@@ -1,0 +1,2 @@
+# Projeto Residencia Digital
+Este é um projeto referente à matéria de Residência Digital da minha faculdade. Não sei se posso dar muitos detalhes aqui, mas é um site referente à uma plataforma de educação. O backend foi inteiramente feito em PHP e no momento da criação deste repositório o CSS ainda não foi aplicado. É recomendado o uso do XAMPP para hospedar o projeto no localhost, mas pode funcionar em programas semelhantes.
