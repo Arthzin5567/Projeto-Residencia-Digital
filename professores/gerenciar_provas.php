@@ -27,11 +27,14 @@ $resultado_provas = mysqli_query($conectar, $sql_provas);
 <body>
     <header>
         <nav>
-            <div class="logo">Edukhan - Gerenciar Provas</div>
+            <div class="logo">
+                <img src="../img/LOGOTIPO 1.avif" alt="logo">
+            </div>
             <ul class="nav-links">
                 <li><a href="dashboard_professor.php">Dashboard</a></li>
+                <li><a href="gerenciar_alunos.php">Alunos</a></li>
                 <li><a href="criar_prova.php">Criar Prova</a></li>
-                <li><a href="gerenciar_provas.php">Minhas Provas</a></li>
+                <li><a href="perfil_professor.php">Meu Perfil</a></li>
                 <li><a href="../logout.php">Sair</a></li>
             </ul>
         </nav>
@@ -51,7 +54,7 @@ $resultado_provas = mysqli_query($conectar, $sql_provas);
                         <div class="prova-card">
                             <div class="prova-header">
                                 <div class="prova-title"><?php echo htmlspecialchars($prova['titulo']); ?></div>
-                                <div class="prova-info">
+                                <div>
                                     ID: <?php echo $prova['idProvas']; ?> | 
                                     Criada em: <?php echo date('d/m/Y', strtotime($prova['data_criacao'])); ?>
                                 </div>
@@ -99,6 +102,18 @@ $resultado_provas = mysqli_query($conectar, $sql_provas);
             </div>
         </article>
     </main>
+
+    <footer>
+        <div class="footer-content">
+            <ul class="footer-links">
+                <li><a href="#">Como Usar a Plataforma</a></li>
+                <li><a href="#">Materiais de Apoio</a></li>
+                <li><a href="#">Suporte Técnico</a></li>
+                <li><a href="#">Dúvidas Frequentes</a></li>
+            </ul>
+            <p class="copyright">© 2023 Edukhan - Plataforma de Avaliação Educacional. Todos os direitos reservados.</p>
+        </div>
+    </footer>
 
     <!-- KaTeX JS -->
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>

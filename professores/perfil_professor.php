@@ -58,17 +58,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['atualizar_perfil'])) {
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-    <header class="perfil-professor-header">
+    <header>
         <nav>
-            <div>
-                <h2>Edukhan - Perfil do Professor</h2>
+            <div class="logo">
+                <img src="../img/LOGOTIPO 1.avif" alt="logo">
             </div>
-            <ul>
+            <ul class="nav-links">
                 <li><a href="dashboard_professor.php">Dashboard</a></li>
                 <li><a href="gerenciar_alunos.php">Alunos</a></li>
-                <li><a href="criar_prova.php">Avaliações</a></li>
-                <li><a href="gerenciar_provas.php">Resultados</a></li>
-                <li><a href="perfil_professor.php">Meu Perfil</a></li>
+                <li><a href="gerenciar_provas.php">Avaliações</a></li>
                 <li><a href="../logout.php">Sair</a></li>
             </ul>
         </nav>
@@ -76,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['atualizar_perfil'])) {
 
     <main>
         <article class="perfil-professor">
-            <section>
+            <section class="perfil-professor-header">
                 <h1>👤 Meu Perfil - Professor</h1>
                 <p>Gerencie suas informações profissionais e pessoais</p>
                 
@@ -173,7 +171,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['atualizar_perfil'])) {
                     </div>
                     
                     <!-- Botões de Ação -->
-                    <div>
+                    <div class="bnt-all-provas">
                         <button type="submit" name="atualizar_perfil">✅ Atualizar Perfil</button>
                         <a href="dashboard_professor.php">↩️ Voltar ao Dashboard</a>
                     </div>
@@ -181,7 +179,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['atualizar_perfil'])) {
             </section>
 
             <!-- AJUDA -->
-            <section>
+            <section class="perfil-professor-ajuda">
                 <h3>💡 Informações Importantes</h3>
                 <ul>
                     <li>Mantenha seus dados de contato atualizados para comunicação com alunos e administração</li>
@@ -193,8 +191,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['atualizar_perfil'])) {
     </main>
 
     <footer>
-        <p>&copy; 2023 Edukhan - Área do Professor</p>
-        <p><small>Professor: <strong><?php echo htmlspecialchars($professor['nome']); ?></strong></small></p>
+        <div class="footer-content">
+            <ul class="footer-links">
+                <li><a href="#">Como Usar a Plataforma</a></li>
+                <li><a href="#">Materiais de Apoio</a></li>
+                <li><a href="#">Suporte Técnico</a></li>
+                <li><a href="#">Dúvidas Frequentes</a></li>
+            </ul>
+            <p class="copyright">© 2023 Edukhan - Plataforma de Avaliação Educacional. Todos os direitos reservados.</p>
+            <p><small>Professor: <strong><?php echo htmlspecialchars($professor['nome']); ?></strong></small></p>
+        </div>
     </footer>
 
     <script>

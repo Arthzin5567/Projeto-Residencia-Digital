@@ -25,7 +25,6 @@ $conectar = mysqli_connect("localhost", "root", "", "projeto_residencia");
                 <div class="logo">Edukhan - Criar Prova</div>
             <ul class="nav-links">
                 <li><a href="dashboard_professor.php">Dashboard</a></li>
-                <li><a href="criar_prova.php">Criar Prova</a></li>
                 <li><a href="gerenciar_provas.php">Minhas Provas</a></li>
                 <li><a href="../logout.php">Sair</a></li>
             </ul>

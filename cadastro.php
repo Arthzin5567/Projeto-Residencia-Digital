@@ -136,7 +136,7 @@ session_start();
                 
                 <div class="cadastro-links">
                     <p>Você já está cadastrado? <a href="aluno/identificar_aluno.php">Acesse com seu código</a></p>
-                    <p>É professor? <a href="professor/login_professor.php">Faça login aqui</a></p>
+                    <p>É professor? <a href="login_professor.php">Faça login aqui</a></p>
                 </div>
 
                 <!-- Mensagens de feedback -->

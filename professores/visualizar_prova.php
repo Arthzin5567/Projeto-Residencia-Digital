@@ -67,7 +67,9 @@ $estatisticas = mysqli_fetch_assoc($resultado_estatisticas);
 <body>
     <header>
         <nav>
-            <div class="logo">Edukhan - Visualizar Prova</div>
+            <div class="logo">
+                <img src="../img/LOGOTIPO 1.avif" alt="logo">
+            </div>
             <ul class="nav-links">
                 <li><a href="dashboard_professor.php">Dashboard</a></li>
                 <li><a href="criar_prova.php">Criar Prova</a></li>
@@ -77,8 +79,8 @@ $estatisticas = mysqli_fetch_assoc($resultado_estatisticas);
         </nav>
     </header>
 
-                <div>Edukhan - Visualizar Prova</div>
-        <article>
+    <main>
+        <article class="visualizar-prova-container">
             <h1>Visualizar Prova: <?php echo htmlspecialchars($prova['titulo']); ?></h1>
             
             <div class="prova-info">
@@ -136,66 +138,68 @@ $estatisticas = mysqli_fetch_assoc($resultado_estatisticas);
             </div>
 
             <!-- Lista de Questões -->
-            <h2>Questões da Prova</h2>
-            
-            <?php if ($num_questoes > 0): ?>
-                <?php foreach ($conteudo as $index => $questao): ?>
-                    <div class="questao-card">
-                        <h3>Questão <?php echo $index + 1; ?></h3>
+            <div class="questoes-section">
+                <h2>Questões da Prova</h2>
 
-                        <!-- Exibir imagens da questão, se houver -->
-                        <?php $numero_questao = $index + 1; ?>
-                        <?php if (isset($imagens_por_questao[$numero_questao]) && !empty($imagens_por_questao[$numero_questao])): ?>
-                            <div class="imagens-questao">
-                                <strong>Imagens desta questão:</strong><br>
-                                <div style="display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0;">
-                                    <?php foreach ($imagens_por_questao[$numero_questao] as $imagem): ?>
-                                        <div class="imagem-container">
-                                            <img src="<?php echo htmlspecialchars($imagem['caminho_imagem']); ?>" 
-                                                 alt="Imagem da questão <?php echo $numero_questao; ?>"
-                                                 class="imagem-questao"
-                                                 onclick="abrirModal('<?php echo htmlspecialchars($imagem['caminho_imagem']); ?>')"
-                                                 style="cursor: pointer;">
-                                            <br>
-                                            <small><?php echo htmlspecialchars($imagem['nome_arquivo']); ?></small>
-                                        </div>
-                                    <?php endforeach; ?>
-                                </div>
-                            </div>
-                        <?php else: ?>
-                            <div class="sem-imagens">
-                                <small>Nenhuma imagem anexada a esta questão</small>
-                            </div>
-                        <?php endif; ?>
+                <?php if ($num_questoes > 0): ?>
+                    <?php foreach ($conteudo as $index => $questao): ?>
+                        <div class="questao-card">
+                            <h3>Questão <?php echo $index + 1; ?></h3>
 
-                        <div class="enunciado">
-                            <strong>Enunciado:</strong><br>
-                            <p><?php echo nl2br(htmlspecialchars($questao['enunciado'])); ?></p>
-                        </div>
-                        
-                        <div class="alternativas">
-                            <strong>Alternativas:</strong>
-                            <?php foreach (['A', 'B', 'C', 'D'] as $letra): ?>
-                                <div class="alternativa <?php echo $questao['resposta_correta'] === $letra ? 'correta' : ''; ?>">
-                                    <strong><?php echo $letra; ?>)</strong> 
-                                    <?php echo htmlspecialchars($questao['alternativas'][$letra]); ?>
-                                    <?php if ($questao['resposta_correta'] === $letra): ?>
-                                        <span>✓ Resposta Correta</span>
-                                    <?php endif; ?>
+                            <!-- Exibir imagens da questão, se houver -->
+                            <?php $numero_questao = $index + 1; ?>
+                            <?php if (isset($imagens_por_questao[$numero_questao]) && !empty($imagens_por_questao[$numero_questao])): ?>
+                                <div class="imagens-questao">
+                                    <strong>Imagens desta questão:</strong><br>
+                                    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0;">
+                                        <?php foreach ($imagens_por_questao[$numero_questao] as $imagem): ?>
+                                            <div class="imagem-container">
+                                                <img src="<?php echo htmlspecialchars($imagem['caminho_imagem']); ?>" 
+                                                    alt="Imagem da questão <?php echo $numero_questao; ?>"
+                                                    class="imagem-questao"
+                                                    onclick="abrirModal('<?php echo htmlspecialchars($imagem['caminho_imagem']); ?>')"
+                                                    style="cursor: pointer;">
+                                                <br>
+                                                <small><?php echo htmlspecialchars($imagem['nome_arquivo']); ?></small>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
                                 </div>
-                            <?php endforeach; ?>
+                            <?php else: ?>
+                                <div class="sem-imagens">
+                                    <small>Nenhuma imagem anexada a esta questão</small>
+                                </div>
+                            <?php endif; ?>
+
+                            <div class="enunciado">
+                                <strong>Enunciado:</strong><br>
+                                <p><?php echo nl2br(htmlspecialchars($questao['enunciado'])); ?></p>
+                            </div>
+                            
+                            <div class="alternativas">
+                                <strong>Alternativas:</strong>
+                                <?php foreach (['A', 'B', 'C', 'D'] as $letra): ?>
+                                    <div class="alternativa <?php echo $questao['resposta_correta'] === $letra ? 'correta' : ''; ?>">
+                                        <strong><?php echo $letra; ?>)</strong> 
+                                        <?php echo htmlspecialchars($questao['alternativas'][$letra]); ?>
+                                        <?php if ($questao['resposta_correta'] === $letra): ?>
+                                            <span>✓ Resposta Correta</span>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
                         </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div>
+                        <h3>Nenhuma questão encontrada nesta prova</h3>
+                        <p>Esta prova não possui questões cadastradas.</p>
                     </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <div>
-                    <h3>Nenhuma questão encontrada nesta prova</h3>
-                    <p>Esta prova não possui questões cadastradas.</p>
-                </div>
-            <?php endif; ?>
-
+                <?php endif; ?>
+            </div>
+            
             <!-- Botões de Ação -->
-            <div>
+            <div class="bnt-all-provas">
                 <a href="gerenciar_provas.php" class="btn btn-voltar">← Voltar para Minhas Provas</a>
                 <a href="editar_prova.php?id=<?php echo $prova_id; ?>" class="btn">Editar Prova</a>
                 <button onclick="window.print()" class="btn btn-imprimir">🖨️ Imprimir Prova</button>
@@ -204,11 +208,23 @@ $estatisticas = mysqli_fetch_assoc($resultado_estatisticas);
         </article>
     </main>
 
+    <footer>
+        <div class="footer-content">
+            <ul class="footer-links">
+                <li><a href="#">Como Usar a Plataforma</a></li>
+                <li><a href="#">Materiais de Apoio</a></li>
+                <li><a href="#">Suporte Técnico</a></li>
+                <li><a href="#">Dúvidas Frequentes</a></li>
+            </ul>
+            <p class="copyright">© 2023 Edukhan - Plataforma de Avaliação Educacional. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
     <!-- Modal para visualização ampliada de imagens -->
-    <div id="modalImagem" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center;">
+    <div id="modalImagem">
         <div style="position: relative; max-width: 90%; max-height: 90%;">
-            <img id="imagemModal" src="" alt="Imagem ampliada" style="max-width: 100%; max-height: 100%; border-radius: 8px;">
-            <button onclick="fecharModal()" style="position: absolute; top: -40px; right: 0; background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Fechar</button>
+            <img id="imagemModal" src="" alt="Imagem ampliada">
+            <button onclick="fecharModal()">Fechar</button>
         </div>
     </div>
 

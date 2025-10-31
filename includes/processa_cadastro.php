@@ -105,7 +105,7 @@ if ($resultado_cadastrar) {
     // Sucesso - mostrar código de acesso
     echo "<script> 
             alert('$nome cadastrado com sucesso!\\\\n\\\\nCÓDIGO DE ACESSO: $codigo_acesso\\\\n\\\\nGuarde este código com segurança!');
-            location.href = '../aluno/cadastro_sucesso.php?codigo=' + encodeURIComponent('$codigo_acesso') + '&nome=' + encodeURIComponent('$nome');
+            location.href = '../alunos/cadastro_sucesso.php?codigo=' + encodeURIComponent('$codigo_acesso') + '&nome=' + encodeURIComponent('$nome');
           </script>";
 } else {
     // Erro no servidor

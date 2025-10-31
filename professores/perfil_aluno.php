@@ -171,14 +171,14 @@ function analisarRespostas($prova_conteudo, $respostas_aluno) {
 <body>
     <header>
         <nav>
-            <div>
-                <h2>Edukhan - Perfil do Aluno</h2>
+            <div class="logo">
+                <img src="../img/LOGOTIPO 1.avif" alt="logo">
             </div>
-            <ul>
+            <ul class="nav-links">
                 <li><a href="dashboard_professor.php">Dashboard</a></li>
                 <li><a href="gerenciar_alunos.php">Alunos</a></li>
-                <li><a href="criar_prova.php">Avaliações</a></li>
-                <li><a href="gerenciar_provas.php">Resultados</a></li>
+                <li><a href="criar_prova.php">Criar Prova</a></li>
+                <li><a href="gerenciar_provas.php">Minhas Provas</a></li>
                 <li><a href="perfil_professor.php">Meu Perfil</a></li>
                 <li><a href="../logout.php">Sair</a></li>
             </ul>
@@ -196,7 +196,7 @@ function analisarRespostas($prova_conteudo, $respostas_aluno) {
                            <strong>Email:</strong> <?php echo htmlspecialchars($aluno['email']); ?> | 
                            <strong>Série:</strong> <?php echo htmlspecialchars($aluno['escolaridade']); ?></p>
                     </div>
-                    <div>
+                    <div class="bnt-all-provas">
                         <a href="gerenciar_alunos.php">← Voltar para Lista</a>
                     </div>
                 </div>
@@ -258,7 +258,7 @@ function analisarRespostas($prova_conteudo, $respostas_aluno) {
                             <!-- Cabeçalho da Prova -->
                             <div class="historico-prova-cabecalho">
                                 <div>
-                                    <h3><?php echo htmlspecialchars($prova['titulo'] ?: $prova['materia'] . ' - Prova'); ?></h3>
+                                    <h3>Prova: <?php echo htmlspecialchars($prova['titulo'] ?: $prova['materia'] . ' - Prova'); ?></h3>
                                     <p>
                                         <strong>Matéria:</strong> <?php echo htmlspecialchars($prova['materia']); ?> | 
                                         <strong>Data:</strong> <?php echo date('d/m/Y', strtotime($prova['data_realizacao'])); ?> | 
@@ -334,7 +334,7 @@ function analisarRespostas($prova_conteudo, $respostas_aluno) {
                                         </div>
 
                                         <!-- Alternativas -->
-                                        <div style="margin-top: 10px;">
+                                        <div>
                                             <strong>Alternativas:</strong><br>
                                             <?php foreach ($detalhe['alternativas'] as $letra => $texto): ?>
                                                 <div>
@@ -368,15 +368,24 @@ function analisarRespostas($prova_conteudo, $respostas_aluno) {
         </article>
     </main>
 
+    <footer>
+        <div class="footer-content">
+            <ul class="footer-links">
+                <li><a href="#">Como Usar a Plataforma</a></li>
+                <li><a href="#">Materiais de Apoio</a></li>
+                <li><a href="#">Suporte Técnico</a></li>
+                <li><a href="#">Dúvidas Frequentes</a></li>
+            </ul>
+            <p class="copyright">© 2023 Edukhan - Plataforma de Avaliação Educacional. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
     <!-- KaTeX JS -->
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
     <script src="../js/math-config.js"></script>
 
-    <footer>
-        <p>&copy; 2023 Edukhan - Perfil do Aluno</p>
-        <p><small>Visualizando perfil de: <strong><?php echo htmlspecialchars($aluno['nome']); ?></strong> (ID: <?php echo $aluno['idAluno']; ?>)</small></p>
-    </footer>
+    
 </body>
 </html>
 

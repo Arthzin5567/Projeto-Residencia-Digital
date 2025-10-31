@@ -129,9 +129,8 @@ $taxa_aprovacao_geral = ($estatisticas_gerais['total_provas_realizadas'] > 0 && 
             <ul class="nav-links">
                 <li><a href="dashboard_professor.php">Dashboard</a></li>
                 <li><a href="gerenciar_alunos.php">Alunos</a></li>
-                <li><a href="criar_prova.php">Avaliações</a></li>
-                <li><a href="gerenciar_provas.php">Resultados</a></li>
-                <li><a href="desempenho_geral.php" class="active">Desempenho Geral</a></li>
+                <li><a href="criar_prova.php">Criar Prova</a></li>
+                <li><a href="gerenciar_provas.php">Minhas Provas</a></li>
                 <li><a href="perfil_professor.php">Meu Perfil</a></li>
                 <li><a href="../logout.php">Sair</a></li>
             </ul>
@@ -141,19 +140,19 @@ $taxa_aprovacao_geral = ($estatisticas_gerais['total_provas_realizadas'] > 0 && 
     <main>
         <article class="desempenho-geral">
             <!-- CABEÇALHO -->
-    <section class="section-card">
-        <div>
-            <div>
-                <h1>📊 Desempenho Geral dos Alunos</h1>
-                <p>Visão geral do desempenho de todos os alunos em todas as disciplinas</p>
-            </div>
-            <div>
-                <a href="exportar_desempenho_csv.php" class="btn btn-success">
-                    📥 Exportar para CSV
-                </a>
-            </div>
-        </div>
-    </section>
+            <section class="section-card">
+                <div>
+                    <div>
+                        <h1>📊 Desempenho Geral dos Alunos</h1>
+                        <p>Visão geral do desempenho de todos os alunos em todas as disciplinas</p>
+                    </div>
+                    <div>
+                        <a href="exportar_desempenho_csv.php" class="btn btn-success">
+                            📥 Exportar para CSV
+                        </a>
+                    </div>
+                </div>
+            </section>
 
             <!-- ESTATÍSTICAS GERAIS -->
             <section class="section-card">
@@ -374,7 +373,13 @@ $taxa_aprovacao_geral = ($estatisticas_gerais['total_provas_realizadas'] > 0 && 
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2023 Edukhan - Área do Aluno</p>
+            <ul class="footer-links">
+                <li><a href="#">Como Usar a Plataforma</a></li>
+                <li><a href="#">Materiais de Apoio</a></li>
+                <li><a href="#">Suporte Técnico</a></li>
+                <li><a href="#">Dúvidas Frequentes</a></li>
+            </ul>
+            <p class="copyright">© 2023 Edukhan - Plataforma de Avaliação Educacional. Todos os direitos reservados.</p>
         </div>
     </footer>
 </body>

@@ -133,13 +133,15 @@ $aprovacao_matematica = $matematica['total'] > 0 ?
 <body>
     <header>
         <nav>
-            <div class="logo">Edukhan - Histórico</div>
+            <div class="logo">
+                <img src="../img/LOGOTIPO 1.avif" alt="logo">
+            </div>
             <ul class="nav-links">
                 <li><a href="dashboard_aluno.php">Dashboard</a></li>
                 <li><a href="provas_disponiveis.php">Provas</a></li>
                 <li><a href="historico.php">Desempenho</a></li>
                 <li><a href="perfil.php">Meu Perfil</a></li>
-                <li><a href="../logout.php" class="btn">Sair</a></li>
+                <li><a href="../logout.php">Sair</a></li>
             </ul>
         </nav>
     </header>
@@ -321,8 +323,13 @@ $aprovacao_matematica = $matematica['total'] > 0 ?
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2023 Edukhan - Área do Aluno</p>
-            <p><small>Seu código de acesso: <strong><?php echo $aluno['codigo_acesso']; ?></strong></small></p>
+            <ul class="footer-links">
+                <li><a href="#">Como Usar a Plataforma</a></li>
+                <li><a href="#">Materiais de Apoio</a></li>
+                <li><a href="#">Suporte Técnico</a></li>
+                <li><a href="#">Dúvidas Frequentes</a></li>
+            </ul>
+            <p class="copyright">© 2023 Edukhan - Plataforma de Avaliação Educacional. Todos os direitos reservados.</p>
         </div>
     </footer>
 </body>

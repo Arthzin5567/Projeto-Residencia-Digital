@@ -56,14 +56,13 @@ $result_ultimas_provas = mysqli_query($conectar, $sql_ultimas_provas);
 <body>
     <header>
         <nav>
-            <div class="logo">Edukhan - Professor</div>
+            <div class="logo">
+                <img src="../img/LOGOTIPO 1.avif" alt="logo">
+            </div>
             <ul class="nav-links">
                 <li><a href="dashboard_professor.php">Dashboard</a></li>
-                <li><a href="lista_alunos.php">Alunos</a></li>
-                <li><a href="criar_prova.php">Avaliações</a></li>
-                <li><a href="gerenciar_provas.php">Resultados</a></li>
-                <li><a href="perfil_professor.php">Meu Perfil</a></li>
-                <li><a href="../logout.php" class="btn">Sair</a></li>
+                <li><a href="gerenciar_provas.php">Minhas Provas</a></li>
+                <li><a href="../logout.php">Sair</a></li>
             </ul>
         </nav>
     </header>
@@ -78,25 +77,25 @@ $result_ultimas_provas = mysqli_query($conectar, $sql_ultimas_provas);
 
             <!-- ESTATÍSTICAS -->
             <section class="stats-container">
-                <div>
+                <div class="stat-card">
                     <h3>👥 Total de Alunos</h3>
                     <div><?php echo $total_alunos; ?></div>
                     <p>Alunos cadastrados</p>
                 </div>
 
-                <div>
+                <div class="stat-card">
                     <h3>📝 Provas Criadas</h3>
                     <div><?php echo $total_provas; ?></div>
                     <p>Suas avaliações</p>
                 </div>
 
-                <div>
+                <div class="stat-card">
                     <h3>📊 Provas Realizadas</h3>
                     <div><?php echo $provas_realizadas; ?></div>
                     <p>Avaliações concluídas</p>
                 </div>
 
-                <div>
+                <div class="stat-card">
                     <h3>⭐ Status</h3>
                     <div>Ativo</div>
                     <p>Professor</p>
@@ -106,33 +105,40 @@ $result_ultimas_provas = mysqli_query($conectar, $sql_ultimas_provas);
             <!-- AÇÕES RÁPIDAS -->
             <section class="actions-container">
                 <h2>⚡ Ações Rápidas</h2>
-                <div class="acoes">
-                    <a href="gerenciar_alunos.php">
-                        <h3>👥 Gerenciar Alunos</h3>
-                        <p>Visualize, edite e pesquise alunos cadastrados</p>
-                        <small>▶️ Acessar</small>
-                    </a>
+                <div class="action-card">
+                    <div class="acoes">
+                        <a href="gerenciar_alunos.php">
+                            <h3>👥 Gerenciar Alunos</h3>
+                            <p>Visualize, edite e pesquise alunos cadastrados</p>
+                            <small>▶️ Acessar</small>
+                        </a>
+                    </div>
                     
-                    <a href="criar_prova.php">
-                        <h3>📝 Criar Avaliação</h3>
-                        <p>Elabore novas provas para os alunos</p>
-                        <small>▶️ Acessar</small>
-                    </a>
+                    <div class="acoes">
+                        <a href="criar_prova.php">
+                            <h3>📝 Criar Avaliação</h3>
+                            <p>Elabore novas provas para os alunos</p>
+                            <small>▶️ Acessar</small>
+                        </a>
+                    </div>
                     
-                    <a href="gerenciar_provas.php">
-                        <h3>📊 Ver Resultados</h3>
-                        <p>Analise o desempenho dos alunos</p>
-                        <small>▶️ Acessar</small>
-                    </a>
                     
-                    <a href="perfil_professor.php">
-                        <h3>👤 Meu Perfil</h3>
-                        <p>Atualize suas informações pessoais</p>
-                        <small>▶️ Acessar</small>
-                    </a>
-                    <a href="desempenho_geral.php">
-                        <h3>📊 Verificar desempenho geral dos alunos</h3>
-                    </a>
+                    <div class="acoes">
+                        <a href="desempenho_geral.php">
+                            <h3>📊 Verificar desempenho geral dos alunos</h3>
+                            <p>Analise o desempenho dos alunos</p>
+                            <small>▶️ Acessar</small>
+                        </a>
+                    </div>
+                    
+                    
+                    <div class="acoes">
+                        <a href="perfil_professor.php">
+                            <h3>👤 Meu Perfil</h3>
+                            <p>Atualize suas informações pessoais</p>
+                            <small>▶️ Acessar</small>
+                        </a>
+                    </div>
                 </div>
             </section>
 
@@ -143,8 +149,8 @@ $result_ultimas_provas = mysqli_query($conectar, $sql_ultimas_provas);
                 <?php if (mysqli_num_rows($result_ultimas_provas) > 0): ?>
                     <div>
                         <?php while ($prova = mysqli_fetch_assoc($result_ultimas_provas)): ?>
-                            <div class="prova-card">
-                                <div>
+                            <div>
+                                <div class="prova-card">
                                     <div>
                                         <h4><?php echo htmlspecialchars($prova['titulo'] ?: $prova['materia'] . ' - Prova'); ?></h4>
                                         <p>
@@ -158,14 +164,14 @@ $result_ultimas_provas = mysqli_query($conectar, $sql_ultimas_provas);
                             </div>
                         <?php endwhile; ?>
                     </div>
-                    <div class="view-all-btn">
+                    <div class="bnt-all-provas">
                         <a href="gerenciar_provas.php">Ver Todas as Provas</a>
                     </div>
                 <?php else: ?>
-                    <p>
+                    <p class="no-tests">
                         📭 Você ainda não criou nenhuma prova.
                     </p>
-                    <div>
+                    <div class="bnt-all-provas">
                         <a href="criar_prova.php">Criar Primeira Prova</a>
                     </div>
                 <?php endif; ?>
@@ -174,7 +180,15 @@ $result_ultimas_provas = mysqli_query($conectar, $sql_ultimas_provas);
     </main>
 
     <footer>
-        <p>&copy; 2023 Edukhan - Área do Professor</p>
+        <div class="footer-content">
+            <ul class="footer-links">
+                <li><a href="#">Como Usar a Plataforma</a></li>
+                <li><a href="#">Materiais de Apoio</a></li>
+                <li><a href="#">Suporte Técnico</a></li>
+                <li><a href="#">Dúvidas Frequentes</a></li>
+            </ul>
+            <p class="copyright">© 2023 Edukhan - Plataforma de Avaliação Educacional. Todos os direitos reservados.</p>
+        </div>
     </footer>
 </body>
 </html>

@@ -84,13 +84,15 @@ if ($result_provas && mysqli_num_rows($result_provas) > 0) {
 <body>
     <header>
         <nav>
-            <div class="logo">Edukhan - Provas</div>
+            <div class="logo">
+                <img src="../img/LOGOTIPO 1.avif" alt="logo">
+            </div>
             <ul class="nav-links">
                 <li><a href="dashboard_aluno.php">Dashboard</a></li>
                 <li><a href="provas_disponiveis.php">Provas</a></li>
                 <li><a href="historico.php">Desempenho</a></li>
                 <li><a href="perfil.php">Meu Perfil</a></li>
-                <li><a href="../logout.php" class="btn">Sair</a></li>
+                <li><a href="../logout.php">Sair</a></li>
             </ul>
         </nav>
     </header>
@@ -227,7 +229,15 @@ if ($result_provas && mysqli_num_rows($result_provas) > 0) {
     <script src="../js/math-config.js"></script>
 
     <footer>
-    <p>&copy; 2023 Edukhan - Área do Aluno</p>
+        <div class="footer-content">
+            <ul class="footer-links">
+                <li><a href="#">Como Usar a Plataforma</a></li>
+                <li><a href="#">Materiais de Apoio</a></li>
+                <li><a href="#">Suporte Técnico</a></li>
+                <li><a href="#">Dúvidas Frequentes</a></li>
+            </ul>
+            <p class="copyright">© 2023 Edukhan - Plataforma de Avaliação Educacional. Todos os direitos reservados.</p>
+        </div>
     </footer>
 </body>
 </html>

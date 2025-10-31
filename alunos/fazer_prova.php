@@ -95,7 +95,9 @@ if (!is_array($questoes) || empty($questoes)) {
 <body>
     <header>
         <nav>
-            <div class="logo">Edukhan - Realizando Prova</div>
+            <div class="logo">
+                <img src="../img/LOGOTIPO 1.avif" alt="logo">
+            </div>
         </nav>
     </header>
 

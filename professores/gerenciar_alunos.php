@@ -68,13 +68,12 @@ $total_alunos = mysqli_num_rows($result_alunos);
     <header>
         <nav>
             <div class="logo">
-                <h2>Edukhan - Gerenciar Alunos</h2>
+                <img src="../img/LOGOTIPO 1.avif" alt="logo">
             </div>
             <ul class="nav-links">
                 <li><a href="dashboard_professor.php">Dashboard</a></li>
-                <li><a href="gerenciar_alunos.php">Alunos</a></li>
-                <li><a href="criar_prova.php">Avaliações</a></li>
-                <li><a href="gerenciar_provas.php">Resultados</a></li>
+                <li><a href="gerenciar_provas.php">Minhas Provas</a></li>
+                <li><a href="criar_prova.php">Criar Provas</a></li>
                 <li><a href="perfil_professor.php">Meu Perfil</a></li>
                 <li><a href="../logout.php">Sair</a></li>
             </ul>
@@ -97,7 +96,7 @@ $total_alunos = mysqli_num_rows($result_alunos);
                 </form>
 
                 <!-- Informações dos Resultados -->
-                <div>
+                <div class="gerenciar-alunos-resultado-pesquisa">
                     <p><strong><?php echo $total_alunos; ?></strong> aluno(s) encontrado(s)
                     <?php if (!empty($pesquisa)): ?>
                         para "<strong><?php echo htmlspecialchars($pesquisa); ?></strong>"
@@ -107,10 +106,8 @@ $total_alunos = mysqli_num_rows($result_alunos);
                 </div>
             </section>
 
-            <hr>
-
             <!-- LISTA DE ALUNOS -->
-            <section class="gerenciar-alunos-informacoes">
+            <section class="gerenciar-alunos-lista">
                 <h2>📋 Lista de Alunos</h2>
                 
                 <?php if ($total_alunos > 0): ?>
@@ -187,7 +184,7 @@ $total_alunos = mysqli_num_rows($result_alunos);
                         <?php endwhile; ?>
                     </div>
                 <?php else: ?>
-                    <div>
+                    <div class="bnt-all-provas">
                         <h3>📭 Nenhum aluno encontrado</h3>
                         <p>
                             <?php if (!empty($pesquisa)): ?>
@@ -209,7 +206,13 @@ $total_alunos = mysqli_num_rows($result_alunos);
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2023 Edukhan - Área do Professor</p>
+            <ul class="footer-links">
+                <li><a href="#">Como Usar a Plataforma</a></li>
+                <li><a href="#">Materiais de Apoio</a></li>
+                <li><a href="#">Suporte Técnico</a></li>
+                <li><a href="#">Dúvidas Frequentes</a></li>
+            </ul>
+            <p class="copyright">© 2023 Edukhan - Plataforma de Avaliação Educacional. Todos os direitos reservados.</p>
             <p><small>Total de alunos no sistema: <strong><?php echo $total_alunos; ?></strong></small></p>
         </div>
     </footer>

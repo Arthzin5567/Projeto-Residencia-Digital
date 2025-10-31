@@ -49,7 +49,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <header>
         <nav>
-            <div class="logo">Edukhan - Identificação</div>
+            <div class="logo">
+                <img src="../img/LOGOTIPO 1.avif" alt="logo">
+            </div>
             <ul class="nav-links">
                 <li><a href="../index.php">Voltar ao Início</a></li>
             </ul>
@@ -57,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </header>
 
     <main>
-        <article class="identificar-links">
+        <article class="identificar-aluno">
             <h1>Identificação do Aluno</h1>
             
             <?php if (isset($erro)): ?>
@@ -67,32 +69,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <?php endif; ?>
             
             <!-- Formulário para alunos já cadastrados -->
-            <div class="identificar-aluno">
-                <h2>Já sou cadastrado</h2>
-                <p>Digite seu código de acesso:</p>
-                <form method="POST" action="identificar_aluno.php">
-                    <div>
-                        <label for="codigo_acesso">Código de Acesso:</label>
-                        <input type="text" id="codigo_acesso" name="codigo_acesso" required 
-                               placeholder="Digite seu código de acesso">
-                    </div>
-                    <button type="submit">Entrar</button>
-                </form>
+            <div>
+                <div>
+                    <h2>Já sou cadastrado</h2>
+                    <p>Digite seu código de acesso:</p>
+                    <form method="POST" action="identificar_aluno.php">
+                        <div class="form-group">
+                            <label for="codigo_acesso">Código de Acesso:</label>
+                            <input type="text" id="codigo_acesso" name="codigo_acesso" required 
+                                placeholder="Digite seu código de acesso">
+                        </div>
+                        <button type="submit">Entrar</button>
+                    </form>
+                </div>
+                
+                <!-- Opção para novos alunos -->
+                <div>
+                    <h2>Primeiro acesso</h2>
+                    <p>Se é sua primeira vez, faça seu cadastro:</p>
+                    <form method="POST" action="identificar_aluno.php">
+                        <button type="submit" name="cadastrar" value="true">
+                            Fazer Cadastro
+                        </button>
+                    </form>
+                </div>
             </div>
-            
-            <!-- Opção para novos alunos -->
-            <div class="identificar-aluno">
-                <h2>Primeiro acesso</h2>
-                <p>Se é sua primeira vez, faça seu cadastro:</p>
-                <form method="POST" action="identificar_aluno.php">
-                    <button type="submit" name="cadastrar" value="true">
-                        Fazer Cadastro
-                    </button>
-                </form>
+
+            <div class="indentificar-links">
+                <p><a href="../index.php">← Voltar para a página inicial</a></p>
             </div>
-            
-            <p><a href="../index.php">← Voltar para a página inicial</a></p>
+
         </article>
     </main>
+
+    <footer>
+        <div class="footer-content">
+            <ul class="footer-links">
+                <li><a href="#">Como Usar a Plataforma</a></li>
+                <li><a href="#">Materiais de Apoio</a></li>
+                <li><a href="#">Suporte Técnico</a></li>
+                <li><a href="#">Dúvidas Frequentes</a></li>
+            </ul>
+            <p class="copyright">© 2023 Edukhan - Plataforma de Avaliação Educacional. Todos os direitos reservados.</p>
+        </div>
+    </footer>
 </body>
 </html>
