@@ -22,7 +22,9 @@ $conectar = mysqli_connect("localhost", "root", "", "projeto_residencia");
 <body>
     <header>
         <nav>
-                <div class="logo">Edukhan - Criar Prova</div>
+            <div class="logo">
+                <img src="../img/LOGOTIPO 1.avif" alt="logo">
+            </div>
             <ul class="nav-links">
                 <li><a href="dashboard_professor.php">Dashboard</a></li>
                 <li><a href="gerenciar_provas.php">Minhas Provas</a></li>

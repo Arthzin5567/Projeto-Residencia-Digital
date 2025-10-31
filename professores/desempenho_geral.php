@@ -124,7 +124,7 @@ $taxa_aprovacao_geral = ($estatisticas_gerais['total_provas_realizadas'] > 0 && 
     <header>
         <nav>
             <div class="logo">
-                <h2>Edukhan - Desempenho Geral</h2>
+                <img src="../img/LOGOTIPO 1.avif" alt="logo">
             </div>
             <ul class="nav-links">
                 <li><a href="dashboard_professor.php">Dashboard</a></li>

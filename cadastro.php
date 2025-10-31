@@ -13,7 +13,9 @@ session_start();
 <body>
     <header>
         <nav>
-            <div class="logo">Edukhan</div>
+            <div class="logo">
+                <img src="../img/LOGOTIPO 1.avif" alt="logo">
+            </div>
             <ul class="nav-links">
                 <li><a href="index.php">Login Professor</a></li>
                 <li><a href="cadastro.php">Cadastro Aluno</a></li>

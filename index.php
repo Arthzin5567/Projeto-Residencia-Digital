@@ -12,7 +12,9 @@ session_start();
 <body>
     <header>
         <nav>
-            <div class="logo">Edukhan</div>
+            <div class="logo">
+                <img src="../img/LOGOTIPO 1.avif" alt="logo">
+            </div>
             <ul class="nav-links">
                 <li><a href="index.php">Início</a></li>
                 <li><a href="#">Sobre</a></li>
