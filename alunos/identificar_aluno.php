@@ -57,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </header>
 
     <main>
-        <article>
+        <article class="identificar-links">
             <h1>Identificação do Aluno</h1>
             
             <?php if (isset($erro)): ?>
@@ -67,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <?php endif; ?>
             
             <!-- Formulário para alunos já cadastrados -->
-            <div>
+            <div class="identificar-aluno">
                 <h2>Já sou cadastrado</h2>
                 <p>Digite seu código de acesso:</p>
                 <form method="POST" action="identificar_aluno.php">
@@ -81,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             
             <!-- Opção para novos alunos -->
-            <div>
+            <div class="identificar-aluno">
                 <h2>Primeiro acesso</h2>
                 <p>Se é sua primeira vez, faça seu cadastro:</p>
                 <form method="POST" action="identificar_aluno.php">

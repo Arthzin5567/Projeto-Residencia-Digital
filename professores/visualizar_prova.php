@@ -61,11 +61,13 @@ $estatisticas = mysqli_fetch_assoc($resultado_estatisticas);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Visualizar Prova - Edukhan</title>
     <link rel="stylesheet" href="../css/style.css">
+    <!-- KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 </head>
 <body>
     <header>
         <nav>
-            <div class="logo">AvaliaEduca - Visualizar Prova</div>
+            <div class="logo">Edukhan - Visualizar Prova</div>
             <ul class="nav-links">
                 <li><a href="dashboard_professor.php">Dashboard</a></li>
                 <li><a href="criar_prova.php">Criar Prova</a></li>
@@ -75,7 +77,7 @@ $estatisticas = mysqli_fetch_assoc($resultado_estatisticas);
         </nav>
     </header>
 
-                <div class="logo">Edukhan - Visualizar Prova</div>
+                <div>Edukhan - Visualizar Prova</div>
         <article>
             <h1>Visualizar Prova: <?php echo htmlspecialchars($prova['titulo']); ?></h1>
             
@@ -209,6 +211,11 @@ $estatisticas = mysqli_fetch_assoc($resultado_estatisticas);
             <button onclick="fecharModal()" style="position: absolute; top: -40px; right: 0; background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Fechar</button>
         </div>
     </div>
+
+    <!-- KaTeX JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script src="../js/math-config.js"></script>
 
     <script>
         // Função para expandir/contrair questões

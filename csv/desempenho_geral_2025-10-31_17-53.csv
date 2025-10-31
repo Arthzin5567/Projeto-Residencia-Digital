@@ -1,0 +1,23 @@
+Aluno;Série;Matéria;Prova;Nota;"Data Realização";Status;"Nº Questões";"Total Provas Aluno"
+aluno;;Matemática;"Teste Caracteres";0,00;31/10/2025;Reprovado;1;7
+aluno;;Matemática;"teste fração 2";10,00;31/10/2025;Aprovado;1;7
+aluno;;Matemática;"teste imagem2";10,00;31/10/2025;Aprovado;1;7
+aluno;;Matemática;teste3;0,00;31/10/2025;Reprovado;2;7
+aluno;;Matemática;teste;10,00;31/10/2025;Aprovado;1;7
+aluno;;Matemática;"teste imagem";10,00;31/10/2025;Aprovado;1;7
+aluno;;Português;apresentação;10,00;31/10/2025;Aprovado;1;7
+"Arthur Morgan";;Matemática;teste3;5,00;31/10/2025;Recuperação;2;4
+"Arthur Morgan";;Matemática;teste;10,00;31/10/2025;Aprovado;1;4
+"Arthur Morgan";;Matemática;"teste imagem2";10,00;31/10/2025;Aprovado;1;4
+"Arthur Morgan";;Matemática;"teste imagem";0,00;31/10/2025;Reprovado;1;4
+Breno;"3º ano EF";Matemática;teste;10,00;03/10/2025;Aprovado;1;1
+teste2;;Matemática;"teste imagem";10,00;31/10/2025;Aprovado;1;4
+teste2;;Matemática;teste3;5,00;31/10/2025;Recuperação;2;4
+teste2;;Matemática;teste;0,00;31/10/2025;Reprovado;1;4
+teste2;;Matemática;"teste imagem2";0,00;31/10/2025;Reprovado;1;4
+teste3;;Matemática;"teste imagem2";10,00;31/10/2025;Aprovado;1;4
+teste3;;Matemática;"teste imagem";0,00;31/10/2025;Reprovado;1;4
+teste3;;Matemática;teste3;10,00;31/10/2025;Aprovado;2;4
+teste3;;Matemática;teste;10,00;31/10/2025;Aprovado;1;4
+teste5;"1º ano EF";Matemática;teste;10,00;02/10/2025;Aprovado;1;2
+teste5;"1º ano EF";Matemática;"teste imagem2";10,00;31/10/2025;Aprovado;1;2

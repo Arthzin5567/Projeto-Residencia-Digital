@@ -21,6 +21,8 @@ $resultado_provas = mysqli_query($conectar, $sql_provas);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciar Provas - Edukhan</title>
     <link rel="stylesheet" href="../css/style.css">
+    <!-- KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 </head>
 <body>
     <header>
@@ -97,6 +99,11 @@ $resultado_provas = mysqli_query($conectar, $sql_provas);
             </div>
         </article>
     </main>
+
+    <!-- KaTeX JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script src="../js/math-config.js"></script>
 
     <script>
         // Função para buscar estatísticas das provas (opcional)

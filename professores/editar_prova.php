@@ -54,6 +54,8 @@ $numero_questoes = is_array($questoes) ? count($questoes) : 0;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Prova - Edukhan</title>
     <link rel="stylesheet" href="../css/style.css">
+    <!-- KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 </head>
 <body>
     <header>
@@ -118,6 +120,11 @@ $numero_questoes = is_array($questoes) ? count($questoes) : 0;
         </article>
     </main>
 
+    <!-- KaTeX JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script src="../js/math-config.js"></script>
+
     <script>
         // Array para armazenar as questões carregadas do PHP
         const questoesExistentes = <?php echo json_encode($questoes); ?>;
@@ -164,7 +171,7 @@ $numero_questoes = is_array($questoes) ? count($questoes) : 0;
                 }
                 
                 container.innerHTML += `
-                    <div class="questao" style="border: 1px solid #ccc; padding: 10px; margin: 10px 0;">
+                    <div class="questao">
                         <h3>Questão ${i}</h3>
 
                          ${imagensHTML}
@@ -186,7 +193,7 @@ $numero_questoes = is_array($questoes) ? count($questoes) : 0;
                         <input type="hidden" name="questao_id_${i}" value="${questaoExistente ? questaoExistente.id : ''}">
                         <div>
                             <label>Enunciado:</label>
-                            <textarea name="enunciado_${i}" rows="3" style="width: 100%;" required>${questaoExistente ? questaoExistente.enunciado : ''}</textarea>
+                            <textarea name="enunciado_${i}" rows="3" required>${questaoExistente ? questaoExistente.enunciado : ''}</textarea>
                         </div>
                         <div>
                             <label>Alternativa A:</label>
@@ -216,6 +223,8 @@ $numero_questoes = is_array($questoes) ? count($questoes) : 0;
                     </div>
                 `;
             }
+
+            renderizarEquacoesNoElemento(container);
         }
 
         function previewNovasImagens(numeroQuestao, files) {

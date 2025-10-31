@@ -16,6 +16,8 @@ $conectar = mysqli_connect("localhost", "root", "", "projeto_residencia");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Criar Prova - Edukhan</title>
     <link rel="stylesheet" href="../css/style.css">
+    <!-- KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 </head>
 <body>
     <header>
@@ -77,6 +79,11 @@ $conectar = mysqli_connect("localhost", "root", "", "projeto_residencia");
         </article>
     </main>
 
+    <!-- KaTeX JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script src="../js/math-config.js"></script>
+
     <script>
         function adicionarQuestao() {
         const container = document.getElementById('questoes-container');
@@ -90,7 +97,8 @@ $conectar = mysqli_connect("localhost", "root", "", "projeto_residencia");
                     <h3>Questão ${i}</h3>
                     <div>
                         <label>Enunciado:</label>
-                        <textarea name="enunciado_${i}" rows="3" required></textarea>
+                        <textarea name="enunciado_${i}" rows="3" placeholder="Ex: Resolva a equação $x^2 + \frac{5}{78} = 9$" required></textarea>
+                        <small>Use $equação$ para fórmulas matemáticas</small>
                     </div>
                     <!-- Área de upload de imagens -->
                     <div class="imagens-questao">
@@ -133,6 +141,9 @@ $conectar = mysqli_connect("localhost", "root", "", "projeto_residencia");
                 </div>
             `;
         }
+
+        // Renderizar equações após adicionar conteúdo dinâmico
+        renderizarEquacoesNoElemento(container);
     }
     
     // Adiciona questões automaticamente quando a página carrega
@@ -211,6 +222,8 @@ $conectar = mysqli_connect("localhost", "root", "", "projeto_residencia");
             }
         });
     });
+
+    
 </script>
 </body>
 </html>

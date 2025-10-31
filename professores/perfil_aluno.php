@@ -165,6 +165,8 @@ function analisarRespostas($prova_conteudo, $respostas_aluno) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil do Aluno - Edukhan</title>
     <link rel="stylesheet" href="../css/style.css">
+    <!-- KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 </head>
 <body>
     <header>
@@ -365,6 +367,11 @@ function analisarRespostas($prova_conteudo, $respostas_aluno) {
             </section>
         </article>
     </main>
+
+    <!-- KaTeX JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script src="../js/math-config.js"></script>
 
     <footer>
         <p>&copy; 2023 Edukhan - Perfil do Aluno</p>

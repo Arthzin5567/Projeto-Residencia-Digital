@@ -117,7 +117,9 @@ $taxa_aprovacao_geral = ($estatisticas_gerais['total_provas_realizadas'] > 0 && 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Desempenho Geral - Edukhan</title>
     <link rel="stylesheet" href="../css/style.css">
-    </head>
+    <!-- KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+</head>
 <body>
     <header>
         <nav>
@@ -139,10 +141,19 @@ $taxa_aprovacao_geral = ($estatisticas_gerais['total_provas_realizadas'] > 0 && 
     <main>
         <article class="desempenho-geral">
             <!-- CABEÇALHO -->
-            <section class="section-card">
+    <section class="section-card">
+        <div>
+            <div>
                 <h1>📊 Desempenho Geral dos Alunos</h1>
                 <p>Visão geral do desempenho de todos os alunos em todas as disciplinas</p>
-            </section>
+            </div>
+            <div>
+                <a href="exportar_desempenho_csv.php" class="btn btn-success">
+                    📥 Exportar para CSV
+                </a>
+            </div>
+        </div>
+    </section>
 
             <!-- ESTATÍSTICAS GERAIS -->
             <section class="section-card">
@@ -367,6 +378,12 @@ $taxa_aprovacao_geral = ($estatisticas_gerais['total_provas_realizadas'] > 0 && 
         </div>
     </footer>
 </body>
+
+<!-- KaTeX JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script src="../js/math-config.js"></script>
+
 </html>
 
 <?php mysqli_close($conectar); ?>
