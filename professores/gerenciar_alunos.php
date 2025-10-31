@@ -61,15 +61,16 @@ $total_alunos = mysqli_num_rows($result_alunos);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciar Alunos - AvaliaEduca</title>
+    <title>Gerenciar Alunos - Edukhan</title>
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <header>
         <nav>
-            <div>
-                <h2>AvaliaEduca - Gerenciar Alunos</h2>
+            <div class="logo">
+                <h2>Edukhan - Gerenciar Alunos</h2>
             </div>
-            <ul>
+            <ul class="nav-links">
                 <li><a href="dashboard_professor.php">Dashboard</a></li>
                 <li><a href="gerenciar_alunos.php">Alunos</a></li>
                 <li><a href="criar_prova.php">Avaliações</a></li>
@@ -78,12 +79,11 @@ $total_alunos = mysqli_num_rows($result_alunos);
                 <li><a href="../logout.php">Sair</a></li>
             </ul>
         </nav>
-        <hr>
     </header>
 
     <main>
-        <article>
-            <section>
+        <article class="gerenciar-alunos">
+            <section class="gerenciar-alunos-informacoes">
                 <h1>👥 Gerenciar Alunos</h1>
                 <p>Visualize e pesquise por alunos cadastrados no sistema</p>
                 
@@ -110,11 +110,11 @@ $total_alunos = mysqli_num_rows($result_alunos);
             <hr>
 
             <!-- LISTA DE ALUNOS -->
-            <section>
+            <section class="gerenciar-alunos-informacoes">
                 <h2>📋 Lista de Alunos</h2>
                 
                 <?php if ($total_alunos > 0): ?>
-                    <div>
+                    <div class="gerenciar-alunos-cards">
                         <?php while ($aluno = mysqli_fetch_assoc($result_alunos)): 
                             // Calcular taxa de aprovação
                             $taxa_aprovacao = $aluno['total_provas'] > 0 ? 
@@ -208,8 +208,10 @@ $total_alunos = mysqli_num_rows($result_alunos);
     </main>
 
     <footer>
-        <p>&copy; 2023 AvaliaEduca - Área do Professor</p>
-        <p><small>Total de alunos no sistema: <strong><?php echo $total_alunos; ?></strong></small></p>
+        <div class="footer-content">
+            <p>&copy; 2023 Edukhan - Área do Professor</p>
+            <p><small>Total de alunos no sistema: <strong><?php echo $total_alunos; ?></strong></small></p>
+        </div>
     </footer>
 </body>
 </html>

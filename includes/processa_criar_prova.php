@@ -14,10 +14,19 @@ $serie_destinada = mysqli_real_escape_string($conectar, $_POST["serie_destinada"
 $numero_questoes = (int)$_POST["numero_questoes"];
 $professor_id = $_SESSION["idProfessor"];
 
+// função de upload de imagens
+require_once 'upload_imagens.php';
+
 // DEBUG: Verificar dados recebidos
 echo "<pre>POST data:\n";
 print_r($_POST);
 echo "</pre>";
+
+// DEBUG: Verificar FILES
+error_log("Arquivos FILES recebidos:");
+foreach ($_FILES as $key => $file) {
+    error_log("$key: " . print_r($file, true));
+}
 
 // Construir array com as questões
 $questoes = [];
@@ -77,6 +86,26 @@ echo "<pre>SQL: $sql</pre>";
 
 if (mysqli_query($conectar, $sql)) {
     $prova_id = mysqli_insert_id($conectar);
+
+    // PROCESSAR UPLOAD DE IMAGENS
+    $total_imagens = 0;
+    for ($i = 1; $i <= $numero_questoes; $i++) {
+        $imagens_key = "imagens_$i";
+        
+        if (isset($_FILES[$imagens_key]) && !empty($_FILES[$imagens_key]['name'][0])) {
+            error_log("📁 Processando imagens para questão $i...");
+            $imagensSalvas = fazerUploadImagens($prova_id, $i, $_FILES[$imagens_key]);
+            
+            if (!empty($imagensSalvas)) {
+                $total_imagens += count($imagensSalvas);
+                error_log("✅ " . count($imagensSalvas) . " imagem(ns) salva(s) para a questão $i");
+            } else {
+                error_log("❌ Nenhuma imagem foi salva para a questão $i");
+            }
+        } else {
+            error_log("📭 Nenhuma imagem enviada para questão $i");
+        }
+    }
     
     // Criar registros para todos os alunos da série
     $sql_alunos = "SELECT idAluno FROM Aluno WHERE escolaridade = '$serie_destinada'";

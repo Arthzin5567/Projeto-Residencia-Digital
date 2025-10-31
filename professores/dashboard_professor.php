@@ -50,13 +50,13 @@ $result_ultimas_provas = mysqli_query($conectar, $sql_ultimas_provas);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Professor - AvaliaEduca</title>
-    
+    <title>Dashboard Professor - Edukhan</title>
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <header>
-        <nav style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-            <div class="logo" style="font-size: 24px; font-weight: bold;">AvaliaEduca - Professor</div>
+        <nav>
+            <div class="logo">Edukhan - Professor</div>
             <ul class="nav-links">
                 <li><a href="dashboard_professor.php">Dashboard</a></li>
                 <li><a href="lista_alunos.php">Alunos</a></li>
@@ -68,83 +68,86 @@ $result_ultimas_provas = mysqli_query($conectar, $sql_ultimas_provas);
         </nav>
     </header>
 
-    <main class="container">
-        <article>
-            <section class="card" style="margin-bottom: 30px;">
+    <main>
+        <article class="dashboard-container">
+            <section class="welcome-professor">
                 <h1>🎓 Dashboard do Professor</h1>
                 <p>Bem-vindo, <strong><?php echo $_SESSION['usuario']; ?></strong>! 👋</p>
                 <p><strong>Email:</strong> <?php echo $professor['email']; ?></p>
             </section>
 
             <!-- ESTATÍSTICAS -->
-            <section class="stats-grid">
-                <div class="stat-card stat-alunos">
+            <section class="stats-container">
+                <div>
                     <h3>👥 Total de Alunos</h3>
-                    <div class="stat-number"><?php echo $total_alunos; ?></div>
+                    <div><?php echo $total_alunos; ?></div>
                     <p>Alunos cadastrados</p>
                 </div>
 
-                <div class="stat-card stat-provas">
+                <div>
                     <h3>📝 Provas Criadas</h3>
-                    <div class="stat-number"><?php echo $total_provas; ?></div>
+                    <div><?php echo $total_provas; ?></div>
                     <p>Suas avaliações</p>
                 </div>
 
-                <div class="stat-card stat-realizadas">
+                <div>
                     <h3>📊 Provas Realizadas</h3>
-                    <div class="stat-number"><?php echo $provas_realizadas; ?></div>
+                    <div><?php echo $provas_realizadas; ?></div>
                     <p>Avaliações concluídas</p>
                 </div>
 
-                <div class="stat-card stat-ativo">
+                <div>
                     <h3>⭐ Status</h3>
-                    <div class="stat-number">Ativo</div>
+                    <div>Ativo</div>
                     <p>Professor</p>
                 </div>
             </section>
 
             <!-- AÇÕES RÁPIDAS -->
-            <section class="card">
+            <section class="actions-container">
                 <h2>⚡ Ações Rápidas</h2>
-                <div class="actions-grid">
-                    <a href="gerenciar_alunos.php" class="action-card action-alunos">
+                <div class="acoes">
+                    <a href="gerenciar_alunos.php">
                         <h3>👥 Gerenciar Alunos</h3>
                         <p>Visualize, edite e pesquise alunos cadastrados</p>
                         <small>▶️ Acessar</small>
                     </a>
                     
-                    <a href="criar_prova.php" class="action-card action-provas">
+                    <a href="criar_prova.php">
                         <h3>📝 Criar Avaliação</h3>
                         <p>Elabore novas provas para os alunos</p>
                         <small>▶️ Acessar</small>
                     </a>
                     
-                    <a href="gerenciar_provas.php" class="action-card action-resultados">
+                    <a href="gerenciar_provas.php">
                         <h3>📊 Ver Resultados</h3>
                         <p>Analise o desempenho dos alunos</p>
                         <small>▶️ Acessar</small>
                     </a>
                     
-                    <a href="perfil_professor.php" class="action-card action-perfil">
+                    <a href="perfil_professor.php">
                         <h3>👤 Meu Perfil</h3>
                         <p>Atualize suas informações pessoais</p>
                         <small>▶️ Acessar</small>
+                    </a>
+                    <a href="desempenho_geral.php">
+                        <h3>📊 Verificar desempenho geral dos alunos</h3>
                     </a>
                 </div>
             </section>
 
             <!-- ÚLTIMAS PROVAS CRIADAS -->
-            <section class="card">
+            <section class="latest-tests">
                 <h2>📋 Suas Últimas Provas</h2>
                 
                 <?php if (mysqli_num_rows($result_ultimas_provas) > 0): ?>
-                    <div style="margin-top: 15px;">
+                    <div>
                         <?php while ($prova = mysqli_fetch_assoc($result_ultimas_provas)): ?>
-                            <div class="prova-item">
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div class="prova-card">
+                                <div>
                                     <div>
-                                        <h4 style="margin: 0 0 5px 0;"><?php echo htmlspecialchars($prova['titulo'] ?: $prova['materia'] . ' - Prova'); ?></h4>
-                                        <p style="margin: 0;">
+                                        <h4><?php echo htmlspecialchars($prova['titulo'] ?: $prova['materia'] . ' - Prova'); ?></h4>
+                                        <p>
                                             <strong>Matéria:</strong> <?php echo htmlspecialchars($prova['materia']); ?> | 
                                             <strong>Questões:</strong> <?php echo htmlspecialchars($prova['numero_questoes']); ?> | 
                                             <strong>Série:</strong> <?php echo htmlspecialchars($prova['serie_destinada']); ?>
@@ -155,15 +158,15 @@ $result_ultimas_provas = mysqli_query($conectar, $sql_ultimas_provas);
                             </div>
                         <?php endwhile; ?>
                     </div>
-                    <div style="text-align: center; margin-top: 15px;">
-                        <a href="gerenciar_provas.php" class="btn">Ver Todas as Provas</a>
+                    <div class="view-all-btn">
+                        <a href="gerenciar_provas.php">Ver Todas as Provas</a>
                     </div>
                 <?php else: ?>
-                    <p style="text-align: center; padding: 20px; color: #666;">
+                    <p>
                         📭 Você ainda não criou nenhuma prova.
                     </p>
-                    <div style="text-align: center;">
-                        <a href="criar_prova.php" class="btn">Criar Primeira Prova</a>
+                    <div>
+                        <a href="criar_prova.php">Criar Primeira Prova</a>
                     </div>
                 <?php endif; ?>
             </section>
@@ -171,7 +174,7 @@ $result_ultimas_provas = mysqli_query($conectar, $sql_ultimas_provas);
     </main>
 
     <footer>
-        <p>&copy; 2023 AvaliaEduca - Área do Professor</p>
+        <p>&copy; 2023 Edukhan - Área do Professor</p>
     </footer>
 </body>
 </html>

@@ -55,9 +55,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['atualizar_perfil'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meu Perfil - Edukhan</title>
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-    <header>
+    <header class="perfil-professor-header">
         <nav>
             <div>
                 <h2>Edukhan - Perfil do Professor</h2>
@@ -71,11 +72,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['atualizar_perfil'])) {
                 <li><a href="../logout.php">Sair</a></li>
             </ul>
         </nav>
-        <hr>
     </header>
 
     <main>
-        <article>
+        <article class="perfil-professor">
             <section>
                 <h1>👤 Meu Perfil - Professor</h1>
                 <p>Gerencie suas informações profissionais e pessoais</p>
@@ -94,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['atualizar_perfil'])) {
             </section>
 
             <!-- INFORMAÇÕES FIXAS -->
-            <section>
+            <section class="perfil-professor-info-fixa">
                 <h2>📋 Informações de Identificação</h2>
                 <div>
                     <div>
@@ -112,7 +112,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['atualizar_perfil'])) {
             </section>
 
             <!-- FORMULÁRIO DE EDIÇÃO -->
-            <section>
+            <section class="perfil-professor-editar">
                 <h2>✏️ Editar Informações</h2>
                 <p>Atualize suas informações de contato e profissionais.</p>
                 

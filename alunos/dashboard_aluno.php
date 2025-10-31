@@ -39,12 +39,13 @@ $provas_realizadas = $result_realizadas ? mysqli_fetch_assoc($result_realizadas)
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Aluno - AvaliaEduca</title>
+    <title>Dashboard do Aluno - Edukhan</title>
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <header>
         <nav>
-            <div class="logo">AvaliaEduca - Aluno</div>
+            <div class="logo">Edukhan - Aluno</div>
             <ul class="nav-links">
                 <li><a href="dashboard_aluno.php">Dashboard</a></li>
                 <li><a href="provas_disponiveis.php">Provas</a></li>
@@ -56,7 +57,7 @@ $provas_realizadas = $result_realizadas ? mysqli_fetch_assoc($result_realizadas)
     </header>
 
     <main>
-        <article>
+        <article class="dashboard-aluno">
             <section>
                 <h1>Dashboard do Aluno</h1>
                 <p>Bem-vindo, <strong><?php echo $_SESSION['nome_aluno']; ?></strong>! 👋</p>
@@ -64,7 +65,7 @@ $provas_realizadas = $result_realizadas ? mysqli_fetch_assoc($result_realizadas)
             </section>
 
             <!-- CARDS DE RESUMO -->
-            <section>
+            <section class="resumo-estatistico">
                 <div>
                     <h3>📝 Provas Disponíveis</h3>
                     <p><?php echo $provas_disponiveis; ?></p>
@@ -94,13 +95,13 @@ $provas_realizadas = $result_realizadas ? mysqli_fetch_assoc($result_realizadas)
             </section>
 
              <!-- PROVAS DISPONÍVEIS -->
-            <section style="margin-bottom: 30px;">
+            <section class="actions-container-aluno">
                 <h2>📚 Provas Disponíveis para Realizar</h2>
                 
                 <?php if ($provas_disponiveis > 0): ?>
-                    <div>
+                    <div class="acoes-aluno">
                         <?php while ($prova = mysqli_fetch_assoc($result_provas)): ?>
-                            <div>
+                            <div class="action-card-aluno">
                                 <!-- CORREÇÃO: Mostrar título ao invés do conteúdo JSON -->
                                 <h4><?php echo htmlspecialchars($prova['titulo'] ?: $prova['materia'] . ' - Prova'); ?></h4>
                                 <p><strong>Matéria:</strong> <?php echo htmlspecialchars($prova['materia']); ?></p>
@@ -120,7 +121,7 @@ $provas_realizadas = $result_realizadas ? mysqli_fetch_assoc($result_realizadas)
             </section>
 
             <!-- AÇÕES RÁPIDAS -->
-            <section>
+            <section class="aluno-proximas-acoes">
                 <h2>⚡ Ações Rápidas</h2>
                 <div>
                     <a href="provas_disponiveis.php">
@@ -143,8 +144,10 @@ $provas_realizadas = $result_realizadas ? mysqli_fetch_assoc($result_realizadas)
     </main>
 
     <footer>
-        <p>&copy; 2023 AvaliaEduca - Área do Aluno</p>
-        <p><small>Seu código de acesso: <strong><?php echo $aluno['codigo_acesso']; ?></strong></small></p>
+        <div class="footer-content">
+            <p>&copy; 2023 Edukhan - Área do Aluno</p>
+            <p><small>Seu código de acesso: <strong><?php echo $aluno['codigo_acesso']; ?></strong></small></p>
+        </div>
     </footer>
 </body>
 </html>

@@ -163,13 +163,14 @@ function analisarRespostas($prova_conteudo, $respostas_aluno) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil do Aluno - AvaliaEduca</title>
+    <title>Perfil do Aluno - Edukhan</title>
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <header>
         <nav>
             <div>
-                <h2>AvaliaEduca - Perfil do Aluno</h2>
+                <h2>Edukhan - Perfil do Aluno</h2>
             </div>
             <ul>
                 <li><a href="dashboard_professor.php">Dashboard</a></li>
@@ -180,13 +181,12 @@ function analisarRespostas($prova_conteudo, $respostas_aluno) {
                 <li><a href="../logout.php">Sair</a></li>
             </ul>
         </nav>
-        <hr>
     </header>
 
     <main>
-        <article>
+        <article class="perfil-aluno">
             <!-- CABEÇALHO DO PERFIL -->
-            <section>
+            <section class="perfil-cabecalho">
                 <div>
                     <div>
                         <h1>👤 Perfil do Aluno: <?php echo htmlspecialchars($aluno['nome']); ?></h1>
@@ -203,7 +203,7 @@ function analisarRespostas($prova_conteudo, $respostas_aluno) {
             <hr>
 
             <!-- ESTATÍSTICAS GERAIS -->
-            <section>
+            <section class="estatisticas-gerais">
                 <h2>📊 Desempenho Geral</h2>
                 
                 <div>
@@ -237,7 +237,7 @@ function analisarRespostas($prova_conteudo, $respostas_aluno) {
             <hr>
 
             <!-- HISTÓRICO DETALHADO DE PROVAS COM ANÁLISE -->
-            <section>
+            <section class="historico-provas">
                 <h2>📋 Histórico Completo de Provas</h2>
                 
                 <?php if ($total_provas > 0): ?>
@@ -254,7 +254,7 @@ function analisarRespostas($prova_conteudo, $respostas_aluno) {
                     ?>
                         <div>
                             <!-- Cabeçalho da Prova -->
-                            <div>
+                            <div class="historico-prova-cabecalho">
                                 <div>
                                     <h3><?php echo htmlspecialchars($prova['titulo'] ?: $prova['materia'] . ' - Prova'); ?></h3>
                                     <p>
@@ -272,7 +272,7 @@ function analisarRespostas($prova_conteudo, $respostas_aluno) {
                             </div>
 
                             <!-- Resumo do Desempenho -->
-                            <div>
+                            <div class="historico-prova-desempenho">
                                 <h4>📊 Resumo do Desempenho</h4>
                                 <div>
                                     <div>
@@ -295,7 +295,7 @@ function analisarRespostas($prova_conteudo, $respostas_aluno) {
                             </div>
 
                             <!-- Detalhamento Questão por Questão -->
-                            <div>
+                            <div class="historico-prova-detalhes-questoes">
                                 <h4 style="margin: 0 0 15px 0;">🔍 Análise Questão por Questão</h4>
                                 
                                 <?php foreach ($analise['detalhes'] as $detalhe): ?>
@@ -349,7 +349,7 @@ function analisarRespostas($prova_conteudo, $respostas_aluno) {
                             </div>
 
                             <!-- Informações adicionais da prova -->
-                            <div>
+                            <div class="historico-prova-informacoes-adicionais">
                                 <strong>Informações da Prova:</strong> 
                                 Série destinada: <?php echo htmlspecialchars($prova['serie_destinada']); ?> | 
                                 Conteúdo: <?php echo htmlspecialchars($prova['conteudo']); ?>
@@ -367,7 +367,7 @@ function analisarRespostas($prova_conteudo, $respostas_aluno) {
     </main>
 
     <footer>
-        <p>&copy; 2023 AvaliaEduca - Perfil do Aluno</p>
+        <p>&copy; 2023 Edukhan - Perfil do Aluno</p>
         <p><small>Visualizando perfil de: <strong><?php echo htmlspecialchars($aluno['nome']); ?></strong> (ID: <?php echo $aluno['idAluno']; ?>)</small></p>
     </footer>
 </body>

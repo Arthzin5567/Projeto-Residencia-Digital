@@ -76,13 +76,13 @@ if ($result_provas && mysqli_num_rows($result_provas) > 0) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Provas Disponíveis - AvaliaEduca</title>
-    
+    <title>Provas Disponíveis - Edukhan</title>
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <header>
         <nav>
-            <div class="logo">AvaliaEduca - Provas</div>
+            <div class="logo">Edukhan - Provas</div>
             <ul class="nav-links">
                 <li><a href="dashboard_aluno.php">Dashboard</a></li>
                 <li><a href="provas_disponiveis.php">Provas</a></li>
@@ -223,7 +223,7 @@ if ($result_provas && mysqli_num_rows($result_provas) > 0) {
     </main>
 
     <footer style="margin-top: 40px; padding: 20px; text-align: center; background: #f5f5f5;">
-        <p>&copy; 2023 AvaliaEduca - Área do Aluno</p>
+        <p>&copy; 2023 Edukhan - Área do Aluno</p>
     </footer>
 </body>
 </html>

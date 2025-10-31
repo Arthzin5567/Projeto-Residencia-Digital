@@ -71,12 +71,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Excluir Prova - AvaliaEduca</title>
+    <title>Excluir Prova - Edukhan</title>
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <header>
         <nav>
-            <div class="logo">AvaliaEduca - Excluir Prova</div>
+            <div class="logo">Edukhan - Excluir Prova</div>
             <ul class="nav-links">
                 <li><a href="../home.php">Home</a></li>
                 <li><a href="dashboard_professor.php">Dashboard</a></li>
@@ -88,15 +89,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </header>
 
     <main>
-        <article>
+        <article class="excluir-prova">
             <h1>Excluir Prova</h1>
             
-            <div style="border: 2px solid #ff0000; padding: 20px; margin: 20px 0; background-color: #ffe6e6;">
-                <h2 style="color: #ff0000;">⚠️ ATENÇÃO: Esta ação é irreversível!</h2>
+            <div class="alerta-de-exclusao">
+                <h2>⚠️ ATENÇÃO: Esta ação é irreversível!</h2>
                 
                 <p><strong>Você está prestes a excluir a seguinte prova:</strong></p>
                 
-                <div style="margin: 15px 0;">
+                <div>
                     <p><strong>Título:</strong> <?php echo htmlspecialchars($prova['titulo']); ?></p>
                     <p><strong>Matéria:</strong> <?php echo htmlspecialchars($prova['materia']); ?></p>
                     <p><strong>Série Destinada:</strong> <?php echo htmlspecialchars($prova['serie_destinada']); ?></p>
@@ -111,11 +112,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <li>Remover qualquer histórico de respostas dos alunos</li>
                 </ul>
 
-                <p style="color: #ff0000; font-weight: bold;">Tem certeza que deseja continuar?</p>
+                <p>Tem certeza que deseja continuar?</p>
             </div>
 
-            <form action="excluir_prova.php?id=<?php echo $prova_id; ?>" method="POST">
-                <div style="margin: 20px 0;">
+            <form class="excluir-prova" action="excluir_prova.php?id=<?php echo $prova_id; ?>" method="POST">
+                <div>
                     <label>
                         <input type="radio" name="confirmar" value="sim" required>
                         Sim, desejo excluir esta prova permanentemente
@@ -128,10 +129,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
 
                 <div>
-                    <button type="submit" style="background-color: #ff0000; color: white; padding: 10px 20px; border: none; cursor: pointer;">
+                    <button type="submit">
                         CONFIRMAR EXCLUSÃO
                     </button>
-                    <button type="button" onclick="window.location.href='../professores/gerenciar_provas.php'" style="background-color: #666; color: white; padding: 10px 20px; border: none; cursor: pointer;">
+                    <button type="button" onclick="window.location.href='../professores/gerenciar_provas.php'">
                         Cancelar
                     </button>
                 </div>

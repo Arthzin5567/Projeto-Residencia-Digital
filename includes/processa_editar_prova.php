@@ -26,6 +26,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
+    // Processar remoção de imagens
+    for ($i = 1; $i <= $numero_questoes; $i++) {
+        $chave_remover = "imagens_remover_$i";
+        if (isset($_POST[$chave_remover]) && is_array($_POST[$chave_remover])) {
+            foreach ($_POST[$chave_remover] as $idImagem) {
+                $idImagem = mysqli_real_escape_string($conectar, $idImagem);
+                
+                // Buscar informações da imagem para excluir o arquivo
+                $sql_imagem = "SELECT caminho_imagem FROM ImagensProvas WHERE idImagem = '$idImagem' AND idProva = '$prova_id'";
+                $result_imagem = mysqli_query($conectar, $sql_imagem);
+                
+                if ($result_imagem && $imagem = mysqli_fetch_assoc($result_imagem)) {
+                    $caminho_arquivo = '../' . $imagem['caminho_imagem'];
+                    
+                    // Excluir arquivo físico
+                    if (file_exists($caminho_arquivo)) {
+                        unlink($caminho_arquivo);
+                    }
+                    
+                    // Excluir registro do banco
+                    $sql_excluir = "DELETE FROM ImagensProvas WHERE idImagem = '$idImagem'";
+                    mysqli_query($conectar, $sql_excluir);
+                }
+            }
+        }
+    }
+
     // Montar array de questões
     $questoes = [];
     for ($i = 1; $i <= $numero_questoes; $i++) {
@@ -54,6 +81,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql_prova = "UPDATE Provas SET titulo = '$titulo', materia = '$materia', serie_destinada = '$serie_destinada', numero_questoes = '$numero_questoes', conteudo = '$conteudo_json' WHERE idProvas = '$prova_id'";
 
     if (mysqli_query($conectar, $sql_prova)) {
+
+        // Processar upload de novas imagens
+        $total_novas_imagens = 0;
+        for ($i = 1; $i <= $numero_questoes; $i++) {
+            $chave_novas_imagens = "novas_imagens_$i";
+            
+            if (isset($_FILES[$chave_novas_imagens]) && !empty($_FILES[$chave_novas_imagens]['name'][0])) {
+                $imagensSalvas = fazerUploadImagens($prova_id, $i, $_FILES[$chave_novas_imagens]);
+                $total_novas_imagens += count($imagensSalvas);
+            }
+        }
+        
+        // Mensagem de sucesso
+        $mensagem = "Prova atualizada com sucesso!";
+        if ($total_novas_imagens > 0) {
+            $mensagem .= " $total_novas_imagens nova(s) imagem(ns) adicionada(s).";
+        }
+        
+        $_SESSION['mensagem_sucesso'] = $mensagem;
         header("Location: ../professores/gerenciar_provas.php?sucesso=prova_editada");
         exit();
     } else {

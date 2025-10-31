@@ -76,13 +76,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['atualizar_perfil'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Perfil - AvaliaEduca</title>
-    <!-- <link rel="stylesheet" href="../css/estilo.css"> -->
+    <title>Meu Perfil - Edukhan</title>
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <header>
         <nav>
-            <div class="logo">AvaliaEduca - Meu Perfil</div>
+            <div class="logo">Edukhan - Meu Perfil</div>
             <ul class="nav-links">
                 <li><a href="dashboard_aluno.php">Dashboard</a></li>
                 <li><a href="provas_disponiveis.php">Provas</a></li>
@@ -94,8 +94,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['atualizar_perfil'])) {
     </header>
 
     <main>
-        <article>
-            <section style="margin-bottom: 20px;">
+        <article class="perfil">
+            <section class="perfil-header">
                 <h1>👤 Meu Perfil</h1>
                 <p>Gerencie suas informações pessoais</p>
                 
@@ -113,7 +113,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['atualizar_perfil'])) {
             </section>
 
             <!-- INFORMAÇÕES FIXAS -->
-            <section>
+            <section class="perfil-info-fixa">
                 <h2>📋 Informações de Identificação</h2>
                 <div>
                     <div>
@@ -136,11 +136,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['atualizar_perfil'])) {
             </section>
 
             <!-- FORMULÁRIO DE EDIÇÃO -->
-            <section>
+            <section class="perfil-info-fixa">
                 <h2>✏️ Editar Informações Pessoais</h2>
                 <p>Para alterar seus dados, preencha o formulário abaixo e confirme com seu código de acesso.</p>
                 
-                <form method="POST" action="perfil.php">
+                <form class="perfil-editar-formulario" method="POST" action="perfil.php">
                     <div>
                         
                         <!-- Coluna 1 -->
@@ -243,7 +243,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['atualizar_perfil'])) {
     </main>
 
     <footer>
-        <p>&copy; 2023 AvaliaEduca - Área do Aluno</p>
+        <p>&copy; 2023 Edukhan - Área do Aluno</p>
     </footer>
 
     <script>

@@ -77,7 +77,7 @@ if ($result_provas && mysqli_num_rows($result_provas) > 0) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Provas Disponíveis - Edukhan</title>
-    
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <header>
@@ -94,14 +94,14 @@ if ($result_provas && mysqli_num_rows($result_provas) > 0) {
     </header>
 
     <main>
-        <article>
-            <section>
+        <article class="provas-disponiveis">
+            <section class="header-provas-disponiveis">
                 <h1>📚 Provas Disponíveis</h1>
                 <p>Aluno: <strong><?php echo $nome_aluno; ?></strong> | Série: <strong><?php echo $serie_aluno; ?></strong></p>
             </section>
 
             <!-- ESTATÍSTICAS RÁPIDAS -->
-            <section>
+            <section class="estatisticas-rapidas-provas-disponiveis">
                 <div>
                     <h3><?php echo $disponiveis; ?></h3>
                     <p>Disponíveis</p>
@@ -125,7 +125,7 @@ if ($result_provas && mysqli_num_rows($result_provas) > 0) {
             </section>
 
             <!-- LISTA DE PROVAS -->
-            <section>
+            <section class="lista-provas-disponiveis">
                 <h2>📋 Lista de Provas</h2>
                 
                 <?php if ($total_provas > 0): ?>
@@ -156,7 +156,7 @@ if ($result_provas && mysqli_num_rows($result_provas) > 0) {
                                         </div>
                                     </div>
                                     
-                                    <div>
+                                    <div class="status-tag">
                                         <?php if ($status === 'disponivel'): ?>
                                             <span class="status-tag tag-disponivel">✅ Disponível</span>
                                         <?php elseif ($status === 'pendente'): ?>

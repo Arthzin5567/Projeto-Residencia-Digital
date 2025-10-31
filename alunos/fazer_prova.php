@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// CORREÇÃO: Verificação consistente com as outras páginas
+// Verificação consistente com as outras páginas
 if (!isset($_SESSION['aluno_identificado'])) {
     echo "<script> 
             alert('Acesso negado! Identifique-se primeiro.');
@@ -10,7 +10,7 @@ if (!isset($_SESSION['aluno_identificado'])) {
     exit();
 }
 
-// CORREÇÃO: Verificar se o ID da prova foi passado
+// Verificar se o ID da prova foi passado
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     echo "<script> 
             alert('Prova não especificada.');
@@ -20,10 +20,10 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 }
 
 $prova_id = $_GET['id'];
-$aluno_id = $_SESSION['id_aluno']; // CORREÇÃO: variável de sessão correta
+$aluno_id = $_SESSION['id_aluno']; // variável de sessão correta
 $conectar = mysqli_connect("localhost", "root", "", "projeto_residencia");
 
-// CORREÇÃO: Buscar dados da prova com tratamento de erro
+// Buscar dados da prova com tratamento de erro
 $sql_prova = "SELECT * FROM Provas WHERE idProvas = '$prova_id'";
 $resultado = mysqli_query($conectar, $sql_prova);
 
@@ -37,7 +37,23 @@ if (!$resultado || mysqli_num_rows($resultado) == 0) {
 
 $prova = mysqli_fetch_assoc($resultado);
 
-// CORREÇÃO: Verificar se o aluno já realizou esta prova
+// Buscar imagens da prova
+$sql_imagens = "SELECT numero_questao, caminho_imagem, nome_arquivo 
+                FROM ImagensProvas 
+                WHERE idProva = '$prova_id' 
+                ORDER BY numero_questao, idImagem";
+$resultado_imagens = mysqli_query($conectar, $sql_imagens);
+$imagens_por_questao = [];
+
+if ($resultado_imagens) {
+    while ($imagem = mysqli_fetch_assoc($resultado_imagens)) {
+        $imagens_por_questao[$imagem['numero_questao']][] = $imagem;
+    }
+}
+
+$base_url = 'http://' . $_SERVER['HTTP_HOST'] . '/projeto_residencia/Projeto-Residencia-Digital/';
+
+// Verificar se o aluno já realizou esta prova
 $sql_verifica = "SELECT status FROM Aluno_Provas 
                  WHERE Aluno_idAluno = '$aluno_id' AND Provas_idProvas = '$prova_id'";
 $result_verifica = mysqli_query($conectar, $sql_verifica);
@@ -71,18 +87,19 @@ if (!is_array($questoes) || empty($questoes)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fazer Prova - AvaliaEduca</title>
+    <title>Fazer Prova - Edukhan</title>
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <header>
         <nav>
-            <div class="logo">AvaliaEduca - Realizando Prova</div>
+            <div class="logo">Edukhan - Realizando Prova</div>
         </nav>
     </header>
 
     <main>
-        <article>
-            <div class="header-info">
+        <article class="fazer-prova">
+            <div class="header-info-fazer-prova">
                 <h1><?php echo htmlspecialchars($prova['titulo'] ?: 'Prova Sem Título'); ?></h1>
                 <p><strong>Matéria:</strong> <?php echo htmlspecialchars($prova['materia']); ?></p>
                 <p><strong>Número de Questões:</strong> <?php echo count($questoes); ?></p>
@@ -93,11 +110,44 @@ if (!is_array($questoes) || empty($questoes)) {
                 <input type="hidden" name="prova_id" value="<?php echo $prova_id; ?>">
                 
                 <?php foreach ($questoes as $index => $questao): ?>
-                    <div class="questao">
+                    <div class="questao-fazer-prova">
                         <h3>Questão <?php echo $index + 1; ?></h3>
+
+                        <!-- Exibir imagens da questão, se houver -->
+                        <?php $numero_questao = $index + 1; ?>
+                        <?php if (isset($imagens_por_questao[$numero_questao]) && !empty($imagens_por_questao[$numero_questao])): ?>
+                            <div class="imagens-questao">
+                                <div>
+                                    <?php foreach ($imagens_por_questao[$numero_questao] as $imagem): ?>
+                                        <div class="imagem-container">
+                                            <?php
+                                            // DEBUG: Verificar o caminho da imagem
+                                            $caminho_imagem = $imagem['caminho_imagem'];
+                                            $caminho_completo = "../" . $caminho_imagem;
+                                            
+                                            // Verificar se o arquivo existe
+                                            if (!file_exists($caminho_completo)) {
+                                                error_log("Arquivo de imagem não encontrado: " . $caminho_completo);
+                                            }
+                                            ?>
+                                            <img src="../Projeto-Residencia-Digital/<?php echo htmlspecialchars($imagem['caminho_imagem']); ?>" 
+                                                 alt="Imagem da questão <?php echo $numero_questao; ?>"
+                                                 class="imagem-questao"
+                                                 onclick="abrirModal('../Projeto-Residencia-Digital/<?php echo htmlspecialchars($imagem['caminho_imagem']); ?>')"
+                                                 >
+                                            <br>
+                                            <small>
+                                                <?php echo htmlspecialchars($imagem['nome_arquivo']); ?>
+                                            </small>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                        
                         <p><?php echo htmlspecialchars($questao['enunciado']); ?></p>
                         
-                        <div class="alternativas">
+                        <div class="alternativas-fazer-prova">
                             <?php foreach ($questao['alternativas'] as $letra => $texto): ?>
                                 <label>
                                     <input type="radio" name="resposta_<?php echo $index; ?>" value="<?php echo $letra; ?>" required>
@@ -116,6 +166,52 @@ if (!is_array($questoes) || empty($questoes)) {
             </form>
         </article>
     </main>
+
+    <!-- Modal para visualização ampliada de imagens -->
+    <div id="modalImagem" class="modal">
+        <div class="modal-content">
+            <img id="imagemModal" src="" alt="Imagem ampliada" class="modal-img">
+            <button class="close-modal" onclick="fecharModal()">Fechar</button>
+        </div>
+    </div>
+
+     <script>
+        // Funções para o modal de imagens
+        function abrirModal(src) {
+            document.getElementById('imagemModal').src = src;
+            document.getElementById('modalImagem').style.display = 'flex';
+        }
+
+        function fecharModal() {
+            document.getElementById('modalImagem').style.display = 'none';
+        }
+
+        // Fechar modal ao clicar fora da imagem
+        document.getElementById('modalImagem').addEventListener('click', function(e) {
+            if (e.target === this) {
+                fecharModal();
+            }
+        });
+
+        // Fechar modal com tecla ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                fecharModal();
+            }
+        });
+
+        // Prevenir que o usuário saia da página acidentalmente
+        window.addEventListener('beforeunload', function(e) {
+            e.preventDefault();
+            e.returnValue = 'Você tem certeza que deseja sair? Suas respostas podem ser perdidas.';
+        });
+
+        // Remover o aviso quando o formulário for enviado
+        document.querySelector('form').addEventListener('submit', function() {
+            window.removeEventListener('beforeunload', arguments.callee);
+        });
+    </script>
+
 </body>
 </html>
 

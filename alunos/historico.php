@@ -125,12 +125,13 @@ $aprovacao_matematica = $matematica['total'] > 0 ?
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Histórico - AvaliaEduca</title>
+    <title>Histórico - Edukhan</title>
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <header>
         <nav>
-            <div class="logo">AvaliaEduca - Histórico</div>
+            <div class="logo">Edukhan - Histórico</div>
             <ul class="nav-links">
                 <li><a href="dashboard_aluno.php">Dashboard</a></li>
                 <li><a href="provas_disponiveis.php">Provas</a></li>
@@ -142,8 +143,8 @@ $aprovacao_matematica = $matematica['total'] > 0 ?
     </header>
 
     <main class="container">
-        <article>
-            <section>
+        <article class="historico">
+            <section class="header-historico">
                 <h1>📊 Meu Desempenho</h1>
                 <p>Aluno: <strong><?php echo $_SESSION['nome_aluno']; ?></strong></p>
             </section>
@@ -195,8 +196,8 @@ $aprovacao_matematica = $matematica['total'] > 0 ?
             </section>
 
             <!-- APROVEITAMENTO POR MATÉRIA -->
-            <section class="materias-grid">
-                <div class="materia-card materia-portugues">
+            <section class="materias-historico">
+                <div class="materia-card-historico">
                     <h3>📚 Português</h3>
                     <div class="materia-number"><?php echo $media_portugues; ?></div>
                     <p>Média Geral</p>
@@ -215,7 +216,7 @@ $aprovacao_matematica = $matematica['total'] > 0 ?
                     </p>
                 </div>
 
-                <div class="materia-card materia-matematica">
+                <div class="materia-card-historico">
                     <h3>🔢 Matemática</h3>
                     <div class="materia-number"><?php echo $media_matematica; ?></div>
                     <p>Média Geral</p>
@@ -236,7 +237,7 @@ $aprovacao_matematica = $matematica['total'] > 0 ?
             </section>
 
             <!-- DETALHES DA EVOLUÇÃO -->
-            <section class="card">
+            <section class="historico-evolucao">
                 <h2>📈 Análise da Sua Evolução</h2>
                 <div>
                     <div>
@@ -257,7 +258,7 @@ $aprovacao_matematica = $matematica['total'] > 0 ?
             </section>
 
             <!-- HISTÓRICO DE PROVAS POR MATÉRIA -->
-            <section class="card">
+            <section class="historico-provas-por-materia">
                 <h2>📋 Histórico de Provas Realizadas</h2>
                 
                 <?php if ($total_provas_realizadas > 0): ?>
@@ -299,7 +300,7 @@ $aprovacao_matematica = $matematica['total'] > 0 ?
                         </div>
                     <?php endwhile; ?>
                 <?php else: ?>
-                    <div>
+                    <div class="nenhuma-prova-historico">
                         <h3>📭 Nenhuma prova realizada ainda</h3>
                         <p>Você ainda não realizou nenhuma prova.</p>
                         <a href="provas_disponiveis.php">
@@ -312,7 +313,10 @@ $aprovacao_matematica = $matematica['total'] > 0 ?
     </main>
 
     <footer>
-        <p>&copy; 2023 AvaliaEduca - Área do Aluno</p>
+        <div class="footer-content">
+            <p>&copy; 2023 Edukhan - Área do Aluno</p>
+            <p><small>Seu código de acesso: <strong><?php echo $aluno['codigo_acesso']; ?></strong></small></p>
+        </div>
     </footer>
 </body>
 </html>

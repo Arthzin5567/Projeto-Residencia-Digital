@@ -43,12 +43,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Identificação do Aluno - AvaliaEduca</title>
+        <title>Identificação do Aluno - Edukhan</title>
+        <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <header>
         <nav>
-            <div class="logo">AvaliaEduca - Identificação</div>
+            <div class="logo">Edukhan - Identificação</div>
             <ul class="nav-links">
                 <li><a href="../index.php">Voltar ao Início</a></li>
             </ul>

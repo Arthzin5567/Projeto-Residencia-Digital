@@ -1,9 +1,5 @@
 <?php
 session_start();
-/*
-colocar mais tarde
-    <link rel="stylesheet" href="css/style.css"> 
-*/
 ?>
 
 <!DOCTYPE html>
@@ -11,12 +7,13 @@ colocar mais tarde
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Aluno - AvaliaEduca</title>
+    <title>Cadastro de Aluno - Edukhan</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header>
         <nav>
-            <div class="logo">AvaliaEduca</div>
+            <div class="logo">Edukhan</div>
             <ul class="nav-links">
                 <li><a href="index.php">Login Professor</a></li>
                 <li><a href="cadastro.php">Cadastro Aluno</a></li>
@@ -175,7 +172,7 @@ colocar mais tarde
                 <li><a href="#">Suporte Técnico</a></li>
                 <li><a href="#">Dúvidas Frequentes</a></li>
             </ul>
-            <p class="copyright">© 2023 AvaliaEduca - Plataforma de Avaliação Educacional. Todos os direitos reservados.</p>
+            <p class="copyright">© 2023 Edukhan - Plataforma de Avaliação Educacional. Todos os direitos reservados.</p>
         </div>
     </footer>
 

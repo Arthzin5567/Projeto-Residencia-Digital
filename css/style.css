@@ -1,0 +1,3143 @@
+@import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400;700&display=swap');
+/* ========================================================================== */
+/* 🎯 RESET BÁSICO */
+/* ========================================================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background: #f5f7fa;
+}
+
+/* Layout-base: header, conteúdo e footer */
+body {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  font-family: 'Kode Mono', monospace;
+}
+
+/* ========================================================================== */
+/* 🧭 HEADER / NAVBAR */
+/* ========================================================================== */
+header {
+  background: rgb(77, 181, 234);
+  padding: 15px 30px;
+  
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ecf0f1;
+}
+
+.logo img {
+  object-fit: cover;
+  width: 143px;
+  height: 51px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  color: rgb(10, 40, 230);
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: white;
+}
+
+/* ========================================================================== */
+/* 🦶 FOOTER */
+/* ========================================================================== */
+footer {
+  background: rgb(77, 181, 234);
+  padding: 20px;
+  
+}
+
+.footer-content {
+  max-width: 1000px;
+  margin: auto;
+  text-align: center;
+}
+
+.footer-links {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.footer-links a {
+  color: rgb(10, 40, 230);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover {
+  color: white;
+}
+
+.copyright {
+  color: rgb(10, 40, 230);
+}
+
+/* ========================================================================== */
+/* 🏠 PÁGINA INICIAL (index) */
+/* ========================================================================== */
+main {
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  background-color: rgb(10, 40, 230);
+}
+
+.area-acesso {
+  max-width: 900px;
+  text-align: center;
+}
+
+.area-acesso h1 {
+  font-size: 2rem;
+  margin-bottom: 15px;
+  color: white;
+}
+
+.area-acesso > p {
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+  color: white;
+}
+
+.area-acesso h2 {
+  margin-bottom: 10px;
+  color: rgb(10, 40, 230);
+}
+
+/* Cartões de acesso */
+.area-acesso > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.area-acesso > div > div {
+  background: rgb(245, 204, 81);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  width: 280px;
+}
+
+.area-acesso div p{
+  margin-bottom: 10px;
+  color: rgb(10, 40, 230);
+}
+
+
+
+/* Botões */
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: rgb(110, 85, 245);
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 5px;
+  transition: background 0.3s, transform 0.2s;
+}
+
+button:hover {
+  background: rgb(10, 40, 230);
+  transform: translateY(-2px);
+}
+
+/* ==================================================================================================================================================== */
+/* 🧒 PÁGINA IDENTIFICAR ALUNO */
+/* ==================================================================================================================================================== */
+.identificar-aluno {
+  text-align: center;
+}
+
+.identificar-aluno > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.identificar-aluno > div > div {
+  background: rgb(245, 204, 81);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  width: 300px;
+}
+
+.identificar-aluno h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: rgb(10, 40, 230);
+}
+
+.identificar-aluno h1{
+  color: white;
+}
+
+.identificar-aluno p {
+  margin-bottom: 15px;
+  color: rgb(10, 40, 230);
+}
+
+.identificar-aluno form div {
+  margin-bottom: 15px;
+}
+
+.identificar-aluno label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.indentificar-links {
+  margin-top: 35px;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.indentificar-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.indentificar-links a:hover {
+  text-decoration: underline;
+}
+
+/* ==================================================================================================================================================== */
+/* 🎓 PÁGINA DE CADASTRO */
+/* ==================================================================================================================================================== */
+
+.cadastro-article {
+  width: 100%;
+  max-width: 900px;
+}
+
+.cadastro-container {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  padding: 50px;
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+/* ========================================================================== */
+/* 🧠 CABEÇALHO */
+/* ========================================================================== */
+.cadastro-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.cadastro-header h1 {
+  font-size: 2rem;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.cadastro-header p {
+  color: #555;
+  font-size: 1rem;
+}
+
+/* ========================================================================== */
+/* 📋 FORMULÁRIO cadastroForm */
+/* ========================================================================== */
+
+/* FORMULÁRIOS */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #5f2eea;
+  box-shadow: 0 0 0 3px rgba(95, 46, 234, 0.2);
+  outline: none;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.form-row .form-group {
+  flex: 1;
+  min-width: 250px;
+}
+
+/* TEXTOS AUXILIARES */
+.form-info {
+  color: #777;
+  font-size: 0.85rem;
+  margin-top: 4px;
+  display: block;
+}
+
+.obrigatorio {
+  color: #e53935;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.info-responsavel {
+  color: #666;
+}
+
+/* ========================================================================== */
+/* 🌐 LINKS DE NAVEGAÇÃO */
+/* ========================================================================== */
+.cadastro-links {
+  margin-top: 35px;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.cadastro-links a {
+  color: blue;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.cadastro-links a:hover {
+  text-decoration: underline;
+}
+
+/* ========================================================================== */
+/* ✅ MENSAGENS DE FEEDBACK */
+.success-message, .error-message {
+  margin-top: 20px;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.success-message {
+  background: #e6f4ea;
+  color: #2e7d32;
+  border: 1px solid #81c784;
+}
+
+.error-message {
+  background: #fdecea;
+  color: #c62828;
+  border: 1px solid #ef9a9a;
+}
+
+/* ==================================================================================================================================================== */
+/* 🎓 PÁGINA login_professor */
+/* ==================================================================================================================================================== */
+
+/* Container principal */
+.login-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 350px;
+    text-align: center;
+}
+
+/* Título */
+.login-container h1 {
+    margin-bottom: 20px;
+    color: #2c3e50;
+    font-size: 24px;
+}
+
+/* Subtítulo */
+.login-container p {
+    margin-bottom: 25px;
+    color: #7f8c8d;
+    font-size: 16px;
+}
+
+/* Formulário */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Mensagens de feedback */
+
+.error-message {
+    background-color: #fdecea;
+    color: #d32f2f;
+    border: 1px solid #ef9a9a;
+}
+
+.success-message {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+}
+
+
+
+/* ==================================================================================================================================================== */
+/* 🎓 PÁGINA dashboard_professor */
+/* ==================================================================================================================================================== */
+
+.dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: rgb(245, 204, 81);
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Cabeçalho */
+.welcome-professor {
+  background-color: #4a6fa5;
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-professor h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.welcome-professor p {
+  margin: 5px 0 0;
+  font-size: 16px;
+}
+
+/* Cards de Estatísticas */
+.stats-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 30px;
+  flex-wrap: wrap; /* permite quebra em telas menores */
+}
+
+.stat-card {
+  flex: 1;
+  min-width: 200px; /* pra não ficar minúsculo */
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.stat-card h3 {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 10px;
+}
+
+.stat-card p {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+  color: #2c3e50;
+}
+
+/* Ações Rápidas */
+.actions-container {
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.action-card {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.acoes {
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+  flex: 1;
+  min-width: 200px;
+}
+
+.acoes h3 {
+  font-size: 16px;
+  margin: 0 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.acoes p {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 15px;
+}
+
+.acoes a {
+  color: rgb(10, 40, 230);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.acoes a:hover {
+  text-decoration: underline;
+}
+
+/* Últimas Provas */
+.latest-tests {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.latest-tests h2 {
+  margin: 0 0 20px;
+  font-size: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.prova-card {
+  background-color: rgb(199, 199, 199);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.view-all-btn {
+  background: none;
+  border: none;
+  color: #4a6fa5;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.no-tests {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+}
+
+.bnt-all-provas {
+  margin-top: 5px;
+}
+
+.bnt-all-provas a {
+  padding: 5px;
+  color: blue;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.bnt-all-provas a:hover {
+  text-decoration: underline;
+}
+
+/* Status */
+.status-badge {
+  display: inline-block;
+  background-color: #e1f5e1;
+  color: #2e7d32;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* Ícones */
+.icon {
+  font-size: 20px;
+}
+
+
+/* ==================================================================================================================================================== */
+/* 🎓 PÁGINA gerenciar_provas */
+/* ==================================================================================================================================================== */
+
+/* 🧩 Container das provas */
+.gerenciar-provas-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: rgb(245, 204, 81);
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.provas-container{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.prova-actions a {
+  color: blue;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.prova-actions a:hover {
+  text-decoration: underline;
+}
+
+/* 🫥 Estado vazio */
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  border-radius: 15px;
+  color: #555;
+  grid-column: 1 / -1;
+}
+
+.empty-state a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.empty-state a:hover {
+  text-decoration: underline;
+}
+
+
+/* ==================================================================================================================================================== */
+/* 🎓 PÁGINA criar_prova */
+/* ==================================================================================================================================================== */
+/* Card da criação da prova */
+.criar-prova {
+    background-color: #ffffff;
+    padding: 30px 40px;
+    border-radius: 20px;
+    box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
+}
+
+.criar-prova:hover {
+    transform: translateY(-3px);
+}
+
+/* Título */
+.criar-prova h1 {
+    text-align: center;
+    color: #2d3436;
+    margin-bottom: 30px;
+    font-size: 2rem;
+    letter-spacing: 1px;
+}
+
+/* Formulário */
+.criar-prova .form-cria-prov > div {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Inputs, selects e textareas */
+.criar-prova .form-cria-prov input[type="text"],
+.criar-prova .form-cria-prov input[type="number"],
+.criar-prova .form-cria-prov select,
+.criar-prova .form-cria-prov textarea {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 1rem;
+    transition: 0.2s;
+    width: 100%;
+}
+
+.criar-prova .form-cria-prov input:focus,
+.criar-prova .form-cria-prov select:focus,
+.criar-prova .form-cria-prov textarea:focus {
+    border-color: #6c63ff;
+    box-shadow: 0 0 5px rgba(108, 99, 255, 0.3);
+}
+
+/* Questões */
+.questao {
+    background-color: #f8f9fa;
+    border-left: 6px solid #6c63ff;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 25px;
+    transition: 0.3s;
+}
+
+.questao:hover {
+    background-color: #f1f1f1;
+}
+
+/* Imagens */
+
+.imagens-questao {
+    margin: 10px 0;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 5px;
+}
+.area-upload {
+    border: 2px dashed #ccc;
+    padding: 15px;
+    text-align: center;
+    margin: 10px 0;
+    cursor: pointer;
+}
+.area-upload:hover {
+    border-color: #007bff;
+}
+.preview-imagem {
+    max-width: 150px;
+    max-height: 150px;
+    margin: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.lista-imagens {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+/* Título da questão */
+.questao h3 {
+    margin-bottom: 15px;
+    color: #2d3436;
+    font-size: 1.2rem;
+}
+
+/* Enunciado */
+.questao textarea {
+    min-height: 120px;
+    min-width: 500px;
+    resize: vertical;
+    font-size: 1rem;
+}
+
+/* Alternativas em duas colunas */
+.alternativas-criar-prova {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px 20px;
+    margin-top: 10px;
+}
+
+/* ==================================================================================================================================================== */
+/* 🎓 PÁGINA visualizar_prova */
+/* ==================================================================================================================================================== */
+/* Container principal */
+.visualizar-prova-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: rgb(245, 204, 81);
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Imagens */
+
+.questao-card {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .imagens-questao {
+            margin: 10px 0;
+        }
+
+        .imagem-container {
+            display: inline-block;
+            margin: 5px;
+            text-align: center;
+        }
+
+        .imagem-questao {
+            max-width: 300px;
+            max-height: 300px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
+        }
+
+        .alternativa.correta {
+            background-color: #e0ffe0;
+            padding: 5px;
+            border-radius: 3px;
+            border-left: 3px solid #28a745;
+        }
+
+        .estatisticas {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .estatistica-item {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin: 5px;
+            min-width: 120px;
+        }
+
+        .estatistica-numero {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .info-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+            background: #f8f9fa;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 5px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+        }
+
+        .btn-voltar {
+            background: #6c757d;
+        }
+
+        .btn-voltar:hover {
+            background: #545b62;
+        }
+
+        .btn-imprimir {
+            background: #28a745;
+        }
+
+        .btn-imprimir:hover {
+            background: #1e7e34;
+        }
+
+        .sem-imagens {
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        @media print {
+            .btn, .estatisticas, .nav-links {
+                display: none !important;
+            }
+            
+            .questao-card {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+            
+            .imagem-questao {
+                max-width: 100% !important;
+                max-height: none !important;
+            }
+        }
+
+/* Informações da prova */
+.prova-info {
+    background-color: #4a6fa5;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.info-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+
+.info-item {
+  background-color: #f8f9fa;
+  padding: 12px;
+  border-radius: 5px;
+}
+
+/* Estatísticas */
+.estatisticas {
+    display: flex;
+    justify-content: space-between;
+    margin: 25px 0;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.estatistica-item {
+    flex: 1;
+    min-width: 150px;
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.estatistica-item h3 {
+    margin-top: 0;
+    color: #333;
+    font-size: 1.1em;
+}
+
+/* Seção de questões */
+.questoes-section {
+    margin-top: 30px;
+}
+
+.questoes-section h2 {
+    color: #2d3436;
+    padding-bottom: 10px;
+}
+
+.questao-card {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+/* Mensagens de estado */
+.mensagem-vazia {
+    text-align: center;
+    padding: 30px;
+    color: #7f8c8d;
+    font-style: italic;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+
+/* ==================================================================================================================================================== */
+/* 🎓 PÁGINA editar_prova */
+/* ==================================================================================================================================================== */
+
+.editar-prova {
+    background-color: #ffffff;
+    padding: 30px 40px;
+    border-radius: 20px;
+    box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
+}
+
+.editar-prova:hover {
+    transform: translateY(-3px);
+}
+
+/* Título */
+.editar-prova h1 {
+    text-align: center;
+    color: #2d3436;
+    margin-bottom: 30px;
+    font-size: 2rem;
+    letter-spacing: 1px;
+}
+
+/* Formulário */
+.editar-prova .form-editar-prov > div {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Inputs, selects e textareas */
+.editar-prova .form-editar-prov input[type="text"],
+.editar-prova .form-editar-prov input[type="number"],
+.editar-prova .form-editar-prov select,
+.editar-prova .form-editar-prov textarea {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 1rem;
+    transition: 0.2s;
+    width: 100%;
+}
+
+.editar-prova .form-editar-prov input:focus,
+.editar-prova .form-editar-prov select:focus,
+.editar-prova .form-editar-prov textarea:focus {
+    border-color: #6c63ff;
+    box-shadow: 0 0 5px rgba(108, 99, 255, 0.3);
+}
+
+
+/* ==================================================================================================================================================== */
+/* 🎓 PÁGINA gerenciar_alunos */
+/* ==================================================================================================================================================== */
+
+/* Área principal do artigo */
+.gerenciar-alunos {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 20px 30px;
+    background-color: rgb(245, 204, 81);
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* ===========================
+   🔍 SEÇÃO DE INFORMAÇÕES
+=========================== */
+.gerenciar-alunos-informacoes{
+  background-color: #4a6fa5;
+  margin: 20px auto;
+  padding: 20px 30px;
+  border-radius: 16px;
+  width: 100%;
+}
+
+.gerenciar-alunos-informacoes h1 {
+    font-size: 2rem;
+    margin-bottom: 5px;
+    color: white;
+}
+
+.gerenciar-alunos-informacoes p {
+    color: white;
+    margin-bottom: 20px;
+}
+
+/* Formulário de pesquisa */
+.gerenciar-alunos-informacoes form div {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.gerenciar-alunos-informacoes input[type="text"] {
+    flex: 1;
+    padding: 10px 15px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+}
+
+.gerenciar-alunos-informacoes input[type="text"]:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Resultado da pesquisa */
+.gerenciar-alunos-resultado-pesquisa {
+    margin-top: 15px;
+    font-size: 0.95rem;
+}
+
+.gerenciar-alunos-resultado-pesquisa a {
+  padding: 5px;
+  color: blue;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.gerenciar-alunos-resultado-pesquisa a:hover {
+    text-decoration: underline;
+}
+
+/* Cards de alunos */
+.gerenciar-alunos-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* Card individual */
+.gerenciar-alunos-cards > div {
+    background: #f9fafc;
+    border: 1px solid #e2e6ea;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gerenciar-alunos-cards > div:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Estatísticas */
+.gerenciar-alunos-cards > div > div:nth-child(2) {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    background: #fff;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.gerenciar-alunos-cards > div > div:nth-child(2) div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* ==================================================================================================================================================== */
+/* 🎓 PÁGINA desempenho_geral */
+/* ==================================================================================================================================================== */
+
+        .estatisticas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .estatistica-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .estatistica-numero {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .tabela-desempenho {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .tabela-desempenho th,
+        .tabela-desempenho td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .tabela-desempenho th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        .tabela-desempenho tr:hover {
+            background-color: #f5f5f5;
+        }
+        .badge-aprovado {
+            background-color: #28a745;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+        }
+        .badge-reprovado {
+            background-color: #dc3545;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+        }
+        .badge-medio {
+            background-color: #ffc107;
+            color: black;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+        }
+        .section-card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        .progress-bar {
+            background-color: #e9ecef;
+            border-radius: 4px;
+            height: 20px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: #28a745;
+            transition: width 0.3s ease;
+        }
+
+/* ==================================================================================================================================================== */
+/* 🎓 PÁGINA perfil_professor */
+/* ==================================================================================================================================================== */
+
+.perfil-professor {
+    max-width: 1100px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* ===========================
+   🧑‍🏫 CABEÇALHO
+=========================== */
+.perfil-professor-header {
+    text-align: center;
+    border-bottom: 2px solid #eaeaea;
+    padding-bottom: 15px;
+}
+
+.perfil-professor-header h1 {
+    font-size: 2rem;
+    color: #2d3e50;
+    margin-bottom: 8px;
+}
+
+.perfil-professor-header p {
+    color: #555;
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+/* Mensagens de sucesso e erro */
+.perfil-professor-header div {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.perfil-professor-header div:has(> strong),
+.perfil-professor-header div:has(> span) {
+    display: inline-block;
+}
+
+.perfil-professor-header div:has(> .erro) {
+    background-color: #ffe0e0;
+    color: #e74c3c;
+}
+
+.perfil-professor-header div:has(> .sucesso),
+.perfil-professor-header div:contains("✅") {
+    background-color: #e2f9e2;
+    color: #2ecc71;
+}
+
+/* ===========================
+   📋 INFORMAÇÕES FIXAS
+=========================== */
+.perfil-professor-info-fixa {
+    background-color: #f9fafc;
+    border: 1px solid #e0e4e8;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.perfil-professor-info-fixa h2 {
+    color: #2d3e50;
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+}
+
+.perfil-professor-info-fixa > div {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 10px;
+}
+
+.perfil-professor-info-fixa p {
+    margin: 5px 0;
+    font-size: 0.95rem;
+}
+
+.perfil-professor-info-fixa strong {
+    color: #000;
+}
+
+.perfil-professor-info-fixa > p {
+    font-style: italic;
+    color: #e67e22;
+    margin-top: 10px;
+}
+
+/* ===========================
+   ✏️ FORMULÁRIO DE EDIÇÃO
+=========================== */
+.perfil-professor-editar h2 {
+    font-size: 1.5rem;
+    color: #2d3e50;
+    margin-bottom: 8px;
+}
+
+.perfil-professor-editar p {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* Layout das duas colunas */
+.perfil-professor-editar form > div:first-child {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+}
+
+/* Cada coluna */
+.perfil-professor-editar form > div > div {
+    background-color: #f9fafc;
+    border: 1px solid #e0e4e8;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.perfil-professor-editar h3 {
+    color: #2d3e50;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+/* Campos */
+.perfil-professor-editar label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.perfil-professor-editar input,
+.perfil-professor-editar select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.perfil-professor-editar input:focus,
+.perfil-professor-editar select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.3);
+    outline: none;
+}
+
+.perfil-professor-editar small {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+
+/* ==================================================================================================================================================== */
+/* 🎓 PÁGINA perfil_aluno */
+/* ==================================================================================================================================================== */
+
+.perfil-aluno {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+/* =====================================
+   👤 CABEÇALHO DO PERFIL
+===================================== */
+.perfil-cabecalho > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    border-bottom: 2px solid #eaeaea;
+    padding-bottom: 15px;
+}
+
+.perfil-cabecalho h1 {
+    font-size: 1.8rem;
+    color: #2d3e50;
+    margin-bottom: 8px;
+}
+
+.perfil-cabecalho p {
+    font-size: 0.95rem;
+    color: #555;
+}
+
+/* =====================================
+   📊 ESTATÍSTICAS GERAIS
+===================================== */
+.estatisticas-gerais {
+    background-color: #f9fafc;
+    border: 1px solid #e0e4e8;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.estatisticas-gerais h2 {
+    font-size: 1.4rem;
+    color: #2d3e50;
+    margin-bottom: 20px;
+}
+
+.estatisticas-gerais > div {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 20px;
+}
+
+.estatisticas-gerais > div > div {
+    background: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+}
+
+.estatisticas-gerais strong {
+    color: #007bff;
+}
+
+/* =====================================
+   📋 HISTÓRICO DE PROVAS
+===================================== */
+.historico-provas h2 {
+    font-size: 1.4rem;
+    color: #2d3e50;
+    margin-bottom: 10px;
+}
+
+.historico-provas p {
+    margin-bottom: 20px;
+    color: #555;
+}
+
+/* BLOCO DE CADA PROVA */
+.historico-provas > div {
+    background-color: #f9fafc;
+    border: 1px solid #e0e4e8;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* Cabeçalho da prova */
+.historico-prova-cabecalho {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.historico-prova-cabecalho h3 {
+    font-size: 1.2rem;
+    color: #2d3e50;
+    margin-bottom: 5px;
+}
+
+.historico-prova-cabecalho p {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.historico-prova-cabecalho > div:last-child {
+    text-align: right;
+}
+
+.historico-prova-cabecalho small {
+    color: #888;
+    font-size: 0.85rem;
+}
+
+.historico-prova-cabecalho > div:last-child > div {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #007bff;
+}
+
+
+/* ================================
+   📈 RESUMO DO DESEMPENHO
+================================ */
+.historico-prova-desempenho h4 {
+    margin-bottom: 10px;
+    color: #2d3e50;
+}
+
+.historico-prova-desempenho > div {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+}
+
+.historico-prova-desempenho > div > div {
+    background: #fff;
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.historico-prova-desempenho > div > div > div:first-child {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.historico-prova-desempenho > div > div > div:last-child {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* ================================
+   🔍 ANÁLISE DAS QUESTÕES
+================================ */
+.historico-prova-detalhes-questoes {
+    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid #e0e4e8;
+}
+
+.historico-prova-detalhes-questoes h4 {
+    margin-bottom: 10px;
+    color: #2d3e50;
+}
+
+.historico-prova-detalhes-questoes > div {
+    background: #f9fafc;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid #e5e9ed;
+}
+
+.historico-prova-detalhes-questoes strong {
+    color: #333;
+}
+
+.historico-prova-detalhes-questoes span {
+    background: #eef3ff;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.historico-prova-detalhes-questoes div div div:last-child {
+    font-weight: bold;
+}
+
+/* Alternativas */
+.historico-prova-detalhes-questoes > div > div:last-child {
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+
+.historico-prova-detalhes-questoes > div > div:last-child > div {
+    padding: 3px 0;
+}
+
+.historico-prova-detalhes-questoes > div > div:last-child span {
+    color: #007bff;
+    font-weight: bold;
+}
+
+/* ================================
+   📄 INFORMAÇÕES ADICIONAIS
+================================ */
+.historico-prova-informacoes-adicionais {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #555;
+    border-top: 1px dashed #ccc;
+    padding-top: 10px;
+}
+
+.historico-prova-informacoes-adicionais strong {
+    color: #2d3e50;
+}
+
+/* ================================
+   📭 SEM PROVAS
+================================ */
+.historico-provas > div:last-child h3 {
+    text-align: center;
+    color: #777;
+    margin-bottom: 5px;
+}
+
+.historico-provas > div:last-child p {
+    text-align: center;
+    color: #999;
+}
+
+/* ==================================================================================================================================================== */
+/* 🎓 PÁGINA excluir_prova */
+/* ==================================================================================================================================================== */
+
+.excluir-prova {
+  max-width: 700px;
+  margin: 4rem auto;
+  background: #fff;
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 0 25px rgba(255, 0, 0, 0.2);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #222;
+  animation: aparecer 0.4s ease-out;
+}
+
+/* 🔥 CABEÇALHO */
+.excluir-prova h1 {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #c0392b;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+/* ⚠️ ALERTA DE EXCLUSÃO */
+.alerta-de-exclusao {
+  background: linear-gradient(135deg, #ffe6e6, #fff);
+  border-left: 6px solid #e74c3c;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.alerta-de-exclusao h2 {
+  color: #e74c3c;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.alerta-de-exclusao p {
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+.alerta-de-exclusao ul {
+  margin: 0.5rem 0 1.5rem 1.5rem;
+}
+
+.alerta-de-exclusao li {
+  margin-bottom: 0.3rem;
+  color: #444;
+}
+
+/* 🧾 INFORMAÇÕES DA PROVA */
+.alerta-de-exclusao div p {
+  background: #fafafa;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 0.5rem 0.8rem;
+  margin: 0.4rem 0;
+}
+
+/* ✅ FORMULÁRIO DE CONFIRMAÇÃO */
+.excluir-prova form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.excluir-prova form div:first-of-type {
+  background: #f7f7f7;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.excluir-prova label {
+  display: block;
+  margin: 0.5rem 0;
+  cursor: pointer;
+}
+
+input[type="radio"] {
+  accent-color: #e74c3c;
+}
+
+/* 🧨 BOTÕES DE AÇÃO */
+.excluir-prova form div:last-of-type {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+
+/* ==================================================================================================================================================== */
+/* 🎓 PÁGINA dashboard_aluno */
+/* ==================================================================================================================================================== */
+
+.dashboard-aluno {
+  max-width: 1000px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background: rgb(245, 204, 81);
+  border-radius: 20px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #222;
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* 📊 RESUMO ESTATÍSTICO */
+.resumo-estatistico {
+  margin-bottom: 2.5rem;
+}
+
+.resumo-estatistico h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.resumo-estatistico > div {
+  display: flex;
+  justify-content: space-around;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.resumo-estatistico > div > div {
+  flex: 1;
+  min-width: 200px;
+  background: #f9f9f9;
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  transition: transform 0.2s;
+}
+
+.resumo-estatistico > div > div:hover {
+  transform: scale(1.05);
+}
+
+.resumo-estatistico h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.resumo-estatistico div div {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+
+/* 🚀 PRÓXIMAS AÇÕES */
+.aluno-proximas-acoes {
+  background: #f7faff;
+  padding: 2rem;
+  border-radius: 16px;
+  margin-bottom: 2.5rem;
+  border: 1px solid #e0e6f1;
+}
+
+.aluno-proximas-acoes h2 {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.aluno-proximas-acoes > div {
+  text-align: center;
+}
+
+.aluno-proximas-acoes div div div {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.2rem;
+  margin: 1rem auto;
+  border: 1px solid #eee;
+  max-width: 600px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.aluno-proximas-acoes h4 {
+  margin-bottom: 0.5rem;
+}
+
+.aluno-proximas-acoes a {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.8rem 1.4rem;
+  border-radius: 10px;
+  background: #4e73df;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.aluno-proximas-acoes a:hover {
+  background: #365acb;
+  transform: scale(1.05);
+}
+
+/* 🎉 Estado “sem provas disponíveis” */
+.aluno-proximas-acoes > div:last-child a {
+  background: #16a085;
+}
+
+.aluno-proximas-acoes > div:last-child a:hover {
+  background: #12876f;
+}
+
+/* ⚡ ACESSO RÁPIDO */
+.actions-container-aluno {
+  text-align: center;
+}
+
+.actions-container-aluno h2 {
+  margin-bottom: 1.5rem;
+}
+
+.action-card-aluno {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.acoes-aluno {
+  flex: 1;
+  min-width: 250px;
+}
+
+.acoes-aluno a {
+  display: block;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid #eee;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+  color: inherit;
+}
+
+.acoes-aluno a:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.acoes-aluno h3 {
+  color: #4e73df;
+  margin-bottom: 0.3rem;
+}
+
+.acoes-aluno small {
+  display: inline-block;
+  margin-top: 0.4rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+
+/* ==================================================================================================================================================== */
+/* 🎓 PÁGINA provas_disponiveis */
+/* ==================================================================================================================================================== */
+
+.provas-disponiveis {
+    max-width: 1000px;
+    padding: 2rem;
+    background-color: rgb(245, 204, 81);
+    color: #1e293b;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ==============================
+   📚 CABEÇALHO
+============================== */
+.header-provas-disponiveis {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.header-provas-disponiveis h1 {
+    font-size: 2rem;
+    color: #2563eb;
+    margin-bottom: 0.5rem;
+}
+
+.header-provas-disponiveis p {
+    color: #475569;
+    font-size: 1.1rem;
+}
+
+/* ==============================
+   📊 ESTATÍSTICAS RÁPIDAS
+============================== */
+.estatisticas-rapidas-provas-disponiveis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.2rem;
+    margin-bottom: 3rem;
+}
+
+.estatisticas-rapidas-provas-disponiveis div {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 1.2rem;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+}
+
+.estatisticas-rapidas-provas-disponiveis div:hover {
+    transform: translateY(-4px);
+}
+
+.estatisticas-rapidas-provas-disponiveis h3 {
+    font-size: 2rem;
+    color: #1e40af;
+    margin-bottom: 0.3rem;
+}
+
+.estatisticas-rapidas-provas-disponiveis p {
+    font-weight: bold;
+    color: #334155;
+}
+
+.estatisticas-rapidas-provas-disponiveis small {
+    color: #64748b;
+}
+
+/* ==============================
+   📋 LISTA DE PROVAS
+============================== */
+.lista-provas-disponiveis{
+  background-color: #f1f5f9;
+  max-width: 1000px;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.lista-provas-disponiveis h2 {
+    font-size: 1.6rem;
+    color: #1d4ed8;
+    margin-bottom: 1.2rem;
+    text-align: center;
+}
+
+#listaProvas {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+/* ==============================
+   🏷️ STATUS DAS PROVAS
+============================== */
+.status-tag {
+    font-weight: bold;
+    border-radius: 8px;
+    padding: 0.4rem 0.8rem;
+    display: inline-block;
+    color: white;
+    font-size: 0.9rem;
+}
+
+.tag-disponivel {
+    background-color: #16a34a;
+}
+
+.tag-pendente {
+    background-color: #f59e0b;
+}
+
+.tag-realizada {
+    background-color: #eab308;
+}
+
+.tag-corrigida {
+    background-color: #0ea5e9;
+}
+
+/* ==============================
+   📭 NENHUMA PROVA DISPONÍVEL
+============================== */
+.no-provas-disponiveis {
+    background-color: #f1f5f9;
+    border: 2px dashed #94a3b8;
+    text-align: center;
+    padding: 2rem;
+    border-radius: 12px;
+}
+
+.no-provas-disponiveis h3 {
+    color: #475569;
+    font-size: 1.4rem;
+}
+
+.no-provas-disponiveis small {
+    color: #94a3b8;
+}
+
+
+/* ==================================================================================================================================================== */
+/* 🎓 PÁGINA historico */
+/* ==================================================================================================================================================== */
+
+
+/* ==============================
+   🌌 GERAL
+============================== */
+.historico {
+    max-width: 1100px;
+    margin: 3rem auto;
+    padding: 2rem;
+    font-family: "Poppins", sans-serif;
+    color: #1e293b;
+    background-color: #f8fafc;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* ==============================
+   🏁 CABEÇALHO
+============================== */
+.header-historico {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.header-historico h1 {
+    font-size: 2rem;
+    color: #2563eb;
+}
+
+.header-historico p {
+    font-size: 1.1rem;
+    color: #475569;
+}
+
+/* ==============================
+   📈 ESTATÍSTICAS GERAIS
+============================== */
+.estatisticas-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.2rem;
+    margin-bottom: 3rem;
+}
+
+.stat-card-historico,
+.stat-card-evolucao-historico {
+    background-color: #ffffff;
+    border-radius: 12px;
+    text-align: center;
+    padding: 1.5rem;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+}
+
+.stat-card-historico:hover,
+.stat-card-evolucao-historico:hover {
+    transform: translateY(-4px);
+}
+
+.stat-card-historico h3,
+.stat-card-evolucao-historico h3 {
+    color: #1d4ed8;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat-card-historico div,
+.stat-card-evolucao-historico .stat-number {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #0f172a;
+    margin: 0.4rem 0;
+}
+
+.stat-card-historico p {
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+.evolucao-positiva {
+    color: #16a34a;
+}
+
+.evolucao-negativa {
+    color: #dc2626;
+}
+
+.evolucao-neutra {
+    color: #475569;
+}
+
+/* ==============================
+   📚 MÉDIAS POR MATÉRIA
+============================== */
+.materias-historico {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.materia-card-historico {
+    background-color: #ffffff;
+    border-radius: 14px;
+    padding: 1.5rem;
+    text-align: center;
+    border-top: 6px solid #2563eb;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+    transition: 0.2s ease;
+}
+
+.materia-card-historico:hover {
+    transform: translateY(-4px);
+}
+
+.materia-card-historico h3 {
+    font-size: 1.2rem;
+    color: #1d4ed8;
+}
+
+.materia-card-historico .materia-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #0f172a;
+    margin: 0.5rem 0;
+}
+
+.materia-card-historico > div {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1rem;
+}
+
+.materia-card-historico p {
+    color: #64748b;
+    margin-top: 0.5rem;
+}
+
+/* ==============================
+   🚀 EVOLUÇÃO DETALHADA
+============================== */
+.historico-evolucao {
+    margin-bottom: 3rem;
+}
+
+.historico-evolucao h2 {
+    text-align: center;
+    font-size: 1.6rem;
+    color: #1d4ed8;
+    margin-bottom: 1.5rem;
+}
+
+.historico-evolucao > div {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.historico-evolucao > div > div {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 1rem 2rem;
+    text-align: center;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+}
+
+.historico-evolucao h4 {
+    color: #0f172a;
+}
+
+.historico-evolucao div div div {
+    font-size: 2rem;
+    color: #2563eb;
+    font-weight: bold;
+}
+
+/* ==============================
+   🧾 HISTÓRICO DE PROVAS
+============================== */
+.historico-provas-por-materia h2 {
+    font-size: 1.6rem;
+    text-align: center;
+    color: #1d4ed8;
+    margin-bottom: 1rem;
+}
+
+.materia-title {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.title-portugues h3 {
+    color: #16a34a;
+}
+
+.title-matematica h3 {
+    color: #dc2626;
+}
+
+.prova-item {
+    background-color: #ffffff;
+    border-radius: 12px;
+    margin: 1rem 0;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.prova-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.prova-header h3 {
+    color: #0f172a;
+    margin-bottom: 0.3rem;
+}
+
+.badge {
+    display: inline-block;
+    background-color: #e2e8f0;
+    color: #1e293b;
+    font-size: 0.8rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 8px;
+    margin-right: 0.4rem;
+}
+
+.nota {
+    font-size: 1.8rem;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    color: white;
+}
+
+.nota-alta {
+    background-color: #16a34a;
+}
+
+.nota-media {
+    background-color: #f59e0b;
+}
+
+.nota-baixa {
+    background-color: #dc2626;
+}
+
+/* ==============================
+   📭 NENHUMA PROVA
+============================== */
+.nenhuma-prova-historico {
+    background-color: #f1f5f9;
+    border: 2px dashed #94a3b8;
+    text-align: center;
+    padding: 2rem;
+    border-radius: 12px;
+}
+
+.nenhuma-prova-historico h3 {
+    color: #475569;
+    font-size: 1.4rem;
+}
+
+.nenhuma-prova-historico a {
+    display: inline-block;
+    margin-top: 1rem;
+    background-color: #3b82f6;
+    color: white;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.nenhuma-prova-historico a:hover {
+    background-color: #1d4ed8;
+}
+
+
+/* ==================================================================================================================================================== */
+/* 🎓 PÁGINA perfil */
+/* ==================================================================================================================================================== */
+
+/* 🧱 CONTAINER PRINCIPAL */
+.perfil {
+  max-width: 1000px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  padding: 30px 40px;
+}
+
+/* 👤 CABEÇALHO DO PERFIL */
+.perfil-header {
+  text-align: center;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 15px;
+  margin-bottom: 25px;
+}
+
+.perfil-header h1 {
+  font-size: 2rem;
+  color: #2b6cb0;
+}
+
+.perfil-header p {
+  color: #555;
+  font-size: 1.1rem;
+}
+
+.perfil-header div {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.perfil-header div:first-of-type {
+  background: #e6ffed;
+  color: #166534;
+}
+
+.perfil-header div:last-of-type {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* 📋 INFORMAÇÕES FIXAS */
+.perfil-info-fixa {
+  margin-bottom: 35px;
+}
+
+.perfil-info-fixa h2 {
+  color: #2f855a;
+  margin-bottom: 15px;
+}
+
+.perfil-info-fixa > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 15px 20px;
+}
+
+.perfil-info-fixa p {
+  margin-bottom: 5px;
+}
+
+.perfil-info-fixa span {
+  background: #edf2f7;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.perfil-info-fixa > p {
+  margin-top: 10px;
+  font-style: italic;
+  color: #b45309;
+}
+
+/* 📝 FORMULÁRIO DE EDIÇÃO */
+.perfil-editar-formulario h2 {
+  color: #2b6cb0;
+  margin-bottom: 10px;
+}
+
+.perfil-editar-formulario p {
+  margin-bottom: 20px;
+  color: #555;
+}
+
+.perfil-editar-formulario form > div {
+  margin-bottom: 25px;
+}
+
+/* GRID BONITÃO PARA DUAS COLUNAS */
+.perfil-editar-formulario form > div:first-of-type {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+.perfil-editar-formulario h3 {
+  color: #1a202c;
+  margin-bottom: 10px;
+}
+
+.perfil-editar-formulario label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.perfil-editar-formulario input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.perfil-editar-formulario input:focus {
+  border-color: #3182ce;
+  box-shadow: 0 0 4px rgba(49, 130, 206, 0.4);
+  outline: none;
+}
+
+/* ==================================================================================================================================================== */
+/* 🎓 PÁGINA fazer_prova */
+/* ==================================================================================================================================================== */
+
+
+/* 📘 CONTAINER PRINCIPAL */
+.fazer-prova {
+  max-width: 900px;
+  margin: 50px auto;
+  background: #fff;
+  padding: 35px 45px;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* 🧠 CABEÇALHO DA PROVA */
+.header-info-fazer-prova {
+  border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+}
+
+.header-info-fazer-prova h1 {
+  font-size: 1.9rem;
+  color: #2b6cb0;
+  margin-bottom: 10px;
+}
+
+.header-info-fazer-prova p {
+  color: #4a5568;
+  margin-bottom: 5px;
+}
+
+.header-info-fazer-prova strong {
+  color: #1a202c;
+}
+
+/* 🧩 CADA QUESTÃO */
+.questao-fazer-prova {
+  background: #f9fafb;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 20px 25px;
+  margin-bottom: 25px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.questao-fazer-prova:hover {
+  transform: scale(1.01);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+.questao-fazer-prova h3 {
+  color: #2b6cb0;
+  margin-bottom: 10px;
+}
+
+.questao-fazer-prova p {
+  margin-bottom: 15px;
+  color: #1a202c;
+}
+
+/* 🔘 ALTERNATIVAS */
+.alternativas-fazer-prova {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.alternativas-fazer-prova label {
+  background: #edf2f7;
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.alternativas-fazer-prova label:hover {
+  background: #e2e8f0;
+  transform: translateX(3px);
+}
+
+/* 💡 RADIO STYLING */
+.alternativas-fazer-prova input[type="radio"] {
+  accent-color: #2b6cb0;
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+
+/*==========================================================================================*/
+/*=====================================RESPONCIVIDADE=======================================*/
+/*==========================================================================================*/
+
+@media (max-width: 768px) {
+  header {
+    padding: 10px 15px;
+  }
+
+  nav {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .logo img {
+    width: 100px;
+    height: auto;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .nav-links a {
+    font-size: 0.9rem;
+  }
+
+
+/* ==================================================================================================================================================== */
+/* 🎓 Responcividade dashboard_professor */
+/* ==================================================================================================================================================== */
+/* Container principal */
+  .dashboard-container {
+    padding: 1rem;
+  }
+
+  /* Cards de estatísticas */
+  .stats-container {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .stat-card {
+    min-width: 100%;
+    padding: 1rem;
+  }
+
+  .stat-card h3 {
+    font-size: 12px;
+  }
+
+  .stat-card p {
+    font-size: 20px;
+  }
+
+  /* Ações rápidas */
+  .action-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+  }
+
+  .acoes {
+    min-width: 100%;
+    padding: 0.8rem;
+  }
+
+  .acoes h3 {
+    font-size: 14px;
+  }
+
+  .acoes p {
+    font-size: 12px;
+  }
+
+  /* Últimas provas */
+  .latest-tests {
+    padding: 1rem;
+  }
+
+  .latest-tests h2 {
+    font-size: 1rem;
+  }
+
+  .prova-card {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .bnt-all-provas a {
+    font-size: 12px;
+  }
+
+  /* Status badge */
+  .status-badge {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+
+  /* Ícones */
+  .icon {
+    font-size: 16px;
+  }
+
+/* ==================================================================================================================================================== */
+/* 🎓 Responcividade criar_prova */
+/* ==================================================================================================================================================== */
+
+  /* Card principal */
+  .criar-prova {
+    padding: 20px;
+    border-radius: 15px;
+  }
+
+  /* Título */
+  .criar-prova h1 {
+    font-size: 1.5rem;
+  }
+
+  /* Formulário */
+  .criar-prova .form-cria-prov > div {
+    margin-bottom: 15px;
+  }
+
+  /* Inputs e textareas */
+  .criar-prova .form-cria-prov input[type="text"],
+  .criar-prova .form-cria-prov input[type="number"],
+  .criar-prova .form-cria-prov select,
+  .criar-prova .form-cria-prov textarea {
+    font-size: 0.95rem;
+    padding: 8px 10px;
+  }
+
+  /* Questão */
+  .questao {
+    padding: 15px;
+  }
+
+  .questao h3 {
+    font-size: 1rem;
+  }
+
+  /* Textarea das questões */
+  .questao textarea {
+    min-width: 100%; /* antes era 500px */
+  }
+
+  /* Alternativas: de duas pra uma coluna */
+  .alternativas-criar-prova {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+/* ==================================================================================================================================================== */
+/* 🎓 Responcividade visualizar_prova */
+/* ==================================================================================================================================================== */
+  /* Container principal */
+  .visualizar-prova-container {
+    padding: 15px;
+    border-radius: 6px;
+  }
+
+  /* Informações da prova */
+  .prova-info {
+    padding: 15px;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr; /* de 3 colunas pra 1 só */
+    gap: 8px;
+  }
+
+  .info-item {
+    padding: 10px;
+  }
+
+  /* Estatísticas */
+  .estatisticas {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .estatistica-item {
+    min-width: 100%;
+    padding: 12px;
+  }
+
+  .estatistica-item h3 {
+    font-size: 1rem;
+  }
+
+  /* Seção de questões */
+  .questoes-section {
+    margin-top: 20px;
+  }
+
+  .questoes-section h2 {
+    font-size: 1.2rem;
+  }
+
+  .questao-card {
+    padding: 15px;
+  }
+
+  /* Mensagem vazia */
+  .mensagem-vazia {
+    padding: 20px;
+    font-size: 0.95rem;
+  }
+
+/* ==================================================================================================================================================== */
+/* 🎓 Responcividade perfil_professor */
+/* ==================================================================================================================================================== */
+
+/* Container geral */
+  .perfil-professor {
+    padding: 20px;
+    margin: 20px auto;
+    gap: 20px;
+  }
+
+  /* Cabeçalho */
+  .perfil-professor-header h1 {
+    font-size: 1.6rem;
+  }
+
+  .perfil-professor-header p {
+    font-size: 0.9rem;
+  }
+
+  /* Informações fixas */
+  .perfil-professor-info-fixa {
+    padding: 15px;
+  }
+
+  .perfil-professor-info-fixa h2 {
+    font-size: 1.2rem;
+  }
+
+  .perfil-professor-info-fixa > div {
+    flex-direction: column; /* empilha tudo */
+    gap: 10px;
+  }
+
+  .perfil-professor-info-fixa p {
+    font-size: 0.9rem;
+  }
+
+  /* Formulário de edição */
+  .perfil-professor-editar h2 {
+    font-size: 1.3rem;
+  }
+
+  .perfil-professor-editar p {
+    font-size: 0.9rem;
+  }
+
+  /* Muda o grid das colunas pra apenas uma */
+  .perfil-professor-editar form > div:first-child {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  /* Caixas de edição */
+  .perfil-professor-editar form > div > div {
+    padding: 15px;
+    gap: 10px;
+  }
+
+  .perfil-professor-editar h3 {
+    font-size: 1rem;
+  }
+
+  .perfil-professor-editar label {
+    font-size: 0.9rem;
+  }
+
+  .perfil-professor-editar input,
+  .perfil-professor-editar select {
+    font-size: 0.9rem;
+    padding: 8px 10px;
+  }
+
+  .perfil-professor-editar small {
+    font-size: 0.8rem;
+  }
+
+/* ==================================================================================================================================================== */
+/* 🎓 Responcividade gerenciar_alunos */
+/* ==================================================================================================================================================== */
+/* Área principal */
+  .gerenciar-alunos {
+    padding: 15px 20px;
+    gap: 20px;
+  }
+
+  /* Seção de informações */
+  .gerenciar-alunos-informacoes {
+    padding: 15px 20px;
+    margin: 15px auto;
+  }
+
+  .gerenciar-alunos-informacoes h1 {
+    font-size: 1.5rem;
+  }
+
+  .gerenciar-alunos-informacoes p {
+    font-size: 0.9rem;
+  }
+
+  /* Formulário de pesquisa */
+  .gerenciar-alunos-informacoes form div {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .gerenciar-alunos-informacoes input[type="text"] {
+    width: 100%;
+    font-size: 0.9rem;
+    padding: 8px 10px;
+  }
+
+  /* Resultado da pesquisa */
+  .gerenciar-alunos-resultado-pesquisa {
+    font-size: 0.85rem;
+  }
+
+  /* Cards de alunos */
+  .gerenciar-alunos-cards {
+    grid-template-columns: 1fr; /* empilha os cards */
+    gap: 15px;
+  }
+
+  /* Card individual */
+  .gerenciar-alunos-cards > div {
+    padding: 15px;
+    gap: 10px;
+  }
+
+  /* Estatísticas internas do card */
+  .gerenciar-alunos-cards > div > div:nth-child(2) {
+    grid-template-columns: 1fr; /* empilha estatísticas */
+    font-size: 0.85rem;
+  }
+
+  .gerenciar-alunos-cards > div > div:nth-child(2) div {
+    gap: 3px;
+  }
+
+/* ==================================================================================================================================================== */
+/* 🎓 Responcividade historico */
+/* ==================================================================================================================================================== */
+/* Container geral */
+  .historico {
+    padding: 1rem;
+    margin: 1.5rem auto;
+  }
+
+  /* Cabeçalho */
+  .header-historico h1 {
+    font-size: 1.5rem;
+  }
+  .header-historico p {
+    font-size: 0.9rem;
+  }
+
+  /* Estatísticas gerais */
+  .estatisticas-grid {
+    grid-template-columns: 1fr 1fr; /* empilha cards */
+    gap: 0.8rem;
+  }
+  .stat-card-historico h3,
+  .stat-card-evolucao-historico h3 {
+    font-size: 1rem;
+  }
+  .stat-card-historico div,
+  .stat-card-evolucao-historico .stat-number {
+    font-size: 1.4rem;
+  }
+  .stat-card-historico p {
+    font-size: 0.8rem;
+  }
+
+  /* Médias por matéria */
+  .materias-historico {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .materia-card-historico h3 {
+    font-size: 1rem;
+  }
+  .materia-card-historico .materia-number {
+    font-size: 1.6rem;
+  }
+  .materia-card-historico > div {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  /* Evolução detalhada */
+  .historico-evolucao h2 {
+    font-size: 1.3rem;
+  }
+  .historico-evolucao > div {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .historico-evolucao div div div {
+    font-size: 1.6rem;
+  }
+
+  /* Histórico de provas */
+  .historico-provas-por-materia h2 {
+    font-size: 1.3rem;
+  }
+  .prova-item {
+    padding: 0.8rem 1rem;
+  }
+  .prova-header h3 {
+    font-size: 1rem;
+  }
+  .badge {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.4rem;
+  }
+  .nota {
+    font-size: 1.4rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  /* Nenhuma prova */
+  .nenhuma-prova-historico h3 {
+    font-size: 1.2rem;
+  }
+  .nenhuma-prova-historico a {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.8rem;
+  }
+
+
+/* ==================================================================================================================================================== */
+/* 🎓 Responcividade provas_disponiveis */
+/* ==================================================================================================================================================== */
+/* Container geral */
+  .provas-disponiveis,
+  .lista-provas-disponiveis {
+    padding: 1rem;
+    margin: 1rem auto;
+  }
+
+  /* Cabeçalho */
+  .header-provas-disponiveis h1 {
+    font-size: 1.5rem;
+  }
+  .header-provas-disponiveis p {
+    font-size: 0.9rem;
+  }
+
+  /* Estatísticas rápidas */
+  .estatisticas-rapidas-provas-disponiveis {
+    grid-template-columns: 1fr 1fr; /* empilha verticalmente */
+    gap: 0.8rem;
+  }
+  .estatisticas-rapidas-provas-disponiveis h3 {
+    font-size: 1.4rem;
+  }
+  .estatisticas-rapidas-provas-disponiveis p {
+    font-size: 0.85rem;
+  }
+  .estatisticas-rapidas-provas-disponiveis small {
+    font-size: 0.75rem;
+  }
+
+  /* Lista de provas */
+  #listaProvas {
+    gap: 0.8rem;
+  }
+
+  /* Status das tags */
+  .status-tag {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.6rem;
+  }
+
+  /* Nenhuma prova disponível */
+  .no-provas-disponiveis h3 {
+    font-size: 1.2rem;
+  }
+  .no-provas-disponiveis small {
+    font-size: 0.75rem;
+  }
+
+/* ==================================================================================================================================================== */
+/* 🎓 Responcividade dashboard_aluno */
+/* ==================================================================================================================================================== */
+/* Container principal */
+  .dashboard-aluno {
+    padding: 1rem;
+    margin: 1rem auto;
+  }
+
+  /* Resumo estatístico */
+  .resumo-estatistico > div {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .resumo-estatistico > div > div {
+    min-width: 100%;
+    padding: 0.8rem;
+  }
+  .resumo-estatistico div div {
+    font-size: 1.6rem;
+  }
+  .resumo-estatistico h3 {
+    font-size: 1rem;
+  }
+
+  /* Próximas ações */
+  .aluno-proximas-acoes {
+    padding: 1rem;
+  }
+  .aluno-proximas-acoes div div div {
+    padding: 0.8rem;
+    max-width: 100%;
+  }
+  .aluno-proximas-acoes a {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  /* Acesso rápido */
+  .action-card-aluno {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .acoes-aluno {
+    min-width: 100%;
+  }
+  .acoes-aluno a {
+    padding: 1rem;
+  }
+  .acoes-aluno h3 {
+    font-size: 1rem;
+  }
+  .acoes-aluno small {
+    font-size: 0.8rem;
+  }
+}

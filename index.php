@@ -7,6 +7,7 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edukhan - Sistema de Avaliação</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header>
@@ -21,7 +22,7 @@ session_start();
     </header>
 
     <main>
-        <article>
+        <article class="area-acesso">
             <h1>Bem-vindo ao Edukhan</h1>
             <p>Selecione sua área de acesso:</p>
             

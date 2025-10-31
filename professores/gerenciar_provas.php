@@ -19,12 +19,13 @@ $resultado_provas = mysqli_query($conectar, $sql_provas);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciar Provas - AvaliaEduca</title>
+    <title>Gerenciar Provas - Edukhan</title>
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <header>
         <nav>
-            <div class="logo">AvaliaEduca - Gerenciar Provas</div>
+            <div class="logo">Edukhan - Gerenciar Provas</div>
             <ul class="nav-links">
                 <li><a href="dashboard_professor.php">Dashboard</a></li>
                 <li><a href="criar_prova.php">Criar Prova</a></li>
@@ -35,7 +36,7 @@ $resultado_provas = mysqli_query($conectar, $sql_provas);
     </header>
 
     <main>
-        <article>
+        <article class="gerenciar-provas-container">
             <h1>Minhas Provas</h1>
             
             <div class="provas-container">

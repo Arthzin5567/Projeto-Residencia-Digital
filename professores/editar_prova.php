@@ -16,7 +16,19 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 
 $prova_id = mysqli_real_escape_string($conectar, $_GET['id']);
 
-// Buscar dados da prova
+// Buscar imagens da prova
+$sql_imagens = "SELECT numero_questao, caminho_imagem, nome_arquivo, idImagem 
+                FROM ImagensProvas 
+                WHERE idProva = '$prova_id' 
+                ORDER BY numero_questao, idImagem";
+$resultado_imagens = mysqli_query($conectar, $sql_imagens);
+$imagens_por_questao = [];
+
+if ($resultado_imagens) {
+    while ($imagem = mysqli_fetch_assoc($resultado_imagens)) {
+        $imagens_por_questao[$imagem['numero_questao']][] = $imagem;
+    }
+}
 
 // Buscar dados da prova
 $sql_prova = "SELECT * FROM Provas WHERE idProvas = '$prova_id' AND Professor_idProfessor = '{$_SESSION['idProfessor']}'";
@@ -40,12 +52,13 @@ $numero_questoes = is_array($questoes) ? count($questoes) : 0;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Prova - AvaliaEduca</title>
+    <title>Editar Prova - Edukhan</title>
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <header>
         <nav>
-            <div class="logo">AvaliaEduca - Editar Prova</div>
+            <div class="logo">Edukhan - Editar Prova</div>
             <ul class="nav-links">
                 <li><a href="dashboard_professor.php">Dashboard</a></li>
                 <li><a href="criar_prova.php">Criar Prova</a></li>
@@ -56,10 +69,10 @@ $numero_questoes = is_array($questoes) ? count($questoes) : 0;
     </header>
 
     <main>
-        <article>
+        <article class="editar-prova">
             <h1>Editar Prova: <?php echo htmlspecialchars($prova['titulo']); ?></h1>
             
-            <form action="../includes/processa_editar_prova.php" method="POST">
+            <form class="form-editar-prov" action="../includes/processa_editar_prova.php" method="POST">
                 <input type="hidden" name="prova_id" value="<?php echo $prova_id; ?>">
                 
                 <div>
@@ -118,10 +131,58 @@ $numero_questoes = is_array($questoes) ? count($questoes) : 0;
             for (let i = 1; i <= numQuestoes; i++) {
                 // Verificar se existe uma questão para este índice
                 const questaoExistente = questoesExistentes.find(q => parseInt(q.numero_questao) === i);
+                const imagensExistente = imagensPorQuestao[i] || [];
+
+                // HTML para imagens existentes
+                let imagensHTML = '';
+                if (imagensExistente.length > 0) {
+                    imagensHTML = `
+                        <div class="imagens-existente">
+                            <strong>Imagens atuais desta questão:</strong>
+                            <div class="lista-imagens">
+                    `;
+                    imagensExistente.forEach(imagem => {
+                        imagensHTML += `
+                            <div class="imagem-container">
+                                <img src="../${imagem.caminho_imagem}" 
+                                     alt="${imagem.nome_arquivo}" 
+                                     class="imagem-existente">
+                                <br>
+                                <small>${imagem.nome_arquivo}</small>
+                                <br>
+                                <button type="button" class="btn-remover" onclick="marcarRemocaoImagem(${imagem.idImagem}, ${i})">
+                                    Remover
+                                </button>
+                                <input type="hidden" name="imagens_manter_${i}[]" value="${imagem.idImagem}">
+                            </div>
+                        `;
+                    });
+                    imagensHTML += `
+                            </div>
+                        </div>
+                    `;
+                }
                 
                 container.innerHTML += `
                     <div class="questao" style="border: 1px solid #ccc; padding: 10px; margin: 10px 0;">
                         <h3>Questão ${i}</h3>
+
+                         ${imagensHTML}
+                        
+                        <!-- Área para adicionar novas imagens -->
+                        <div class="imagens-novas">
+                            <label>Adicionar novas imagens (opcional):</label>
+                            <div class="area-upload" onclick="document.getElementById('novas_imagens_${i}').click()">
+                                <p>Clique aqui ou arraste imagens para adicionar</p>
+                                <small>Formatos: JPG, PNG, GIF (Máx: 2MB cada)</small>
+                            </div>
+                            <input type="file" id="novas_imagens_${i}" name="novas_imagens_${i}[]" 
+                                   multiple accept="image/*" style="display: none;" 
+                                   onchange="previewNovasImagens(${i}, this.files)">
+                            
+                            <div id="preview_novas_${i}" class="lista-imagens"></div>
+                        </div>
+
                         <input type="hidden" name="questao_id_${i}" value="${questaoExistente ? questaoExistente.id : ''}">
                         <div>
                             <label>Enunciado:</label>
@@ -155,6 +216,39 @@ $numero_questoes = is_array($questoes) ? count($questoes) : 0;
                     </div>
                 `;
             }
+        }
+
+        function previewNovasImagens(numeroQuestao, files) {
+            const preview = document.getElementById(`preview_novas_${numeroQuestao}`);
+            preview.innerHTML = '';
+            
+            for (let file of files) {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'preview-imagem';
+                        img.title = file.name;
+                        preview.appendChild(img);
+                    }
+                    reader.readAsDataURL(file);
+                }
+            }
+        }
+
+        function marcarRemocaoImagem(idImagem, numeroQuestao) {
+            // Remove a imagem visualmente
+            const container = document.querySelector(`input[value="${idImagem}"]`).closest('.imagem-container');
+            container.remove();
+            
+            // Adiciona um campo hidden para marcar a remoção
+            const inputRemocao = document.createElement('input');
+            inputRemocao.type = 'hidden';
+            inputRemocao.name = `imagens_remover_${numeroQuestao}[]`;
+            inputRemocao.value = idImagem;
+            
+            document.querySelector(`.questao:nth-child(${numeroQuestao})`).appendChild(inputRemocao);
         }
 
         // Carregar questões automaticamente quando a página carrega

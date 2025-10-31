@@ -17,6 +17,20 @@ if (!isset($_GET['id'])) {
 $prova_id = (int)$_GET['id'];
 $professor_id = $_SESSION["idProfessor"];
 
+// Buscar imagens da prova
+$sql_imagens = "SELECT numero_questao, caminho_imagem, nome_arquivo 
+                FROM ImagensProvas 
+                WHERE idProva = $prova_id 
+                ORDER BY numero_questao, idImagem";
+$resultado_imagens = mysqli_query($conectar, $sql_imagens);
+$imagens_por_questao = [];
+
+if ($resultado_imagens) {
+    while ($imagem = mysqli_fetch_assoc($resultado_imagens)) {
+        $imagens_por_questao[$imagem['numero_questao']][] = $imagem;
+    }
+}
+
 // Buscar os dados da prova
 $sql_prova = "SELECT * FROM Provas WHERE idProvas = $prova_id AND Professor_idProfessor = $professor_id";
 $resultado_prova = mysqli_query($conectar, $sql_prova);
@@ -45,7 +59,8 @@ $estatisticas = mysqli_fetch_assoc($resultado_estatisticas);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualizar Prova - AvaliaEduca</title>
+        <title>Visualizar Prova - Edukhan</title>
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <header>
@@ -60,7 +75,7 @@ $estatisticas = mysqli_fetch_assoc($resultado_estatisticas);
         </nav>
     </header>
 
-    <main>
+                <div class="logo">Edukhan - Visualizar Prova</div>
         <article>
             <h1>Visualizar Prova: <?php echo htmlspecialchars($prova['titulo']); ?></h1>
             
@@ -125,6 +140,32 @@ $estatisticas = mysqli_fetch_assoc($resultado_estatisticas);
                 <?php foreach ($conteudo as $index => $questao): ?>
                     <div class="questao-card">
                         <h3>Questão <?php echo $index + 1; ?></h3>
+
+                        <!-- Exibir imagens da questão, se houver -->
+                        <?php $numero_questao = $index + 1; ?>
+                        <?php if (isset($imagens_por_questao[$numero_questao]) && !empty($imagens_por_questao[$numero_questao])): ?>
+                            <div class="imagens-questao">
+                                <strong>Imagens desta questão:</strong><br>
+                                <div style="display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0;">
+                                    <?php foreach ($imagens_por_questao[$numero_questao] as $imagem): ?>
+                                        <div class="imagem-container">
+                                            <img src="<?php echo htmlspecialchars($imagem['caminho_imagem']); ?>" 
+                                                 alt="Imagem da questão <?php echo $numero_questao; ?>"
+                                                 class="imagem-questao"
+                                                 onclick="abrirModal('<?php echo htmlspecialchars($imagem['caminho_imagem']); ?>')"
+                                                 style="cursor: pointer;">
+                                            <br>
+                                            <small><?php echo htmlspecialchars($imagem['nome_arquivo']); ?></small>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        <?php else: ?>
+                            <div class="sem-imagens">
+                                <small>Nenhuma imagem anexada a esta questão</small>
+                            </div>
+                        <?php endif; ?>
+
                         <div class="enunciado">
                             <strong>Enunciado:</strong><br>
                             <p><?php echo nl2br(htmlspecialchars($questao['enunciado'])); ?></p>
@@ -161,6 +202,14 @@ $estatisticas = mysqli_fetch_assoc($resultado_estatisticas);
         </article>
     </main>
 
+    <!-- Modal para visualização ampliada de imagens -->
+    <div id="modalImagem" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center;">
+        <div style="position: relative; max-width: 90%; max-height: 90%;">
+            <img id="imagemModal" src="" alt="Imagem ampliada" style="max-width: 100%; max-height: 100%; border-radius: 8px;">
+            <button onclick="fecharModal()" style="position: absolute; top: -40px; right: 0; background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Fechar</button>
+        </div>
+    </div>
+
     <script>
         // Função para expandir/contrair questões
         document.addEventListener('DOMContentLoaded', function() {
@@ -193,6 +242,30 @@ $estatisticas = mysqli_fetch_assoc($resultado_estatisticas);
                     card.querySelector('.enunciado').appendChild(btnExpandir);
                 }
             });
+        });
+
+        // Funções para o modal de imagens
+        function abrirModal(src) {
+            document.getElementById('imagemModal').src = src;
+            document.getElementById('modalImagem').style.display = 'flex';
+        }
+
+        function fecharModal() {
+            document.getElementById('modalImagem').style.display = 'none';
+        }
+
+        // Fechar modal ao clicar fora da imagem
+        document.getElementById('modalImagem').addEventListener('click', function(e) {
+            if (e.target === this) {
+                fecharModal();
+            }
+        });
+
+        // Fechar modal com tecla ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                fecharModal();
+            }
         });
     </script>
 </body>

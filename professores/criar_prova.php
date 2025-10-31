@@ -14,12 +14,13 @@ $conectar = mysqli_connect("localhost", "root", "", "projeto_residencia");
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criar Prova - AvaliaEduca</title>
+        <title>Criar Prova - Edukhan</title>
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <header>
         <nav>
-            <div class="logo">AvaliaEduca - Criar Prova</div>
+                <div class="logo">Edukhan - Criar Prova</div>
             <ul class="nav-links">
                 <li><a href="dashboard_professor.php">Dashboard</a></li>
                 <li><a href="criar_prova.php">Criar Prova</a></li>
@@ -30,10 +31,10 @@ $conectar = mysqli_connect("localhost", "root", "", "projeto_residencia");
     </header>
 
     <main>
-        <article>
+        <article class="criar-prova">
             <h1>Criar Nova Prova</h1>
             
-            <form action="../includes/processa_criar_prova.php" method="POST">
+            <form class="form-cria-prov" action="../includes/processa_criar_prova.php" method="POST" enctype="multipart/form-data">
                 <div>
                     <label for="titulo">Título da Prova:</label>
                     <input type="text" id="titulo" name="titulo" required>
@@ -85,11 +86,24 @@ $conectar = mysqli_connect("localhost", "root", "", "projeto_residencia");
         
         for (let i = 1; i <= numQuestoes; i++) {
             container.innerHTML += `
-                <div class="questao" style="border: 1px solid #ccc; padding: 10px; margin: 10px 0;">
+                <div class="questao">
                     <h3>Questão ${i}</h3>
                     <div>
                         <label>Enunciado:</label>
-                        <textarea name="enunciado_${i}" rows="3" style="width: 100%;" required></textarea>
+                        <textarea name="enunciado_${i}" rows="3" required></textarea>
+                    </div>
+                    <!-- Área de upload de imagens -->
+                    <div class="imagens-questao">
+                        <label>Imagens para esta questão (opcional):</label>
+                        <div class="area-upload" onclick="document.getElementById('imagens_${i}').click()">
+                            <p>Clique aqui ou arraste imagens para adicionar</p>
+                            <small>Formatos: JPG, PNG, GIF (Máx: 2MB cada)</small>
+                        </div>
+                        <input type="file" id="imagens_${i}" name="imagens_${i}[]" 
+                            multiple accept="image/*" style="display: none;" 
+                            onchange="previewImagens(${i}, this.files)">
+                        
+                        <div id="preview_${i}" class="lista-imagens"></div>
                     </div>
                     <div>
                         <label>Alternativa A:</label>
@@ -156,6 +170,46 @@ $conectar = mysqli_connect("localhost", "root", "", "projeto_residencia");
                 return;
             }
         }
+    });
+    function previewImagens(numeroQuestao, files) {
+    const preview = document.getElementById(`preview_${numeroQuestao}`);
+    preview.innerHTML = '';
+    
+    for (let file of files) {
+        if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'preview-imagem';
+                img.title = file.name;
+                preview.appendChild(img);
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+}
+
+    // Drag and drop functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('dragenter', function(e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('dragover', function(e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('drop', function(e) {
+            e.preventDefault();
+            const target = e.target.closest('.area-upload');
+            if (target) {
+                const questaoNum = target.previousElementSibling.htmlFor.split('_')[1];
+                const input = document.getElementById(`imagens_${questaoNum}`);
+                input.files = e.dataTransfer.files;
+                previewImagens(questaoNum, input.files);
+            }
+        });
     });
 </script>
 </body>
