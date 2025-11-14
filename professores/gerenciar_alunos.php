@@ -22,10 +22,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$host = "localhost";
-$user = "root";
-$password = "SenhaIrada@2024!";
-$database = "projeto_residencia";
+require_once '../config/database_config.php';
+
+$host = $db_config['host'];
+$user = $db_config['user'];
+$password = $db_config['password'];
+$database = $db_config['database'];
 
 // CONEXÃO SEGURA
 $conectar = mysqli_connect($host, $user, $password, $database);
@@ -55,9 +57,9 @@ if ($professor_id <= 0 || $professor_id > 999999) {
 }
 
 // BUSCAR DADOS DO PROFESSOR COM PREPARED STATEMENT
-$sql_professor = "SELECT idProfessor, nome, email, data_cadastro 
-                  FROM Professor 
-                  WHERE idProfessor = ? 
+$sql_professor = "SELECT idProfessor, nome, email, data_cadastro
+                  FROM Professor
+                  WHERE idProfessor = ?
                   LIMIT 1";
 $stmt_professor = mysqli_prepare($conectar, $sql_professor);
 
@@ -107,7 +109,7 @@ if (isset($_GET['pesquisa']) && !empty(trim($_GET['pesquisa']))) {
 }
 
 // BUSCAR ALUNOS COM ESTATÍSTICAS USANDO PREPARED STATEMENT
-$sql_alunos = "SELECT 
+$sql_alunos = "SELECT
                 a.idAluno,
                 a.nome,
                 a.email,
@@ -119,7 +121,7 @@ $sql_alunos = "SELECT
                 MIN(ap.nota) as pior_nota,
                 SUM(CASE WHEN ap.nota >= 7 THEN 1 ELSE 0 END) as provas_aprovadas
                FROM Aluno a
-               LEFT JOIN Aluno_Provas ap ON a.idAluno = ap.Aluno_idAluno 
+               LEFT JOIN Aluno_Provas ap ON a.idAluno = ap.Aluno_idAluno
                AND (ap.status = 'realizada' OR ap.status = 'corrigida')
                WHERE $where_condition
                GROUP BY a.idAluno, a.nome, a.email, a.escolaridade, a.data_cadastro
@@ -206,9 +208,9 @@ if (empty($_SESSION['csrf_token'])) {
                 <form method="GET" action="gerenciar_alunos.php">
                     <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                     <div>
-                        <input type="text" 
-                               name="pesquisa" 
-                               value="<?php echo $pesquisa_segura; ?>" 
+                        <input type="text"
+                               name="pesquisa"
+                               value="<?php echo $pesquisa_segura; ?>"
                                placeholder="Pesquisar por ID ou nome do aluno..."
                                maxlength="100"
                                size="50">

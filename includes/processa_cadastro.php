@@ -5,10 +5,12 @@ session_start();
 header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: DENY');
 
-$host = "localhost";
-$user = "root";
-$password = "SenhaIrada@2024!";
-$database = "projeto_residencia";
+require_once '../config/database_config.php';
+
+$host = $db_config['host'];
+$user = $db_config['user'];
+$password = $db_config['password'];
+$database = $db_config['database'];
 $conectar = mysqli_connect($host, $user, $password, $database);
 
 // Verificar conexão
@@ -32,7 +34,7 @@ $idade = isset($_POST["idade"]) ? (int)$_POST["idade"] : 0;
 $escolaridade = trim(htmlspecialchars($_POST["escolaridade"] ?? '', ENT_QUOTES, 'UTF-8'));
 $codigo_acesso = trim($_POST["codigo_acesso"] ?? '');
 
-// VALIDAÇÕES BÁSICAS 
+// VALIDAÇÕES BÁSICAS
 if (empty($nome) || empty($cpf) || empty($escolaridade) || empty($codigo_acesso) || $idade < 8) {
     echo "<script>alert('Preencha todos os campos obrigatórios! Idade mínima: 8 anos.'); location.href='../cadastro.php';</script>";
     exit();

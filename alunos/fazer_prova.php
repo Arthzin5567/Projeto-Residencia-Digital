@@ -3,7 +3,7 @@ session_start();
 
 // Verificação consistente com as outras páginas
 if (!isset($_SESSION['aluno_identificado'])) {
-    echo "<script> 
+    echo "<script>
             alert('Acesso negado! Identifique-se primeiro.');
             location.href = '../index.php';
           </script>";
@@ -12,7 +12,7 @@ if (!isset($_SESSION['aluno_identificado'])) {
 
 // ✅ VALIDAÇÃO SEGURA do ID da prova
 if (!isset($_GET['id']) || empty($_GET['id']) || !is_numeric($_GET['id'])) {
-    echo "<script> 
+    echo "<script>
             alert('Prova não especificada.');
             location.href = 'dashboard_aluno.php';
           </script>";
@@ -22,10 +22,12 @@ if (!isset($_GET['id']) || empty($_GET['id']) || !is_numeric($_GET['id'])) {
 $prova_id = (int)$_GET['id'];
 $aluno_id = (int)$_SESSION['id_aluno'];
 
-$host = "localhost";
-$user = "root";
-$password = "SenhaIrada@2024!";
-$database = "projeto_residencia";
+require_once '../config/database_config.php';
+
+$host = $db_config['host'];
+$user = $db_config['user'];
+$password = $db_config['password'];
+$database = $db_config['database'];
 $conectar = mysqli_connect($host, $user, $password, $database);
 
 //  Buscar dados da prova
@@ -36,7 +38,7 @@ mysqli_stmt_execute($stmt_prova);
 $resultado = mysqli_stmt_get_result($stmt_prova);
 
 if (!$resultado || mysqli_num_rows($resultado) == 0) {
-    echo "<script> 
+    echo "<script>
             alert('Prova não encontrada.');
             location.href = 'dashboard_aluno.php';
           </script>";
@@ -78,7 +80,7 @@ $result_verifica = mysqli_stmt_get_result($stmt_verifica);
 if ($result_verifica && mysqli_num_rows($result_verifica) > 0) {
     $status_prova = mysqli_fetch_assoc($result_verifica)['status'];
     if ($status_prova === 'realizada' || $status_prova === 'corrigida') {
-        echo "<script> 
+        echo "<script>
                 alert('Você já realizou esta prova.');
                 location.href = 'dashboard_aluno.php';
               </script>";
@@ -93,7 +95,7 @@ $questoes = json_decode($prova['conteudo'], true);
 
 // CORREÇÃO: Verificar se o conteúdo é válido
 if (!is_array($questoes) || empty($questoes)) {
-    echo "<script> 
+    echo "<script>
             alert('Erro: Conteúdo da prova inválido.');
             location.href = 'dashboard_aluno.php';
           </script>";
@@ -223,15 +225,15 @@ if (!is_array($questoes) || empty($questoes)) {
                                     // Debug: Verificar o caminho
                                     error_log("Imagem da prova: " . $caminho_final);
                                     ?>
-                                    <img src="<?php echo htmlspecialchars($caminho_final); ?>" 
-                                        alt="Imagem da questão <?php echo $numero_questao; ?>"
+                                    <img src="<?php echo htmlspecialchars($caminho_final); ?>"
+                                        alt="Img da questão <?php echo $numero_questao; ?>"
                                         class="imagem-questao"
                                         onclick="abrirModal('<?php echo htmlspecialchars($caminho_final); ?>')"
                                         style="max-width: 300px; cursor: zoom-in;">
                                     <br>
                                     <small>
                                         <?php echo htmlspecialchars($imagem['nome_arquivo']); ?>
-                                        <span style="color: #666; font-size: 0.8em;">(Clique para ampliar)</span>
+                                        <span>(Clique para ampliar)</span>
                                     </small>
                                 </div>
                             <?php endforeach; ?>
@@ -245,9 +247,9 @@ if (!is_array($questoes) || empty($questoes)) {
                         <div class="alternativas-fazer-prova">
                             <?php foreach ($questao['alternativas'] as $letra => $texto): ?>
                                 <label class="alternativa-label">
-                                    <input type="radio" 
-                                        name="resposta_<?php echo $index; ?>" 
-                                        value="<?php echo htmlspecialchars($letra); ?>" 
+                                    <input type="radio"
+                                        name="resposta_<?php echo $index; ?>"
+                                        value="<?php echo htmlspecialchars($letra); ?>"
                                         required
                                         class="alternativa-input">
                                     <span class="alternativa-texto">
@@ -276,7 +278,7 @@ if (!is_array($questoes) || empty($questoes)) {
     <div id="modalImagem" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="fecharModal()">&times;</span>
-            <img id="imagemModal" src="" alt="Imagem ampliada" class="modal-img">
+            <img id="imagemModal" src="" alt="Img ampliada" class="modal-img">
         </div>
     </div>
 

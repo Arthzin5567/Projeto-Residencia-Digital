@@ -24,10 +24,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 //  CONFIGURAÇÃO SEGURA DO BANCO
-$host = "localhost";
-$user = "root";
-$password = "SenhaIrada@2024!";
-$database = "projeto_residencia";
+require_once '../config/database_config.php';
+
+$host = $db_config['host'];
+$user = $db_config['user'];
+$password = $db_config['password'];
+$database = $db_config['database'];
 
 // Conexão com tratamento de erro seguro
 $conectar = mysqli_connect($host, $user, $password, $database);
@@ -57,9 +59,9 @@ if ($professor_id <= 0 || $professor_id > 999999) {
 }
 
 // BUSCAR DADOS DO PROFESSOR COM PREPARED STATEMENT
-$sql_professor = "SELECT idProfessor, nome, email, data_cadastro 
-                  FROM Professor 
-                  WHERE idProfessor = ? 
+$sql_professor = "SELECT idProfessor, nome, email, data_cadastro
+                  FROM Professor
+                  WHERE idProfessor = ?
                   LIMIT 1";
 $stmt_professor = mysqli_prepare($conectar, $sql_professor);
 
@@ -113,10 +115,10 @@ if ($stmt_total_provas) {
 }
 
 // ESTATÍSTICAS - PROVAS REALIZADAS
-$sql_provas_realizadas = "SELECT COUNT(DISTINCT ap.Provas_idProvas) as total 
-                          FROM Aluno_Provas ap 
-                          INNER JOIN Provas p ON ap.Provas_idProvas = p.idProvas 
-                          WHERE p.Professor_idProfessor = ? 
+$sql_provas_realizadas = "SELECT COUNT(DISTINCT ap.Provas_idProvas) as total
+                          FROM Aluno_Provas ap
+                          INNER JOIN Provas p ON ap.Provas_idProvas = p.idProvas
+                          WHERE p.Professor_idProfessor = ?
                           AND ap.status IN ('realizada', 'corrigida')";
 $stmt_provas_realizadas = mysqli_prepare($conectar, $sql_provas_realizadas);
 $provas_realizadas = 0;
@@ -131,10 +133,10 @@ if ($stmt_provas_realizadas) {
 }
 
 // ÚLTIMAS PROVAS CRIADAS
-$sql_ultimas_provas = "SELECT idProvas, titulo, materia, numero_questoes, serie_destinada, data_criacao 
-                       FROM Provas 
-                       WHERE Professor_idProfessor = ? 
-                       ORDER BY data_criacao DESC 
+$sql_ultimas_provas = "SELECT idProvas, titulo, materia, numero_questoes, serie_destinada, data_criacao
+                       FROM Provas
+                       WHERE Professor_idProfessor = ?
+                       ORDER BY data_criacao DESC
                        LIMIT 5";
 $stmt_ultimas_provas = mysqli_prepare($conectar, $sql_ultimas_provas);
 $ultimas_provas = [];

@@ -199,7 +199,7 @@ session_start();
             const idade = document.getElementById('idade').value;
             const codigoAcesso = document.getElementById('codigo_acesso').value;
             
-            // Verificar idade entre 8 e 100 anos 
+            // Verificar idade entre 8 e 100 anos
             if (idade < 8 || idade > 100) {
                 e.preventDefault();
                 alert('A idade deve ser entre 8 e 100 anos! Ou você é muito novo, ou é muito velho para estar aqui :)');

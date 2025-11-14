@@ -12,10 +12,12 @@ if (!isset($_SESSION['idProfessor']) || !is_numeric($_SESSION['idProfessor'])) {
     exit();
 }
 
-$host = "localhost";
-$user = "root";
-$password = "SenhaIrada@2024!";
-$database = "projeto_residencia";
+require_once '../config/database_config.php';
+
+$host = $db_config['host'];
+$user = $db_config['user'];
+$password = $db_config['password'];
+$database = $db_config['database'];
 $conectar = mysqli_connect($host, $user, $password, $database);
 
 // ✅ SEGURANÇA: Verificar conexão

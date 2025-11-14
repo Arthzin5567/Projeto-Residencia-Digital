@@ -3,17 +3,19 @@ session_start();
 
 // Verificar se o aluno está identificado
 if (!isset($_SESSION['aluno_identificado'])) {
-    echo "<script> 
+    echo "<script>
             alert('Acesso negado! Identifique-se primeiro.');
             location.href = '../index.php';
           </script>";
     exit();
 }
 
-$host = "localhost";
-$user = "root";
-$password = "SenhaIrada@2024!";
-$database = "projeto_residencia";
+require_once '../config/database_config.php';
+
+$host = $db_config['host'];
+$user = $db_config['user'];
+$password = $db_config['password'];
+$database = $db_config['database'];
 $conectar = mysqli_connect($host, $user, $password, $database);
 
 //  Verificar conexão
@@ -21,7 +23,7 @@ if (!$conectar) {
     die("Erro de conexão: " . mysqli_connect_error());
 }
 
-$aluno_id = (int)$_SESSION['id_aluno']; 
+$aluno_id = (int)$_SESSION['id_aluno'];
 
 //  Buscar dados do aluno (SEGURA)
 $sql_aluno = "SELECT escolaridade, nome FROM Aluno WHERE idAluno = ?";
@@ -36,9 +38,9 @@ $serie_aluno = $aluno['escolaridade'] ?? '';
 $nome_aluno = $aluno['nome'] ?? '';
 
 //  Buscar provas disponíveis para o aluno (SEGURA)
-$sql_provas = "SELECT p.*, ap.status, ap.nota, ap.data_realizacao 
-               FROM Provas p 
-               LEFT JOIN Aluno_Provas ap ON p.idProvas = ap.Provas_idProvas AND ap.Aluno_idAluno = ? 
+$sql_provas = "SELECT p.*, ap.status, ap.nota, ap.data_realizacao
+               FROM Provas p
+               LEFT JOIN Aluno_Provas ap ON p.idProvas = ap.Provas_idProvas AND ap.Aluno_idAluno = ?
                WHERE (ap.Aluno_idAluno IS NULL OR ap.status = 'pendente')
                AND p.ativa = 1
                ORDER BY p.data_criacao DESC";
@@ -158,7 +160,7 @@ mysqli_stmt_close($stmt_provas);
                 
                 <?php if ($total_provas > 0): ?>
                     <div id="listaProvas">
-                        <?php foreach ($provas_data as $prova): 
+                        <?php foreach ($provas_data as $prova):
                             $status = $prova['status_corrigido'];
                             $classe_status = "status-" . $status;
                             $tag_status = "tag-" . $status;
@@ -200,11 +202,11 @@ mysqli_stmt_close($stmt_provas);
                                 <!-- Informações adicionais -->
                                 <div>
                                     <div>
-                                        <strong>Criada em:</strong> 
+                                        <strong>Criada em:</strong>
                                         <?php echo date('d/m/Y', strtotime($prova['data_criacao'])); ?>
                                     </div>
                                     <div>
-                                        <strong>Realizada em:</strong> 
+                                        <strong>Realizada em:</strong>
                                         <?php echo $prova['data_realizacao'] ? date('d/m/Y', strtotime($prova['data_realizacao'])) : '--/--/----'; ?>
                                     </div>
                                 </div>

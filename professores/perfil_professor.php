@@ -30,10 +30,12 @@ if ($professor_id <= 0 || $professor_id > 999999) {
     exit();
 }
 
-$host = "localhost";
-$user = "root";
-$password = "SenhaIrada@2024!";
-$database = "projeto_residencia";
+require_once '../config/database_config.php';
+
+$host = $db_config['host'];
+$user = $db_config['user'];
+$password = $db_config['password'];
+$database = $db_config['database'];
 
 // 🔒 CONEXÃO SEGURA
 $conectar = mysqli_connect($host, $user, $password, $database);
@@ -47,9 +49,9 @@ mysqli_set_charset($conectar, "utf8mb4");
 mysqli_query($conectar, "SET time_zone = '-03:00'");
 
 // 🔒 BUSCAR DADOS DO PROFESSOR COM PREPARED STATEMENT (VERSÃO COMPATÍVEL)
-$sql_professor = "SELECT idProfessor, nome, email, cpf, login, data_cadastro 
-                  FROM Professor 
-                  WHERE idProfessor = ? 
+$sql_professor = "SELECT idProfessor, nome, email, cpf, login, data_cadastro
+                  FROM Professor
+                  WHERE idProfessor = ?
                   LIMIT 1";
 $stmt_professor = mysqli_prepare($conectar, $sql_professor);
 
@@ -122,7 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['atualizar_perfil'])) {
             // 🔒 CONSTRUIR SQL DE ATUALIZAÇÃO APENAS COM CAMPOS EXISTENTES
             if (!empty($senha)) {
                 // Atualizar com senha (apenas campos que existem)
-                $sql_atualizar = "UPDATE Professor SET 
+                $sql_atualizar = "UPDATE Professor SET
                                  nome = ?, email = ?, senha = ?
                                  WHERE idProfessor = ?";
                 $stmt_atualizar = mysqli_prepare($conectar, $sql_atualizar);
@@ -133,7 +135,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['atualizar_perfil'])) {
                 }
             } else {
                 // Atualizar sem senha (apenas campos que existem)
-                $sql_atualizar = "UPDATE Professor SET 
+                $sql_atualizar = "UPDATE Professor SET
                                  nome = ?, email = ?
                                  WHERE idProfessor = ?";
                 $stmt_atualizar = mysqli_prepare($conectar, $sql_atualizar);
@@ -256,8 +258,8 @@ $professor_formacao = htmlspecialchars($professor['formacao'] ?? '', ENT_QUOTES,
                             
                             <div class="form-group">
                                 <label for="nome">Nome Completo *</label>
-                                <input type="text" id="nome" name="nome" 
-                                       value="<?php echo $professor_nome; ?>" 
+                                <input type="text" id="nome" name="nome"
+                                       value="<?php echo $professor_nome; ?>"
                                        required maxlength="100"
                                        oninput="validarNome(this)">
                                 <small class="text-help">Máximo 100 caracteres</small>
@@ -265,8 +267,8 @@ $professor_formacao = htmlspecialchars($professor['formacao'] ?? '', ENT_QUOTES,
                             
                             <div class="form-group">
                                 <label for="email">E-mail *</label>
-                                <input type="email" id="email" name="email" 
-                                       value="<?php echo $professor_email; ?>" 
+                                <input type="email" id="email" name="email"
+                                       value="<?php echo $professor_email; ?>"
                                        required maxlength="100"
                                        oninput="validarEmail(this)">
                                 <small class="text-help">Seu e-mail institucional</small>
@@ -274,8 +276,8 @@ $professor_formacao = htmlspecialchars($professor['formacao'] ?? '', ENT_QUOTES,
                             
                             <div class="form-group">
                                 <label for="telefone">Telefone</label>
-                                <input type="text" id="telefone" name="telefone" 
-                                       value="<?php echo $professor_telefone; ?>" 
+                                <input type="text" id="telefone" name="telefone"
+                                       value="<?php echo $professor_telefone; ?>"
                                        maxlength="20"
                                        placeholder="(11) 99999-9999"
                                        oninput="formatarTelefone(this)">
@@ -310,7 +312,7 @@ $professor_formacao = htmlspecialchars($professor['formacao'] ?? '', ENT_QUOTES,
                             
                             <div class="form-group">
                                 <label for="senha">Senha</label>
-                                <input type="password" id="senha" name="senha" 
+                                <input type="password" id="senha" name="senha"
                                        placeholder="Deixe em branco para manter a atual"
                                        minlength="6"
                                        oninput="validarSenha(this)">
@@ -489,7 +491,7 @@ $professor_formacao = htmlspecialchars($professor['formacao'] ?? '', ENT_QUOTES,
 </body>
 </html>
 
-<?php 
+<?php
 // 🔒 LIMPEZA SEGURA
 mysqli_close($conectar);
 ?>

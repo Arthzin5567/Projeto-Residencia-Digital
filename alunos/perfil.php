@@ -27,7 +27,7 @@ function limparTelefone($telefone) {
 
 // Verificar se o aluno está identificado
 if (!isset($_SESSION['aluno_identificado'])) {
-    echo "<script> 
+    echo "<script>
             alert('Acesso negado! Identifique-se primeiro.');
             location.href = '../index.php';
           </script>";
@@ -35,10 +35,12 @@ if (!isset($_SESSION['aluno_identificado'])) {
 }
 
 
-$host = "localhost";
-$user = "root";
-$password = "SenhaIrada@2024!";
-$database = "projeto_residencia";
+require_once '../config/database_config.php';
+
+$host = $db_config['host'];
+$user = $db_config['user'];
+$password = $db_config['password'];
+$database = $db_config['database'];
 $conectar = mysqli_connect($host, $user, $password, $database);
 
 // Verificar conexão
@@ -120,7 +122,7 @@ unset($_SESSION['erro_perfil']);
                         <p><strong>Escolaridade:</strong> <?php echo htmlspecialchars($aluno['escolaridade']); ?></p>
                     </div>
                     <div>
-                        <p><strong>Código de Acesso:</strong> 
+                        <p><strong>Código de Acesso:</strong>
                             <span>
                                 <?php echo htmlspecialchars($aluno['codigo_acesso']); ?>
                             </span>
@@ -157,7 +159,7 @@ unset($_SESSION['erro_perfil']);
                             
                             <div>
                                 <label>Telefone</label>
-                                <input type="text" name="telefone" value="<?php echo htmlspecialchars($aluno['telefone']); ?>" 
+                                <input type="text" name="telefone" value="<?php echo htmlspecialchars($aluno['telefone']); ?>"
                                        placeholder="(11) 99999-9999">
                             </div>
                         </div>
@@ -168,19 +170,19 @@ unset($_SESSION['erro_perfil']);
                             
                             <div>
                                 <label>Endereço</label>
-                                <input type="text" name="endereco" value="<?php echo htmlspecialchars($aluno['endereco']); ?>" 
+                                <input type="text" name="endereco" value="<?php echo htmlspecialchars($aluno['endereco']); ?>"
                                        placeholder="Endereço completo">
                             </div>
                             
                             <div>
                                 <label>Escola</label>
-                                <input type="text" name="escola" value="<?php echo htmlspecialchars($aluno['escola']); ?>" 
+                                <input type="text" name="escola" value="<?php echo htmlspecialchars($aluno['escola']); ?>"
                                        placeholder="Nome da escola">
                             </div>
                             
                             <div>
                                 <label>Turma</label>
-                                <input type="text" name="turma" value="<?php echo htmlspecialchars($aluno['turma']); ?>" 
+                                <input type="text" name="turma" value="<?php echo htmlspecialchars($aluno['turma']); ?>"
                                        placeholder="Turma/Classe">
                             </div>
                         </div>

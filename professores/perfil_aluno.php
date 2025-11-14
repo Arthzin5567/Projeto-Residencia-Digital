@@ -36,10 +36,12 @@ if ($aluno_id <= 0 || $aluno_id > 999999) {
     exit();
 }
 
-$host = "localhost";
-$user = "root";
-$password = "SenhaIrada@2024!";
-$database = "projeto_residencia";
+require_once '../config/database_config.php';
+
+$host = $db_config['host'];
+$user = $db_config['user'];
+$password = $db_config['password'];
+$database = $db_config['database'];
 
 // CONEXÃO SEGURA
 $conectar = mysqli_connect($host, $user, $password, $database);
@@ -53,9 +55,9 @@ mysqli_set_charset($conectar, "utf8mb4");
 mysqli_query($conectar, "SET time_zone = '-03:00'");
 
 // BUSCAR DADOS BÁSICOS DO ALUNO COM PREPARED STATEMENT
-$sql_aluno = "SELECT idAluno, nome, email, escolaridade, data_cadastro 
-              FROM Aluno 
-              WHERE idAluno = ? 
+$sql_aluno = "SELECT idAluno, nome, email, escolaridade, data_cadastro
+              FROM Aluno
+              WHERE idAluno = ?
               LIMIT 1";
 $stmt_aluno = mysqli_prepare($conectar, $sql_aluno);
 
@@ -79,15 +81,15 @@ $aluno = mysqli_fetch_assoc($result_aluno);
 mysqli_stmt_close($stmt_aluno);
 
 // BUSCAR ESTATÍSTICAS GERAIS COM PREPARED STATEMENT
-$sql_estatisticas = "SELECT 
+$sql_estatisticas = "SELECT
                      COUNT(*) as total_provas,
                      AVG(nota) as media_geral,
                      MAX(nota) as melhor_nota,
                      MIN(nota) as pior_nota,
                      SUM(CASE WHEN nota >= 7 THEN 1 ELSE 0 END) as provas_aprovadas,
                      SUM(CASE WHEN nota < 5 THEN 1 ELSE 0 END) as provas_reprovadas
-                     FROM Aluno_Provas 
-                     WHERE Aluno_idAluno = ? 
+                     FROM Aluno_Provas
+                     WHERE Aluno_idAluno = ?
                      AND (status = 'realizada' OR status = 'corrigida')";
 $stmt_estatisticas = mysqli_prepare($conectar, $sql_estatisticas);
 $estatisticas = [
@@ -108,7 +110,7 @@ if ($stmt_estatisticas) {
 }
 
 // BUSCAR ESTATÍSTICAS POR MATÉRIA COM PREPARED STATEMENT
-$sql_materias = "SELECT 
+$sql_materias = "SELECT
                  p.materia,
                  COUNT(*) as total_provas,
                  AVG(ap.nota) as media,
@@ -116,7 +118,7 @@ $sql_materias = "SELECT
                  MIN(ap.nota) as pior
                  FROM Aluno_Provas ap
                  INNER JOIN Provas p ON ap.Provas_idProvas = p.idProvas
-                 WHERE ap.Aluno_idAluno = ? 
+                 WHERE ap.Aluno_idAluno = ?
                  AND (ap.status = 'realizada' OR ap.status = 'corrigida')
                  GROUP BY p.materia
                  ORDER BY p.materia";
@@ -137,7 +139,7 @@ if ($stmt_materias) {
 }
 
 // BUSCAR TODAS AS PROVAS REALIZADAS PELO ALUNO COM PREPARED STATEMENT
-$sql_provas = "SELECT 
+$sql_provas = "SELECT
                p.idProvas,
                p.titulo,
                p.materia,
@@ -150,7 +152,7 @@ $sql_provas = "SELECT
                ap.respostas
                FROM Aluno_Provas ap
                INNER JOIN Provas p ON ap.Provas_idProvas = p.idProvas
-               WHERE ap.Aluno_idAluno = ? 
+               WHERE ap.Aluno_idAluno = ?
                AND (ap.status = 'realizada' OR ap.status = 'corrigida')
                ORDER BY ap.data_realizacao DESC";
 $stmt_provas = mysqli_prepare($conectar, $sql_provas);
@@ -226,7 +228,7 @@ function analisarRespostas($prova_conteudo, $respostas_aluno) {
         // SANITIZAR ALTERNATIVAS
         $alternativas_sanitizadas = [];
         foreach (['A', 'B', 'C', 'D'] as $letra) {
-            $alternativas_sanitizadas[$letra] = isset($questao['alternativas'][$letra]) ? 
+            $alternativas_sanitizadas[$letra] = isset($questao['alternativas'][$letra]) ?
                 htmlspecialchars($questao['alternativas'][$letra], ENT_QUOTES, 'UTF-8') : '';
         }
         
@@ -244,16 +246,16 @@ function analisarRespostas($prova_conteudo, $respostas_aluno) {
 }
 
 // FORMATAR VALORES COM VALIDAÇÃO
-$media_geral = isset($estatisticas['media_geral']) && $estatisticas['media_geral'] !== null ? 
+$media_geral = isset($estatisticas['media_geral']) && $estatisticas['media_geral'] !== null ?
                number_format((float)$estatisticas['media_geral'], 1) : '0.0';
-$melhor_nota = isset($estatisticas['melhor_nota']) && $estatisticas['melhor_nota'] !== null ? 
+$melhor_nota = isset($estatisticas['melhor_nota']) && $estatisticas['melhor_nota'] !== null ?
                number_format((float)$estatisticas['melhor_nota'], 1) : '0.0';
-$pior_nota = isset($estatisticas['pior_nota']) && $estatisticas['pior_nota'] !== null ? 
+$pior_nota = isset($estatisticas['pior_nota']) && $estatisticas['pior_nota'] !== null ?
              number_format((float)$estatisticas['pior_nota'], 1) : '0.0';
 
 $total_provas_geral = (int)($estatisticas['total_provas'] ?? 0);
 $provas_aprovadas = (int)($estatisticas['provas_aprovadas'] ?? 0);
-$aprovacao_geral = $total_provas_geral > 0 ? 
+$aprovacao_geral = $total_provas_geral > 0 ?
     number_format(($provas_aprovadas / $total_provas_geral) * 100, 1) : '0.0';
 
 // SANITIZAR DADOS DO ALUNO
@@ -305,8 +307,8 @@ if (empty($_SESSION['csrf_token'])) {
                 <div class="perfil-header">
                     <div class="perfil-info">
                         <h1>👤 Perfil do Aluno: <span class="dado-seguro"><?php echo $aluno_nome; ?></span></h1>
-                        <p><strong>ID:</strong> <?php echo $aluno_id; ?> | 
-                           <strong>Email:</strong> <span class="dado-seguro"><?php echo $aluno_email; ?></span> | 
+                        <p><strong>ID:</strong> <?php echo $aluno_id; ?> |
+                           <strong>Email:</strong> <span class="dado-seguro"><?php echo $aluno_email; ?></span> |
                            <strong>Série:</strong> <span class="dado-seguro"><?php echo $aluno_serie; ?></span></p>
                         <p><strong>Cadastrado em:</strong> <?php echo $aluno_data_cadastro; ?></p>
                     </div>
@@ -359,14 +361,14 @@ if (empty($_SESSION['csrf_token'])) {
                 <?php if ($total_provas > 0): ?>
                     <p>Total de provas realizadas: <strong><?php echo $total_provas; ?></strong></p>
                     
-                    <?php foreach ($provas as $prova): 
+                    <?php foreach ($provas as $prova):
                         $nota_prova = (float)($prova['nota'] ?? 0);
                         $cor_nota = $nota_prova >= 7 ? 'nota-alta' : ($nota_prova < 5 ? 'nota-baixa' : 'nota-media');
                         $status_text = ($prova['status'] === 'corrigida') ? '✅ Corrigida' : '⏳ Aguardando correção';
                         
                         // ANALISAR AS RESPOSTAS DO ALUNO
                         $analise = analisarRespostas($prova['conteudo'], $prova['respostas']);
-                        $percentual_acertos = $analise['total_questoes'] > 0 ? 
+                        $percentual_acertos = $analise['total_questoes'] > 0 ?
                             ($analise['acertos'] / $analise['total_questoes']) * 100 : 0;
                         
                         // SANITIZAR DADOS DA PROVA
@@ -381,8 +383,8 @@ if (empty($_SESSION['csrf_token'])) {
                                 <div class="prova-info">
                                     <h3 class="dado-seguro"><?php echo $prova_titulo; ?></h3>
                                     <p>
-                                        <strong>Matéria:</strong> <span class="dado-seguro"><?php echo $prova_materia; ?></span> | 
-                                        <strong>Data:</strong> <?php echo $prova_data; ?> | 
+                                        <strong>Matéria:</strong> <span class="dado-seguro"><?php echo $prova_materia; ?></span> |
+                                        <strong>Data:</strong> <?php echo $prova_data; ?> |
                                         <strong>Questões:</strong> <?php echo (int)($prova['numero_questoes'] ?? 0); ?>
                                     </p>
                                 </div>
@@ -425,7 +427,7 @@ if (empty($_SESSION['csrf_token'])) {
                                     <div class="questao-analise">
                                         <div class="questao-cabecalho">
                                             <div class="questao-enunciado">
-                                                <strong>Questão <?php echo $detalhe['numero']; ?>:</strong> 
+                                                <strong>Questão <?php echo $detalhe['numero']; ?>:</strong>
                                                 <span class="dado-seguro"><?php echo $detalhe['enunciado']; ?></span>
                                             </div>
                                             <div class="questao-status <?php echo $detalhe['acertou'] ? 'acerto' : 'erro'; ?>">
@@ -438,7 +440,7 @@ if (empty($_SESSION['csrf_token'])) {
                                                 <strong>Resposta do Aluno:</strong><br>
                                                 <?php if ($detalhe['resposta_aluno']): ?>
                                                     <span class="dado-seguro">
-                                                        <?php echo $detalhe['resposta_aluno']; ?> - 
+                                                        <?php echo $detalhe['resposta_aluno']; ?> -
                                                         <?php echo $detalhe['alternativas'][$detalhe['resposta_aluno']] ?? 'N/A'; ?>
                                                     </span>
                                                 <?php else: ?>
@@ -448,7 +450,7 @@ if (empty($_SESSION['csrf_token'])) {
                                             <div class="resposta-correta">
                                                 <strong>Resposta Correta:</strong><br>
                                                 <span class="dado-seguro">
-                                                    <?php echo $detalhe['resposta_correta']; ?> - 
+                                                    <?php echo $detalhe['resposta_correta']; ?> -
                                                     <?php echo $detalhe['alternativas'][$detalhe['resposta_correta']] ?? 'N/A'; ?>
                                                 </span>
                                             </div>
@@ -459,7 +461,7 @@ if (empty($_SESSION['csrf_token'])) {
                                             <strong>Alternativas:</strong><br>
                                             <?php foreach ($detalhe['alternativas'] as $letra => $texto): ?>
                                                 <div class="alternativa <?php echo $letra === $detalhe['resposta_correta'] ? 'correta' : ''; ?>">
-                                                    <strong><?php echo $letra; ?>)</strong> 
+                                                    <strong><?php echo $letra; ?>)</strong>
                                                     <span class="dado-seguro"><?php echo $texto; ?></span>
                                                     <?php if ($letra === $detalhe['resposta_correta']): ?>
                                                         <span class="marcador-correta"> ✓</span>
@@ -473,7 +475,7 @@ if (empty($_SESSION['csrf_token'])) {
 
                             <!-- Informações adicionais da prova -->
                             <div class="historico-prova-informacoes-adicionais">
-                                <strong>Informações da Prova:</strong> 
+                                <strong>Informações da Prova:</strong>
                                 Série destinada: <span class="dado-seguro"><?php echo $prova_serie; ?></span>
                             </div>
                         </div>

@@ -22,10 +22,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$host = "localhost";
-$user = "root";
-$password = "SenhaIrada@2024!";
-$database = "projeto_residencia";
+require_once '../config/database_config.php';
+
+$host = $db_config['host'];
+$user = $db_config['user'];
+$password = $db_config['password'];
+$database = $db_config['database'];
 
 // CONEXÃO SEGURA
 $conectar = mysqli_connect($host, $user, $password, $database);
@@ -55,9 +57,9 @@ if ($professor_id <= 0 || $professor_id > 999999) {
 }
 
 // BUSCAR PROVAS DO PROFESSOR COM PREPARED STATEMENT
-$sql_provas = "SELECT idProvas, titulo, materia, serie_destinada, data_criacao, conteudo, ativa 
-               FROM Provas 
-               WHERE Professor_idProfessor = ? 
+$sql_provas = "SELECT idProvas, titulo, materia, serie_destinada, data_criacao, conteudo, ativa
+               FROM Provas
+               WHERE Professor_idProfessor = ?
                ORDER BY data_criacao DESC";
 $stmt_provas = mysqli_prepare($conectar, $sql_provas);
 
@@ -163,7 +165,7 @@ if (isset($_GET['erro'])) {
             
             <div class="provas-container">
                 <?php if (!empty($provas)): ?>
-                    <?php foreach ($provas as $prova): 
+                    <?php foreach ($provas as $prova):
                         // DECODIFICAR JSON COM VALIDAÇÃO
                         $conteudo = null;
                         if (!empty($prova['conteudo'])) {
@@ -187,7 +189,7 @@ if (isset($_GET['erro'])) {
                         $link_visualizar = $prova_id > 0 ? "visualizar_prova.php?id=" . $prova_id : "#";
                         $link_editar = $prova_id > 0 ? "editar_prova.php?id=" . $prova_id : "#";
                         $link_excluir = $prova_id > 0 ? "../includes/excluir_prova.php?id=" . $prova_id : "#";
-                        $link_ativar_desativar = $prova_id > 0 ? 
+                        $link_ativar_desativar = $prova_id > 0 ?
                             ($prova_ativa ? "../includes/desativar_prova.php?id=" . $prova_id : "../includes/ativar_prova.php?id=" . $prova_id) : "#";
                         $link_resultados = $prova_id > 0 ? "resultados_prova.php?id=" . $prova_id : "#";
                     ?>
@@ -195,7 +197,7 @@ if (isset($_GET['erro'])) {
                             <div class="prova-header">
                                 <div class="prova-title dado-seguro"><?php echo $prova_titulo; ?></div>
                                 <div class="prova-meta">
-                                    ID: <?php echo $prova_id; ?> | 
+                                    ID: <?php echo $prova_id; ?> |
                                     Criada em: <?php echo $prova_data; ?>
                                 </div>
                             </div>

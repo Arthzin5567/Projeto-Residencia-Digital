@@ -15,18 +15,17 @@ if (!isset($_SESSION["logado"]) || $_SESSION["logado"] !== true || $_SESSION["ti
 }
 
 // VALIDAÇÃO DE CSRF TOKEN PARA AÇÕES CRÍTICAS
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-        error_log("Tentativa de CSRF detectada no desempenho geral");
-        die("Erro de segurança. Tente novamente.");
-    }
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token'])) {
+    die("Token CSRF inválido");
 }
 
 // CONFIGURAÇÃO SEGURA DO BANCO
-$host = "localhost";
-$user = "root";
-$password = "SenhaIrada@2024!";
-$database = "projeto_residencia";
+require_once '../config/database_config.php';
+
+$host = $db_config['host'];
+$user = $db_config['user'];
+$password = $db_config['password'];
+$database = $db_config['database'];
 
 // Conexão com tratamento de erro seguro
 $conectar = mysqli_connect($host, $user, $password, $database);

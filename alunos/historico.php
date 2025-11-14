@@ -3,21 +3,23 @@ session_start();
 
 // Verificar se o aluno está identificado
 if (!isset($_SESSION['aluno_identificado'])) {
-    echo "<script> 
+    echo "<script>
             alert('Acesso negado! Identifique-se primeiro.');
             location.href = '../index.php';
           </script>";
     exit();
 }
 
-$host = "localhost";
-$user = "root";
-$password = "SenhaIrada@2024!";
-$database = "projeto_residencia";
-$conectar = mysqli_connect($host, $user, $password, $database);
-$aluno_id = (int)$_SESSION['id_aluno']; 
+require_once '../config/database_config.php';
 
-//  Buscar dados do aluno 
+$host = $db_config['host'];
+$user = $db_config['user'];
+$password = $db_config['password'];
+$database = $db_config['database'];
+$conectar = mysqli_connect($host, $user, $password, $database);
+$aluno_id = (int)$_SESSION['id_aluno'];
+
+//  Buscar dados do aluno
 $sql_aluno = "SELECT * FROM Aluno WHERE idAluno = ?";
 $stmt_aluno = mysqli_prepare($conectar, $sql_aluno);
 mysqli_stmt_bind_param($stmt_aluno, "i", $aluno_id);
@@ -26,11 +28,11 @@ $result_aluno = mysqli_stmt_get_result($stmt_aluno);
 $aluno = mysqli_fetch_assoc($result_aluno);
 mysqli_stmt_close($stmt_aluno);
 
-//  Buscar todas as provas realizadas pelo aluno 
+//  Buscar todas as provas realizadas pelo aluno
 $sql_provas = "SELECT p.*, ap.nota, ap.data_realizacao, ap.status, ap.respostas
                FROM Aluno_Provas ap
                INNER JOIN Provas p ON ap.Provas_idProvas = p.idProvas
-               WHERE ap.Aluno_idAluno = ? 
+               WHERE ap.Aluno_idAluno = ?
                AND (ap.status = 'realizada' OR ap.status = 'corrigida')
                ORDER BY p.materia, ap.data_realizacao DESC";
 $stmt_provas = mysqli_prepare($conectar, $sql_provas);
@@ -40,15 +42,15 @@ $result_provas = mysqli_stmt_get_result($stmt_provas);
 $total_provas_realizadas = mysqli_num_rows($result_provas);
 
 
-// Calcular estatísticas gerais 
-$sql_estatisticas = "SELECT 
+// Calcular estatísticas gerais
+$sql_estatisticas = "SELECT
                      COUNT(*) as total_provas,
                      AVG(nota) as media_geral,
                      MAX(nota) as melhor_nota,
                      MIN(nota) as pior_nota,
                      SUM(CASE WHEN nota >= 7 THEN 1 ELSE 0 END) as provas_aprovadas
-                     FROM Aluno_Provas 
-                     WHERE Aluno_idAluno = ? 
+                     FROM Aluno_Provas
+                     WHERE Aluno_idAluno = ?
                      AND (status = 'realizada' OR status = 'corrigida')";
 $stmt_estatisticas = mysqli_prepare($conectar, $sql_estatisticas);
 mysqli_stmt_bind_param($stmt_estatisticas, "i", $aluno_id);
@@ -57,8 +59,8 @@ $result_estatisticas = mysqli_stmt_get_result($stmt_estatisticas);
 $estatisticas = mysqli_fetch_assoc($result_estatisticas);
 mysqli_stmt_close($stmt_estatisticas);
 
-// Calcular estatísticas por matéria - PORTUGUÊS 
-$sql_portugues = "SELECT 
+// Calcular estatísticas por matéria - PORTUGUÊS
+$sql_portugues = "SELECT
                   COUNT(*) as total,
                   AVG(ap.nota) as media,
                   MAX(ap.nota) as melhor,
@@ -66,7 +68,7 @@ $sql_portugues = "SELECT
                   SUM(CASE WHEN ap.nota >= 7 THEN 1 ELSE 0 END) as aprovadas
                   FROM Aluno_Provas ap
                   INNER JOIN Provas p ON ap.Provas_idProvas = p.idProvas
-                  WHERE ap.Aluno_idAluno = ? 
+                  WHERE ap.Aluno_idAluno = ?
                   AND (ap.status = 'realizada' OR ap.status = 'corrigida')
                   AND p.materia = 'Português'";
 $stmt_portugues = mysqli_prepare($conectar, $sql_portugues);
@@ -76,8 +78,8 @@ $result_portugues = mysqli_stmt_get_result($stmt_portugues);
 $portugues = mysqli_fetch_assoc($result_portugues);
 mysqli_stmt_close($stmt_portugues);
 
-// Calcular estatísticas por matéria - MATEMÁTICA 
-$sql_matematica = "SELECT 
+// Calcular estatísticas por matéria - MATEMÁTICA
+$sql_matematica = "SELECT
                    COUNT(*) as total,
                    AVG(ap.nota) as media,
                    MAX(ap.nota) as melhor,
@@ -85,7 +87,7 @@ $sql_matematica = "SELECT
                    SUM(CASE WHEN ap.nota >= 7 THEN 1 ELSE 0 END) as aprovadas
                    FROM Aluno_Provas ap
                    INNER JOIN Provas p ON ap.Provas_idProvas = p.idProvas
-                   WHERE ap.Aluno_idAluno = ? 
+                   WHERE ap.Aluno_idAluno = ?
                    AND (ap.status = 'realizada' OR ap.status = 'corrigida')
                    AND p.materia = 'Matematica'";
 $stmt_matematica = mysqli_prepare($conectar, $sql_matematica);
@@ -95,24 +97,24 @@ $result_matematica = mysqli_stmt_get_result($stmt_matematica);
 $matematica = mysqli_fetch_assoc($result_matematica);
 mysqli_stmt_close($stmt_matematica);
 
-// Calcular evolução geral 
-$sql_evolucao = "SELECT 
+// Calcular evolução geral
+$sql_evolucao = "SELECT
                  (SELECT AVG(nota) FROM (
-                     SELECT nota FROM Aluno_Provas 
-                     WHERE Aluno_idAluno = ? 
+                     SELECT nota FROM Aluno_Provas
+                     WHERE Aluno_idAluno = ?
                      AND (status = 'realizada' OR status = 'corrigida')
-                     ORDER BY data_realizacao ASC 
+                     ORDER BY data_realizacao ASC
                      LIMIT 3
                  ) as primeiras) as media_inicial,
                  (SELECT AVG(nota) FROM (
-                     SELECT nota FROM Aluno_Provas 
-                     WHERE Aluno_idAluno = ? 
+                     SELECT nota FROM Aluno_Provas
+                     WHERE Aluno_idAluno = ?
                      AND (status = 'realizada' OR status = 'corrigida')
-                     ORDER BY data_realizacao DESC 
+                     ORDER BY data_realizacao DESC
                      LIMIT 3
                  ) as ultimas) as media_recente";
 $stmt_evolucao = mysqli_prepare($conectar, $sql_evolucao);
-mysqli_stmt_bind_param($stmt_evolucao, "ii", $aluno_id, $aluno_id); 
+mysqli_stmt_bind_param($stmt_evolucao, "ii", $aluno_id, $aluno_id);
 mysqli_stmt_execute($stmt_evolucao);
 $result_evolucao = mysqli_stmt_get_result($stmt_evolucao);
 $evolucao = mysqli_fetch_assoc($result_evolucao);
@@ -132,19 +134,19 @@ if ($media_inicial > 0) {
 $media_geral = $estatisticas['media_geral'] ? number_format($estatisticas['media_geral'], 1) : '0.0';
 $melhor_nota = $estatisticas['melhor_nota'] ? number_format($estatisticas['melhor_nota'], 1) : '0.0';
 $pior_nota = $estatisticas['pior_nota'] ? number_format($estatisticas['pior_nota'], 1) : '0.0';
-$aprovacao_geral = $estatisticas['total_provas'] > 0 ? 
+$aprovacao_geral = $estatisticas['total_provas'] > 0 ?
     number_format(($estatisticas['provas_aprovadas'] / $estatisticas['total_provas']) * 100, 1) : '0.0';
 
 // Formatar valores de Português
 $media_portugues = $portugues['media'] ? number_format($portugues['media'], 1) : '0.0';
 $melhor_portugues = $portugues['melhor'] ? number_format($portugues['melhor'], 1) : '0.0';
-$aprovacao_portugues = $portugues['total'] > 0 ? 
+$aprovacao_portugues = $portugues['total'] > 0 ?
     number_format(($portugues['aprovadas'] / $portugues['total']) * 100, 1) : '0.0';
 
 // Formatar valores de Matemática
 $media_matematica = $matematica['media'] ? number_format($matematica['media'], 1) : '0.0';
 $melhor_matematica = $matematica['melhor'] ? number_format($matematica['melhor'], 1) : '0.0';
-$aprovacao_matematica = $matematica['total'] > 0 ? 
+$aprovacao_matematica = $matematica['total'] > 0 ?
     number_format(($matematica['aprovadas'] / $matematica['total']) * 100, 1) : '0.0';
 ?>
 
@@ -209,9 +211,9 @@ $aprovacao_matematica = $matematica['total'] > 0 ?
 
                 <div class="stat-card evolucao">
                     <h3>🚀 Sua Evolução</h3>
-                    <div class="stat-number <?php 
-                        echo $porcentagem_evolucao > 0 ? 'evolucao-positiva' : 
-                             ($porcentagem_evolucao < 0 ? 'evolucao-negativa' : 'evolucao-neutra'); 
+                    <div class="stat-number <?php
+                        echo $porcentagem_evolucao > 0 ? 'evolucao-positiva' :
+                             ($porcentagem_evolucao < 0 ? 'evolucao-negativa' : 'evolucao-neutra');
                     ?>">
                         <?php echo number_format($porcentagem_evolucao, 1); ?>%
                     </div>
@@ -296,7 +298,7 @@ $aprovacao_matematica = $matematica['total'] > 0 ?
                 <?php if ($total_provas_realizadas > 0): ?>
                     <p>Total de provas realizadas: <strong><?php echo $total_provas_realizadas; ?></strong></p>
                     
-                    <?php 
+                    <?php
                     // ✅ Fechar o statement das provas apenas DEPOIS de usar os resultados
                     mysqli_stmt_close($stmt_provas);
 
@@ -332,7 +334,7 @@ $aprovacao_matematica = $matematica['total'] > 0 ?
                                     <?php echo number_format($prova['nota'], 1); ?>
                                 </div>
                             </div>
-                            <p><strong>Status:</strong> 
+                            <p><strong>Status:</strong>
                                 <?php echo $prova['status'] === 'corrigida' ? '✅ Corrigida' : '⏳ Aguardando correção'; ?>
                             </p>
                             <p><strong>Questões:</strong> <?php echo htmlspecialchars($prova['numero_questoes']); ?></p>

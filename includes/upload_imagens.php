@@ -16,10 +16,12 @@ function fazerUploadImagens($idProva, $questaoNumero, $arquivos) {
         return [];
     }
 
-    $host = "localhost";
-    $user = "root";
-    $password = "SenhaIrada@2024!";
-    $database = "projeto_residencia";
+    require_once '../config/database_config.php';
+
+    $host = $db_config['host'];
+    $user = $db_config['user'];
+    $password = $db_config['password'];
+    $database = $db_config['database'];
     $conectar = mysqli_connect($host, $user, $password, $database);
 
     //  Verificar conexão
@@ -35,23 +37,19 @@ function fazerUploadImagens($idProva, $questaoNumero, $arquivos) {
     $uploadBaseDir = "../uploads/provas/";
     
     // Garantir que o diretório base existe
-    if (!is_dir($uploadBaseDir)) {
-        if (!mkdir($uploadBaseDir, 0755, true)) {
-            error_log("Não foi possível criar diretório base: $uploadBaseDir");
-            mysqli_close($conectar);
-            return [];
-        }
+    if (!is_dir($uploadBaseDir) && !mkdir($uploadBaseDir, 0755, true)) {
+        error_log("Não foi possível criar diretório base: $uploadBaseDir");
+        mysqli_close($conectar);
+        return [];
     }
     
     $uploadDir = $uploadBaseDir . "prova_" . (int)$idProva . "/";
     
     // Criar diretório se não existir
-    if (!is_dir($uploadDir)) {
-        if (!mkdir($uploadDir, 0755, true)) {
-            error_log("Não foi possível criar diretório: $uploadDir");
-            mysqli_close($conectar);
-            return [];
-        }
+    if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755, true)) {
+        error_log("Não foi possível criar diretório: $uploadDir");
+        mysqli_close($conectar);
+        return [];
     }
     
     $imagensSalvas = [];

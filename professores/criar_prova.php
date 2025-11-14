@@ -13,10 +13,12 @@ if (!isset($_SESSION['idProfessor']) || !is_numeric($_SESSION['idProfessor'])) {
     exit();
 }
 
-$host = "localhost";
-$user = "root";
-$password = "SenhaIrada@2024!";
-$database = "projeto_residencia";
+require_once '../config/database_config.php';
+
+$host = $db_config['host'];
+$user = $db_config['user'];
+$password = $db_config['password'];
+$database = $db_config['database'];
 $conectar = mysqli_connect($host, $user, $password, $database);
 
 //  Verificar conexão com banco
@@ -65,8 +67,8 @@ if (!$conectar) {
                 
                 <div>
                     <label for="titulo">Título da Prova:</label>
-                    <input type="text" id="titulo" name="titulo" required 
-                           maxlength="255" 
+                    <input type="text" id="titulo" name="titulo" required
+                           maxlength="255"
                            pattern="[A-Za-z0-9áéíóúâêîôûãõçÁÉÍÓÚÂÊÎÔÛÃÕÇ\s\.\-_!?]{1,255}"
                            title="Máximo 255 caracteres. Use apenas letras, números e espaços.">
                 </div>
@@ -95,8 +97,8 @@ if (!$conectar) {
                 
                 <div>
                     <label for="numero_questoes">Número de Questões:</label>
-                    <input type="number" id="numero_questoes" name="numero_questoes" 
-                           min="1" max="20" required 
+                    <input type="number" id="numero_questoes" name="numero_questoes"
+                           min="1" max="20" required
                            oninput="validarNumeroQuestoes(this)">
                 </div>
                 
@@ -141,8 +143,8 @@ if (!$conectar) {
                         <h3>Questão ${i}</h3>
                         <div>
                             <label>Enunciado:</label>
-                            <textarea name="enunciado_${i}" rows="3" 
-                                      placeholder="Ex: Resolva a equação $x^2 + \frac{5}{78} = 9$" 
+                            <textarea name="enunciado_${i}" rows="3"
+                                      placeholder="Ex: Resolva a equação $x^2 + \frac{5}{78} = 9$"
                                       required
                                       maxlength="2000"></textarea>
                             <small>Use $equação$ para fórmulas matemáticas</small>
@@ -155,7 +157,7 @@ if (!$conectar) {
                                 <small>Formatos: JPG, PNG, GIF (Máx: 2MB cada)</small>
                             </div>
                             <input type="file" id="imagens_${i}" name="imagens_${i}[]"
-                                multiple accept="image/jpeg,image/png,image/gif" 
+                                multiple accept="image/jpeg,image/png,image/gif"
                                 style="display: none;"
                                 onchange="previewImagens(${i}, this.files)">
                             

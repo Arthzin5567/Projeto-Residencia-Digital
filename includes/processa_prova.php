@@ -33,10 +33,12 @@ if (!isset($_POST['prova_id']) || empty($_POST['prova_id'])) {
 $aluno_id = (int)$_SESSION['id_aluno'];
 $prova_id = (int)$_POST['prova_id'];
 
-$host = "localhost";
-$user = "root";
-$password = "SenhaIrada@2024!";
-$database = "projeto_residencia";
+require_once '../config/database_config.php';
+
+$host = $db_config['host'];
+$user = $db_config['user'];
+$password = $db_config['password'];
+$database = $db_config['database'];
 $conectar = mysqli_connect($host, $user, $password, $database);
 
 //  Verificar conexão
@@ -63,7 +65,7 @@ $questoes = json_decode($prova['conteudo'], true);
 
 //  Verificar se questões são válidas
 if (!is_array($questoes) || empty($questoes)) {
-    echo "<script> 
+    echo "<script>
             alert('Erro: Conteúdo da prova inválido.');
             location.href = '../alunos/dashboard_aluno.php';
           </script>";
@@ -87,7 +89,7 @@ $nota = ($acertos / count($questoes)) * 10;
 $nota_formatada = number_format($nota, 1);
 
 //  Verificar se existe registro na tabela Aluno_Provas
-$sql_verifica = "SELECT * FROM Aluno_Provas 
+$sql_verifica = "SELECT * FROM Aluno_Provas
                  WHERE Aluno_idAluno = '$aluno_id' AND Provas_idProvas = '$prova_id'";
 $result_verifica = mysqli_query($conectar, $sql_verifica);
 

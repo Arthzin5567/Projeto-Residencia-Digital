@@ -23,10 +23,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // CONFIGURAÇÃO SEGURA DO BANCO
-$host = "localhost";
-$user = "root";
-$password = "SenhaIrada@2024!";
-$database = "projeto_residencia";
+require_once '../config/database_config.php';
+
+$host = $db_config['host'];
+$user = $db_config['user'];
+$password = $db_config['password'];
+$database = $db_config['database'];
 
 // Conexão com tratamento de erro seguro
 $conectar = mysqli_connect($host, $user, $password, $database);
@@ -55,8 +57,8 @@ if ($prova_id <= 0 || $prova_id > 999999 || $professor_id <= 0) {
 }
 
 // BUSCAR DADOS DA PROVA COM PREPARED STATEMENT
-$sql_prova = "SELECT idProvas, titulo, materia, serie_destinada, conteudo, data_criacao 
-              FROM Provas 
+$sql_prova = "SELECT idProvas, titulo, materia, serie_destinada, conteudo, data_criacao
+              FROM Provas
               WHERE idProvas = ? AND Professor_idProfessor = ?
               LIMIT 1";
 $stmt_prova = mysqli_prepare($conectar, $sql_prova);
@@ -294,7 +296,7 @@ function validarCaminhoImagem($caminho, $prova_id) {
                 <div class="form-group">
                     <label for="titulo">Título da Prova:</label>
                     <input type="text" id="titulo" name="titulo"
-                           value="<?php echo htmlspecialchars($prova['titulo'], ENT_QUOTES, 'UTF-8'); ?>" 
+                           value="<?php echo htmlspecialchars($prova['titulo'], ENT_QUOTES, 'UTF-8'); ?>"
                            required maxlength="255">
                 </div>
                 
