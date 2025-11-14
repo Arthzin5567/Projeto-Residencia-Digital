@@ -1,49 +1,57 @@
 <?php
 session_start();
 
-//  Verificação consistente com as outras páginas
-if (!isset($_SESSION['aluno_identificado'])) {
-    echo "<script> 
-            alert('Acesso negado! Identifique-se primeiro.');
-            location.href = '../index.php';
-          </script>";
+//  Headers de segurança
+header('X-Content-Type-Options: nosniff');
+header('X-Frame-Options: DENY');
+
+// Verificação consistente com as outras páginas
+if (!isset($_SESSION['aluno_identificado']) || $_SESSION['aluno_identificado'] !== true) {
+    header("Location: ../index.php");
     exit();
 }
 
-//  Verificar se o formulário foi submetido
+//  Validar ID do aluno
+if (!isset($_SESSION['id_aluno']) || !is_numeric($_SESSION['id_aluno'])) {
+    header("Location: ../index.php");
+    exit();
+}
+
+// Verificar se o formulário foi submetido
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    echo "<script> 
-            alert('Método de acesso inválido.');
-            location.href = '../alunos/dashboard_aluno.php';
-          </script>";
+    header("Location: ../alunos/dashboard_aluno.php");
     exit();
 }
 
-//  Variáveis de sessão consistentes
-$aluno_id = $_SESSION['id_aluno'];
-
-//  Verificar se o prova_id foi enviado
+// Verificar se o prova_id foi enviado
 if (!isset($_POST['prova_id']) || empty($_POST['prova_id'])) {
-    echo "<script> 
-            alert('Prova não identificada.');
-            location.href = '../alunos/dashboard_aluno.php';
-          </script>";
+    header("Location: ../alunos/dashboard_aluno.php");
     exit();
 }
 
-$prova_id = $_POST['prova_id'];
+//  Validar IDs
+$aluno_id = (int)$_SESSION['id_aluno'];
+$prova_id = (int)$_POST['prova_id'];
+
 $host = "localhost";
 $user = "root";
 $password = "SenhaIrada@2024!";
 $database = "projeto_residencia";
 $conectar = mysqli_connect($host, $user, $password, $database);
 
+//  Verificar conexão
+if (!$conectar) {
+    error_log("Erro de conexão ao processar prova");
+    echo "<script>alert('Erro de conexão. Tente novamente.'); location.href='../alunos/dashboard_aluno.php';</script>";
+    exit();
+}
+
 //  Buscar prova com tratamento de erro
 $sql_prova = "SELECT * FROM Provas WHERE idProvas = '$prova_id'";
 $resultado = mysqli_query($conectar, $sql_prova);
 
 if (!$resultado || mysqli_num_rows($resultado) == 0) {
-    echo "<script> 
+    echo "<script>
             alert('Prova não encontrada.');
             location.href = '../alunos/dashboard_aluno.php';
           </script>";
@@ -67,7 +75,7 @@ $respostas_aluno = [];
 
 // Corrigir cada questão
 foreach ($questoes as $index => $questao) {
-    $resposta_aluno = $_POST["resposta_$index"] ?? null;
+    $resposta_aluno = $POST["resposta$index"] ?? null;
     $respostas_aluno[] = $resposta_aluno;
     
     if ($resposta_aluno === $questao['resposta_correta']) {
@@ -88,17 +96,17 @@ $respostas_json = mysqli_real_escape_string($conectar, json_encode($respostas_al
 
 if (mysqli_num_rows($result_verifica) > 0) {
     // Atualizar registro existente
-    $sql_update = "UPDATE Aluno_Provas 
-                   SET nota = '$nota', 
-                       data_realizacao = CURDATE(), 
-                       status = 'realizada', 
+    $sql_update = "UPDATE Aluno_Provas
+                   SET nota = '$nota',
+                       data_realizacao = CURDATE(),
+                       status = 'realizada',
                        respostas = '$respostas_json'
                    WHERE Aluno_idAluno = '$aluno_id' AND Provas_idProvas = '$prova_id'";
 } else {
     //  Criar novo registro se não existir
-    $sql_update = "INSERT INTO Aluno_Provas 
+    $sql_update = "INSERT INTO Aluno_Provas
                    (Aluno_idAluno, Provas_idProvas, nota, data_realizacao, status, respostas, observacoes)
-                   VALUES 
+                   VALUES
                    ('$aluno_id', '$prova_id', '$nota', CURDATE(), 'realizada', '$respostas_json', 'Prova realizada com sucesso')";
 }
 

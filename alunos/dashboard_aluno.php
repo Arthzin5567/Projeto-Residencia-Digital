@@ -50,7 +50,7 @@ $provas_realizadas = $result_realizadas ? mysqli_fetch_assoc($result_realizadas)
 mysqli_stmt_close($stmt_realizadas);
 
 //  Buscar provas corrigidas
-$sql_corrigidas = "SELECT COUNT(*) as total FROM Aluno_Provas 
+$sql_corrigidas = "SELECT COUNT(*) as total FROM Aluno_Provas
                    WHERE Aluno_idAluno = ? AND status = 'corrigida'";
 $stmt_corrigidas = mysqli_prepare($conectar, $sql_corrigidas);
 mysqli_stmt_bind_param($stmt_corrigidas, "i", $aluno_id);
@@ -125,7 +125,7 @@ mysqli_stmt_close($stmt_corrigidas);
                     <p>Você tem <strong><?php echo (int)$provas_disponiveis; ?> prova(s)</strong> disponível(is) para realizar.</p>
                     
                     <div>
-                        <?php 
+                        <?php
                         mysqli_data_seek($result_provas, 0);
                         while ($prova = mysqli_fetch_assoc($result_provas)):
                         ?>

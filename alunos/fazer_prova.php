@@ -28,7 +28,7 @@ $password = "SenhaIrada@2024!";
 $database = "projeto_residencia";
 $conectar = mysqli_connect($host, $user, $password, $database);
 
-//  Buscar dados da prova 
+//  Buscar dados da prova
 $sql_prova = "SELECT * FROM Provas WHERE idProvas = ?";
 $stmt_prova = mysqli_prepare($conectar, $sql_prova);
 mysqli_stmt_bind_param($stmt_prova, "i", $prova_id);
@@ -47,7 +47,7 @@ if (!$resultado || mysqli_num_rows($resultado) == 0) {
 $prova = mysqli_fetch_assoc($resultado);
 mysqli_stmt_close($stmt_prova);
 
-//  Buscar imagens da prova 
+//  Buscar imagens da prova
 $sql_imagens = "SELECT numero_questao, caminho_imagem, nome_arquivo
                 FROM ImagensProvas
                 WHERE idProva = ?
@@ -67,7 +67,7 @@ mysqli_stmt_close($stmt_imagens);
 
 $base_url = 'http://' . $_SERVER['HTTP_HOST'] . '/projeto_residencia/Projeto-Residencia-Digital/';
 
-// Verificar se aluno já realizou a prova 
+// Verificar se aluno já realizou a prova
 $sql_verifica = "SELECT status FROM Aluno_Provas
                  WHERE Aluno_idAluno = ? AND Provas_idProvas = ?";
 $stmt_verifica = mysqli_prepare($conectar, $sql_verifica);
@@ -251,7 +251,7 @@ if (!is_array($questoes) || empty($questoes)) {
                                         required
                                         class="alternativa-input">
                                     <span class="alternativa-texto">
-                                        <strong><?php echo htmlspecialchars($letra); ?>)</strong> 
+                                        <strong><?php echo htmlspecialchars($letra); ?>)</strong>
                                         <?php echo htmlspecialchars($texto); ?>
                                     </span>
                                 </label>
@@ -283,7 +283,7 @@ if (!is_array($questoes) || empty($questoes)) {
     <!-- KaTeX JS -->
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
-    <script src="../js/math-config.js"></script>
+    <script defer src="../js/math-config.js"></script>
 
     <script>
         // ✅ FUNÇÕES BÁSICAS DO MODAL - VERSÃO SIMPLIFICADA

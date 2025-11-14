@@ -1,6 +1,30 @@
 <?php
 session_start();
 
+function formatarTelefone($telefone) {
+    if (empty($telefone) || $telefone == 0) {
+        return '';
+    }
+    
+    $telefone = preg_replace('/\D/', '', (string)$telefone);
+    
+    if (strlen($telefone) === 11) {
+        return '(' . substr($telefone, 0, 2) . ') ' . substr($telefone, 2, 5) . '-' . substr($telefone, 7);
+    } elseif (strlen($telefone) === 10) {
+        return '(' . substr($telefone, 0, 2) . ') ' . substr($telefone, 2, 4) . '-' . substr($telefone, 6);
+    } else {
+        return $telefone;
+    }
+}
+
+function limparTelefone($telefone) {
+    if (empty($telefone)) {
+        return '';
+    }
+    // Remove tudo que não é número
+    return preg_replace('/\D/', '', $telefone);
+}
+
 // Verificar se o aluno está identificado
 if (!isset($_SESSION['aluno_identificado'])) {
     echo "<script> 
@@ -9,6 +33,7 @@ if (!isset($_SESSION['aluno_identificado'])) {
           </script>";
     exit();
 }
+
 
 $host = "localhost";
 $user = "root";
@@ -21,10 +46,9 @@ if (!$conectar) {
     die("Erro de conexão: " . mysqli_connect_error());
 }
 
-
 $aluno_id = (int)$_SESSION['id_aluno'];
 
-// Buscar dados do aluno (SEGURA)
+// Buscar dados do aluno
 $sql_aluno = "SELECT * FROM Aluno WHERE idAluno = ?";
 $stmt_aluno = mysqli_prepare($conectar, $sql_aluno);
 mysqli_stmt_bind_param($stmt_aluno, "i", $aluno_id);
@@ -33,108 +57,14 @@ $result_aluno = mysqli_stmt_get_result($stmt_aluno);
 $aluno = mysqli_fetch_assoc($result_aluno);
 mysqli_stmt_close($stmt_aluno);
 
-// Processar atualização do perfil
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['atualizar_perfil'])) {
-    $codigo_confirmacao = trim($_POST['codigo_confirmacao']);
-    
-    //  VALIDAÇÃO do código de confirmação
-    if ($codigo_confirmacao !== $aluno['codigo_acesso']) {
-        $erro = "Código de confirmação incorreto!";
-    } else {
-        //  COLETAR E VALIDAR DADOS DO FORMULÁRIO
-        $nome = trim($_POST['nome']);
-        $email = trim($_POST['email']);
-        $endereco = trim($_POST['endereco']);
-        $telefone = trim($_POST['telefone']);
-        $escola = trim($_POST['escola']);
-        $turma = trim($_POST['turma']);
-        
-        //  VALIDAÇÕES BÁSICAS
-        if (empty($nome) || strlen($nome) > 45) {
-            $erro = "Nome inválido!";
-        } elseif ($email && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $erro = "E-mail inválido!";
-        } else {
-            //  CONSTRUIR SQL DINÂMICO COM PREPARED STATEMENT
-            $sql_atualizar = "UPDATE Aluno SET
-                             nome = ?, email = ?, endereco = ?, telefone = ?, escola = ?, turma = ?";
-            $tipos = "ssssss";
-            $valores = [$nome, $email, $endereco, $telefone, $escola, $turma];
-            
-            //  ADICIONAR CAMPOS DO RESPONSÁVEL SE FOR MENOR DE IDADE
-            if ($aluno['idade'] < 18) {
-                $nome_responsavel = trim($_POST['nome_responsavel']);
-                $telefone_responsavel = trim($_POST['telefone_responsavel']);
-                
-                if (empty($nome_responsavel) || empty($telefone_responsavel)) {
-                    $erro = "Dados do responsável são obrigatórios para menores de idade!";
-                } else {
-                    $sql_atualizar .= ", nome_responsavel = ?, telefone_responsavel = ?";
-                    $tipos .= "ss";
-                    $valores[] = $nome_responsavel;
-                    $valores[] = $telefone_responsavel;
-                }
-            }
-            
-            if (!isset($erro)) {
-                $sql_atualizar .= " WHERE idAluno = ?";
-                $tipos .= "i";
-                $valores[] = $aluno_id;
-                
-                //  EXECUTAR UPDATE SEGURO
-                $stmt_atualizar = mysqli_prepare($conectar, $sql_atualizar);
-                
-                if ($stmt_atualizar) {
-                    //  BIND PARAM DINÂMICO
-                    mysqli_stmt_bind_param($stmt_atualizar, $tipos, $valores);
-                    
-                    if (mysqli_stmt_execute($stmt_atualizar)) {
-                        $sucesso = "Perfil atualizado com sucesso!";
-                        
-                        //  ATUALIZAR DADOS NA SESSÃO (SANITIZADOS)
-                        $_SESSION['nome_aluno'] = htmlspecialchars($nome);
-                        $_SESSION['usuario'] = htmlspecialchars($nome);
-                        
-                        //  RECARREGAR DADOS DO ALUNO
-                        $stmt_aluno_reload = mysqli_prepare($conectar, $sql_aluno);
-                        mysqli_stmt_bind_param($stmt_aluno_reload, "i", $aluno_id);
-                        mysqli_stmt_execute($stmt_aluno_reload);
-                        $result_aluno_reload = mysqli_stmt_get_result($stmt_aluno_reload);
-                        $aluno = mysqli_fetch_assoc($result_aluno_reload);
-                        mysqli_stmt_close($stmt_aluno_reload);
-                        
-                    } else {
-                        $erro = "Erro ao atualizar perfil: " . mysqli_error($conectar);
-                    }
-                    mysqli_stmt_close($stmt_atualizar);
-                } else {
-                    $erro = "Erro no sistema. Tente novamente.";
-                }
-            }
-        }
-    }
-}
+// Verificar mensagens de sessão
+$sucesso = $_SESSION['sucesso_perfil'] ?? null;
+$erro = $_SESSION['erro_perfil'] ?? null;
 
+// Limpar mensagens da sessão
+unset($_SESSION['sucesso_perfil']);
+unset($_SESSION['erro_perfil']);
 
-
-//  FUNÇÃO PARA FORMATAR TELEFONE
-function formatarTelefone($telefone) {
-    if (empty($telefone) || $telefone == 0) {
-        return '';
-    }
-    
-    // Converter para string e remover caracteres não numéricos
-    $telefone = preg_replace('/\D/', '', (string)$telefone);
-    
-    // Formatar baseado no tamanho
-    if (strlen($telefone) === 11) {
-        return '(' . substr($telefone, 0, 2) . ') ' . substr($telefone, 2, 5) . '-' . substr($telefone, 7);
-    } elseif (strlen($telefone) === 10) {
-        return '(' . substr($telefone, 0, 2) . ') ' . substr($telefone, 2, 4) . '-' . substr($telefone, 6);
-    } else {
-        return $telefone; // Retorna sem formatação se não for 10 ou 11 dígitos
-    }
-}
 ?>
 
 <!DOCTYPE html>
@@ -208,7 +138,7 @@ function formatarTelefone($telefone) {
                 <h2>✏️ Editar Informações Pessoais</h2>
                 <p>Para alterar seus dados, preencha o formulário abaixo e confirme com seu código de acesso.</p>
                 
-                <form class="perfil-editar-formulario" method="POST" action="perfil.php">
+                <form class="perfil-editar-formulario" method="POST" action="../includes/processa_edita_aluno.php">
                     <div>
                         
                         <!-- Coluna 1 -->
@@ -263,25 +193,28 @@ function formatarTelefone($telefone) {
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Nome do Responsável *</label>
-                                <input type="text" 
-                                    name="nome_responsavel" 
-                                    value="<?php echo htmlspecialchars($aluno['nome_responsavel'] ?? ''); ?>" 
+                                <input type="text"
+                                    name="nome_responsavel"
+                                    value="<?php echo htmlspecialchars($aluno['nome_responsavel'] ?? ''); ?>"
                                     required
                                     placeholder="Nome completo do responsável">
                             </div>
                             <div class="form-group">
                                 <label>Telefone do Responsável *</label>
-                                <input type="text" 
-                                    name="telefone_responsavel" 
-                                    value="<?php 
-                                        // ✅ CORREÇÃO: Formatar telefone do responsável
-                                        $tel_responsavel = $aluno['telefone_responsavel'] ?? '';
-                                        if (!empty($tel_responsavel) && $tel_responsavel != 0) {
-                                            echo formatarTelefone($tel_responsavel);
-                                        }
-                                    ?>" 
-                                    placeholder="(11) 99999-9999" 
-                                    required>
+
+                                <?php
+                                    // Pré-formatar o telefone ANTES do input
+                                    $telefone_responsavel_formatado = '';
+                                    if (!empty($aluno['tell_responsavel']) && $aluno['tell_responsavel'] != 0) {
+                                        $telefone_responsavel_formatado = formatarTelefone($aluno['tell_responsavel']);
+                                    }
+                                ?>
+
+                                <input type="text"
+                                name="telefone_responsavel"
+                                value="<?php echo htmlspecialchars($telefone_responsavel_formatado); ?>"
+                                placeholder="(11) 99999-9999"
+                                required>
                             </div>
                         </div>
                     </div>

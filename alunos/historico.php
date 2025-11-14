@@ -307,8 +307,8 @@ $aprovacao_matematica = $matematica['total'] > 0 ?
                     $result_provas_display = mysqli_stmt_get_result($stmt_provas_again);
 
                     $current_materia = '';
-                    while ($prova = mysqli_fetch_assoc($result_provas_display)): 
-                        $nota_class = $prova['nota'] >= 7 ? 'nota-alta' : 
+                    while ($prova = mysqli_fetch_assoc($result_provas_display)):
+                        $nota_class = $prova['nota'] >= 7 ? 'nota-alta' :
                                     ($prova['nota'] >= 5 ? 'nota-media' : 'nota-baixa');
                         $materia_class = $prova['materia'] === 'Português' ? 'portugues-item' : 'matematica-item';
                         $title_class = $prova['materia'] === 'Português' ? 'title-portugues' : 'title-matematica';

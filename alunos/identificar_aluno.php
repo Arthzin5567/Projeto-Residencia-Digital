@@ -25,7 +25,7 @@ $bloqueio_tempo = 15 * 60; // 15 minutos
 if (isset($_SESSION['tentativas_login'])) {
     if ($_SESSION['tentativas_login'] >= $max_tentativas) {
         if (time() - $_SESSION['ultima_tentativa'] < $bloqueio_tempo) {
-            $erro = "Muitas tentativas falhas. Tente novamente em " . 
+            $erro = "Muitas tentativas falhas. Tente novamente em " .
                     ceil(($bloqueio_tempo - (time() - $_SESSION['ultima_tentativa'])) / 60) . " minutos.";
             $bloqueado = true;
         } else {
@@ -38,7 +38,7 @@ if (isset($_SESSION['tentativas_login'])) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['codigo_acesso'])) {
-        //  ALUNO JÁ CADASTRADO 
+        //  ALUNO JÁ CADASTRADO
         $codigo_acesso = trim($_POST['codigo_acesso']);
         
         //  VALIDAÇÃO do código de acesso
@@ -128,7 +128,7 @@ if (isset($erro)) {
                     <form method="POST" action="identificar_aluno.php">
                         <div class="form-group">
                             <label for="codigo_acesso">Código de Acesso:</label>
-                            <input type="text" id="codigo_acesso" name="codigo_acesso" required 
+                            <input type="text" id="codigo_acesso" name="codigo_acesso" required
                                 placeholder="Digite seu código de acesso">
                         </div>
                         <button type="submit">Entrar</button>

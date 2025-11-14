@@ -5,18 +5,30 @@ if (!isset($_SESSION["logado"]) || $_SESSION["logado"] !== true || $_SESSION["ti
     exit();
 }
 
+// ✅ SEGURANÇA MÍNIMA: Validar ID do professor
+if (!isset($_SESSION['idProfessor']) || !is_numeric($_SESSION['idProfessor'])) {
+    header("Location: ../index.php");
+    exit();
+}
+
 $host = "localhost";
 $user = "root";
 $password = "SenhaIrada@2024!";
 $database = "projeto_residencia";
 $conectar = mysqli_connect($host, $user, $password, $database);
 
-// Coletar dados básicos
-$titulo = mysqli_real_escape_string($conectar, $_POST["titulo"]);
-$materia = mysqli_real_escape_string($conectar, $_POST["materia"]);
-$serie_destinada = mysqli_real_escape_string($conectar, $_POST["serie_destinada"]);
-$numero_questoes = (int)$_POST["numero_questoes"];
-$professor_id = $_SESSION["idProfessor"];
+// Coletar dados básicos - Sanitização básica
+$titulo = mysqli_real_escape_string($conectar, trim($_POST["titulo"] ?? ''));
+$materia = mysqli_real_escape_string($conectar, trim($_POST["materia"] ?? ''));
+$serie_destinada = mysqli_real_escape_string($conectar, trim($_POST["serie_destinada"] ?? ''));
+$numero_questoes = isset($_POST["numero_questoes"]) ? (int)$_POST["numero_questoes"] : 0;
+$professor_id = (int)$_SESSION["idProfessor"];
+
+//  Validação mínima
+if (empty($titulo) || $numero_questoes < 1) {
+    echo "<script>alert('Dados inválidos!'); location.href='../professores/criar_prova.php';</script>";
+    exit();
+}
 
 // função de upload de imagens
 require_once 'upload_imagens.php';
@@ -26,12 +38,6 @@ echo "<pre>POST data:\n";
 print_r($_POST);
 echo "</pre>";
 
-// DEBUG: Verificar FILES
-error_log("Arquivos FILES recebidos:");
-foreach ($_FILES as $key => $file) {
-    error_log("$key: " . print_r($file, true));
-}
-
 // Construir array com as questões
 $questoes = [];
 $questoes_encontradas = 0;
@@ -39,16 +45,25 @@ $questoes_encontradas = 0;
 for ($i = 1; $i <= $numero_questoes; $i++) {
     $enunciado_key = "enunciado_$i";
     
+    // Processa se o enunciado existir e não estiver vazio
     if (isset($_POST[$enunciado_key]) && !empty(trim($_POST[$enunciado_key]))) {
+        // Sanitização sem quebrar o fluxo
+        $enunciado = mysqli_real_escape_string($conectar, $_POST[$enunciado_key]);
+        $alternativa_a = mysqli_real_escape_string($conectar, $_POST["alternativa_a_$i"] ?? '');
+        $alternativa_b = mysqli_real_escape_string($conectar, $_POST["alternativa_b_$i"] ?? '');
+        $alternativa_c = mysqli_real_escape_string($conectar, $_POST["alternativa_c_$i"] ?? '');
+        $alternativa_d = mysqli_real_escape_string($conectar, $_POST["alternativa_d_$i"] ?? '');
+        $resposta_correta = mysqli_real_escape_string($conectar, $_POST["resposta_correta_$i"] ?? 'A');
+        
         $questoes[] = [
-            'enunciado' => $_POST[$enunciado_key],
+            'enunciado' => $enunciado,
             'alternativas' => [
-                'A' => $_POST["alternativa_a_$i"],
-                'B' => $_POST["alternativa_b_$i"],
-                'C' => $_POST["alternativa_c_$i"],
-                'D' => $_POST["alternativa_d_$i"]
+                'A' => $alternativa_a,
+                'B' => $alternativa_b,
+                'C' => $alternativa_c,
+                'D' => $alternativa_d
             ],
-            'resposta_correta' => $_POST["resposta_correta_$i"]
+            'resposta_correta' => $resposta_correta
         ];
         $questoes_encontradas++;
     }
@@ -103,11 +118,7 @@ if (mysqli_query($conectar, $sql)) {
             if (!empty($imagensSalvas)) {
                 $total_imagens += count($imagensSalvas);
                 error_log("✅ " . count($imagensSalvas) . " imagem(ns) salva(s) para a questão $i");
-            } else {
-                error_log("❌ Nenhuma imagem foi salva para a questão $i");
             }
-        } else {
-            error_log("📭 Nenhuma imagem enviada para questão $i");
         }
     }
     
@@ -123,10 +134,10 @@ if (mysqli_query($conectar, $sql)) {
         }
         echo "<script>alert('Prova criada com sucesso!'); location.href='../professores/gerenciar_provas.php';</script>";
     } else {
-        echo "<script>alert('Prova criada, mas erro ao vincular alunos: " . mysqli_error($conectar) . "'); location.href='../professores/gerenciar_provas.php';</script>";
+        echo "<script>alert('Prova criada, mas erro ao vincular alunos.'); location.href='../professores/gerenciar_provas.php';</script>";
     }
 } else {
-    echo "<script>alert('Erro ao criar prova: " . mysqli_error($conectar) . "'); history.back();</script>";
+    echo "<script>alert('Erro ao criar prova.'); history.back();</script>";
 }
 
 mysqli_close($conectar);
