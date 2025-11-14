@@ -10,7 +10,11 @@ if (!isset($_SESSION["logado"]) || $_SESSION["logado"] !== true || $_SESSION["ti
     exit();
 }
 
-$conectar = mysqli_connect("localhost", "root", "", "projeto_residencia");
+$host = "localhost";
+$user = "root";
+$password = "SenhaIrada@2024!";
+$database = "projeto_residencia";
+$conectar = mysqli_connect($host, $user, $password, $database);
 
 // Buscar dados do professor
 $professor_id = $_SESSION['idProfessor'];

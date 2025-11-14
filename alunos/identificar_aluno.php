@@ -7,7 +7,11 @@ if (isset($_SESSION['aluno_identificado'])) {
     exit();
 }
 
-$conectar = mysqli_connect("localhost", "root", "", "projeto_residencia");
+$host = "localhost";
+$user = "root";
+$password = "SenhaIrada@2024!";
+$database = "projeto_residencia";
+$conectar = mysqli_connect($host, $user, $password, $database);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['codigo_acesso'])) {

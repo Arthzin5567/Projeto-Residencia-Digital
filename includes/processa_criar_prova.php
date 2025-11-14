@@ -5,7 +5,11 @@ if (!isset($_SESSION["logado"]) || $_SESSION["logado"] !== true || $_SESSION["ti
     exit();
 }
 
-$conectar = mysqli_connect("localhost", "root", "", "projeto_residencia");
+$host = "localhost";
+$user = "root";
+$password = "SenhaIrada@2024!";
+$database = "projeto_residencia";
+$conectar = mysqli_connect($host, $user, $password, $database);
 
 // Coletar dados básicos
 $titulo = mysqli_real_escape_string($conectar, $_POST["titulo"]);
@@ -126,4 +130,3 @@ if (mysqli_query($conectar, $sql)) {
 }
 
 mysqli_close($conectar);
-?>

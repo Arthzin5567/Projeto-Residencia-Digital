@@ -21,7 +21,13 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 
 $prova_id = $_GET['id'];
 $aluno_id = $_SESSION['id_aluno']; // variável de sessão correta
-$conectar = mysqli_connect("localhost", "root", "", "projeto_residencia");
+
+$host = "localhost";
+$user = "root";
+$password = "SenhaIrada@2024!";
+$database = "projeto_residencia";
+$conectar = mysqli_connect($host, $user, $password, $database);
+
 
 // Buscar dados da prova com tratamento de erro
 $sql_prova = "SELECT * FROM Provas WHERE idProvas = '$prova_id'";

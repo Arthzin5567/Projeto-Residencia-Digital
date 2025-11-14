@@ -1,6 +1,10 @@
 <?php
 function fazerUploadImagens($idProva, $questaoNumero, $arquivos) {
-    $conectar = mysqli_connect("localhost", "root", "", "projeto_residencia");
+    $host = "localhost";
+    $user = "root";
+    $password = "SenhaIrada@2024!";
+    $database = "projeto_residencia";
+    $conectar = mysqli_connect($host, $user, $password, $database);
 
     // DEBUG: Verificar o que está chegando
     error_log("Upload chamado para prova $idProva, questão $questaoNumero");
@@ -57,4 +61,3 @@ function fazerUploadImagens($idProva, $questaoNumero, $arquivos) {
     mysqli_close($conectar);
     return $imagensSalvas;
 }
-?>

@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// CORREÇÃO: Verificação consistente com as outras páginas
+//  Verificação consistente com as outras páginas
 if (!isset($_SESSION['aluno_identificado'])) {
     echo "<script> 
             alert('Acesso negado! Identifique-se primeiro.');
@@ -10,7 +10,7 @@ if (!isset($_SESSION['aluno_identificado'])) {
     exit();
 }
 
-// CORREÇÃO: Verificar se o formulário foi submetido
+//  Verificar se o formulário foi submetido
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo "<script> 
             alert('Método de acesso inválido.');
@@ -19,10 +19,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit();
 }
 
-// CORREÇÃO: Variáveis de sessão consistentes
+//  Variáveis de sessão consistentes
 $aluno_id = $_SESSION['id_aluno'];
 
-// CORREÇÃO: Verificar se o prova_id foi enviado
+//  Verificar se o prova_id foi enviado
 if (!isset($_POST['prova_id']) || empty($_POST['prova_id'])) {
     echo "<script> 
             alert('Prova não identificada.');
@@ -32,9 +32,13 @@ if (!isset($_POST['prova_id']) || empty($_POST['prova_id'])) {
 }
 
 $prova_id = $_POST['prova_id'];
-$conectar = mysqli_connect("localhost", "root", "", "projeto_residencia");
+$host = "localhost";
+$user = "root";
+$password = "SenhaIrada@2024!";
+$database = "projeto_residencia";
+$conectar = mysqli_connect($host, $user, $password, $database);
 
-// CORREÇÃO: Buscar prova com tratamento de erro
+//  Buscar prova com tratamento de erro
 $sql_prova = "SELECT * FROM Provas WHERE idProvas = '$prova_id'";
 $resultado = mysqli_query($conectar, $sql_prova);
 
@@ -49,7 +53,7 @@ if (!$resultado || mysqli_num_rows($resultado) == 0) {
 $prova = mysqli_fetch_assoc($resultado);
 $questoes = json_decode($prova['conteudo'], true);
 
-// CORREÇÃO: Verificar se questões são válidas
+//  Verificar se questões são válidas
 if (!is_array($questoes) || empty($questoes)) {
     echo "<script> 
             alert('Erro: Conteúdo da prova inválido.');
@@ -74,12 +78,12 @@ foreach ($questoes as $index => $questao) {
 $nota = ($acertos / count($questoes)) * 10;
 $nota_formatada = number_format($nota, 1);
 
-// CORREÇÃO: Verificar se existe registro na tabela Aluno_Provas
+//  Verificar se existe registro na tabela Aluno_Provas
 $sql_verifica = "SELECT * FROM Aluno_Provas 
                  WHERE Aluno_idAluno = '$aluno_id' AND Provas_idProvas = '$prova_id'";
 $result_verifica = mysqli_query($conectar, $sql_verifica);
 
-// CORREÇÃO: Preparar respostas para SQL
+//  Preparar respostas para SQL
 $respostas_json = mysqli_real_escape_string($conectar, json_encode($respostas_aluno));
 
 if (mysqli_num_rows($result_verifica) > 0) {
@@ -91,7 +95,7 @@ if (mysqli_num_rows($result_verifica) > 0) {
                        respostas = '$respostas_json'
                    WHERE Aluno_idAluno = '$aluno_id' AND Provas_idProvas = '$prova_id'";
 } else {
-    // CORREÇÃO: Criar novo registro se não existir
+    //  Criar novo registro se não existir
     $sql_update = "INSERT INTO Aluno_Provas 
                    (Aluno_idAluno, Provas_idProvas, nota, data_realizacao, status, respostas, observacoes)
                    VALUES 
@@ -111,4 +115,3 @@ if (mysqli_query($conectar, $sql_update)) {
 }
 
 mysqli_close($conectar);
-?>

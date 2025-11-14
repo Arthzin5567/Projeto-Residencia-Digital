@@ -20,7 +20,11 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 }
 
 $aluno_id = $_GET['id'];
-$conectar = mysqli_connect("localhost", "root", "", "projeto_residencia");
+$host = "localhost";
+$user = "root";
+$password = "SenhaIrada@2024!";
+$database = "projeto_residencia";
+$conectar = mysqli_connect($host, $user, $password, $database);
 
 // Buscar dados básicos do aluno
 $sql_aluno = "SELECT * FROM Aluno WHERE idAluno = '$aluno_id'";

@@ -6,7 +6,11 @@ if (!isset($_SESSION["logado"]) || $_SESSION["logado"] !== true || $_SESSION["ti
     exit();
 }
 
-$conectar = mysqli_connect("localhost", "root", "", "projeto_residencia");
+$host = "localhost";
+$user = "root";
+$password = "SenhaIrada@2024!";
+$database = "projeto_residencia";
+$conectar = mysqli_connect($host, $user, $password, $database);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Receber dados do formulário
@@ -110,4 +114,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     header("Location: ../professores/gerenciar_provas.php");
     exit();
 }
-?>

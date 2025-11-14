@@ -10,7 +10,11 @@ if (!isset($_SESSION['aluno_identificado'])) {
     exit();
 }
 
-$conectar = mysqli_connect("localhost", "root", "", "projeto_residencia");
+$host = "localhost";
+$user = "root";
+$password = "SenhaIrada@2024!";
+$database = "projeto_residencia";
+$conectar = mysqli_connect($host, $user, $password, $database);
 $aluno_id = $_SESSION['id_aluno'];
 
 // Buscar dados do aluno

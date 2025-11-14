@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// CORREÇÃO: Verificação consistente com as outras páginas
+//  Verificação consistente com as outras páginas
 if (!isset($_SESSION['aluno_identificado'])) {
     echo "<script> 
             alert('Acesso negado! Identifique-se primeiro.');
@@ -10,7 +10,7 @@ if (!isset($_SESSION['aluno_identificado'])) {
     exit();
 }
 
-// CORREÇÃO: Verificar se o ID da prova foi passado
+//  Verificar se o ID da prova foi passado
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     echo "<script> 
             alert('Prova não especificada.');
@@ -20,10 +20,14 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 }
 
 $prova_id = $_GET['id'];
-$aluno_id = $_SESSION['id_aluno']; // CORREÇÃO: variável de sessão correta
-$conectar = mysqli_connect("localhost", "root", "", "projeto_residencia");
+$aluno_id = $_SESSION['id_aluno'];
+$host = "localhost";
+$user = "root";
+$password = "SenhaIrada@2024!";
+$database = "projeto_residencia";
+$conectar = mysqli_connect($host, $user, $password, $database);
 
-// CORREÇÃO: Buscar dados da prova com tratamento de erro
+//  Buscar dados da prova com tratamento de erro
 $sql_prova = "SELECT * FROM Provas WHERE idProvas = '$prova_id'";
 $resultado = mysqli_query($conectar, $sql_prova);
 
@@ -37,7 +41,7 @@ if (!$resultado || mysqli_num_rows($resultado) == 0) {
 
 $prova = mysqli_fetch_assoc($resultado);
 
-// CORREÇÃO: Verificar se o aluno já realizou esta prova
+//  Verificar se o aluno já realizou esta prova
 $sql_verifica = "SELECT status FROM Aluno_Provas 
                  WHERE Aluno_idAluno = '$aluno_id' AND Provas_idProvas = '$prova_id'";
 $result_verifica = mysqli_query($conectar, $sql_verifica);
@@ -56,7 +60,7 @@ if ($result_verifica && mysqli_num_rows($result_verifica) > 0) {
 // Decodificar questões
 $questoes = json_decode($prova['conteudo'], true);
 
-// CORREÇÃO: Verificar se o conteúdo é válido
+//  Verificar se o conteúdo é válido
 if (!is_array($questoes) || empty($questoes)) {
     echo "<script> 
             alert('Erro: Conteúdo da prova inválido.');

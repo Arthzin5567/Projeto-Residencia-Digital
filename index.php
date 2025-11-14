@@ -13,7 +13,7 @@ session_start();
     <header>
         <nav>
             <div class="logo">
-                <img src="../img/LOGOTIPO 1.avif" alt="logo">
+                <img src="img/LOGOTIPO 1.avif" alt="logo">
             </div>
             <ul class="nav-links">
                 <li><a href="index.php">Início</a></li>

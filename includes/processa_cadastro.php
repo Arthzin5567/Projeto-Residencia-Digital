@@ -1,6 +1,10 @@
 <?php
 session_start();
-$conectar = mysqli_connect("localhost", "root", "", "projeto_residencia");
+$host = "localhost";
+$user = "root";
+$password = "SenhaIrada@2024!";
+$database = "projeto_residencia";
+$conectar = mysqli_connect($host, $user, $password, $database);
 
 // Coletar todos os dados do formulário
 $nome = mysqli_real_escape_string($conectar, $_POST["nome"]);
@@ -114,4 +118,3 @@ if ($resultado_cadastrar) {
             location.href = '../cadastro.php';
           </script>";
 }
-?>
