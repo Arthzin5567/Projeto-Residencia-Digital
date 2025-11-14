@@ -15,23 +15,38 @@ $user = "root";
 $password = "SenhaIrada@2024!";
 $database = "projeto_residencia";
 $conectar = mysqli_connect($host, $user, $password, $database);
-$aluno_id = $_SESSION['id_aluno'];
 
-// Buscar dados do aluno
-$sql_aluno = "SELECT escolaridade, nome FROM Aluno WHERE idAluno = '$aluno_id'";
-$result_aluno = mysqli_query($conectar, $sql_aluno);
+//  Verificar conexão
+if (!$conectar) {
+    die("Erro de conexão: " . mysqli_connect_error());
+}
+
+$aluno_id = (int)$_SESSION['id_aluno']; 
+
+//  Buscar dados do aluno (SEGURA)
+$sql_aluno = "SELECT escolaridade, nome FROM Aluno WHERE idAluno = ?";
+$stmt_aluno = mysqli_prepare($conectar, $sql_aluno);
+mysqli_stmt_bind_param($stmt_aluno, "i", $aluno_id);
+mysqli_stmt_execute($stmt_aluno);
+$result_aluno = mysqli_stmt_get_result($stmt_aluno);
 $aluno = mysqli_fetch_assoc($result_aluno);
-$serie_aluno = $aluno['escolaridade'];
-$nome_aluno = $aluno['nome'];
+mysqli_stmt_close($stmt_aluno);
 
-// CORREÇÃO: Buscar provas disponíveis para o aluno (usando a variável correta)
+$serie_aluno = $aluno['escolaridade'] ?? '';
+$nome_aluno = $aluno['nome'] ?? '';
+
+//  Buscar provas disponíveis para o aluno (SEGURA)
 $sql_provas = "SELECT p.*, ap.status, ap.nota, ap.data_realizacao 
                FROM Provas p 
-               LEFT JOIN Aluno_Provas ap ON p.idProvas = ap.Provas_idProvas AND ap.Aluno_idAluno = '$aluno_id' 
-               WHERE ap.Aluno_idAluno IS NULL OR ap.status = 'pendente'
+               LEFT JOIN Aluno_Provas ap ON p.idProvas = ap.Provas_idProvas AND ap.Aluno_idAluno = ? 
+               WHERE (ap.Aluno_idAluno IS NULL OR ap.status = 'pendente')
+               AND p.ativa = 1
                ORDER BY p.data_criacao DESC";
 
-$result_provas = mysqli_query($conectar, $sql_provas);
+$stmt_provas = mysqli_prepare($conectar, $sql_provas);
+mysqli_stmt_bind_param($stmt_provas, "i", $aluno_id);
+mysqli_stmt_execute($stmt_provas);
+$result_provas = mysqli_stmt_get_result($stmt_provas);
 
 // Contadores para estatísticas
 $total_provas = 0;
@@ -46,13 +61,15 @@ if ($result_provas && mysqli_num_rows($result_provas) > 0) {
     while ($prova = mysqli_fetch_assoc($result_provas)) {
         $total_provas++;
         
-        // CORREÇÃO: Lógica de status corrigida
+        //  LÓGICA DE STATUS CORRIGIDA E SEGURA
+        $status_prova = 'disponivel'; // padrão
+        
         if ($prova['status'] === null) {
             $status_prova = 'disponivel';
             $disponiveis++;
         } elseif ($prova['status'] === 'pendente') {
             $status_prova = 'pendente';
-            $realizadas++; // Considera como "em andamento"
+            $realizadas++;
         } elseif ($prova['status'] === 'realizada') {
             $status_prova = 'realizada';
             $realizadas++;
@@ -61,11 +78,11 @@ if ($result_provas && mysqli_num_rows($result_provas) > 0) {
             $corrigidas++;
         }
         
-        // Adicionar status corrigido ao array
+        //  Adicionar status corrigido ao array
         $prova['status_corrigido'] = $status_prova;
         
-        // Decodificar conteúdo para contar questões
-        $conteudo = json_decode($prova['conteudo'], true);
+        //  Decodificar conteúdo para contar questões (com validação)
+        $conteudo = json_decode($prova['conteudo'] ?? '[]', true);
         $prova['num_questoes'] = is_array($conteudo) ? count($conteudo) : 0;
         
         $provas_data[] = $prova;
@@ -73,6 +90,9 @@ if ($result_provas && mysqli_num_rows($result_provas) > 0) {
 } else {
     $total_provas = 0;
 }
+
+//  FECHAR STATEMENT DAS PROVAS
+mysqli_stmt_close($stmt_provas);
 ?>
 
 <!DOCTYPE html>
@@ -105,7 +125,7 @@ if ($result_provas && mysqli_num_rows($result_provas) > 0) {
         <article class="provas-disponiveis">
             <section class="header-provas-disponiveis">
                 <h1>📚 Provas Disponíveis</h1>
-                <p>Aluno: <strong><?php echo $nome_aluno; ?></strong> | Série: <strong><?php echo $serie_aluno; ?></strong></p>
+                <p>Aluno: <strong><?php echo htmlspecialchars($nome_aluno); ?></strong> | Série: <strong><?php echo htmlspecialchars($serie_aluno); ?></strong></p>
             </section>
 
             <!-- ESTATÍSTICAS RÁPIDAS -->
@@ -147,7 +167,7 @@ if ($result_provas && mysqli_num_rows($result_provas) > 0) {
                                 
                                 <div>
                                     <div>
-                                        <!-- CORREÇÃO: Título formatado elegantemente -->
+                                        <!-- ✅ Título sanitizado -->
                                         <h3>
                                             <?php echo htmlspecialchars($prova['titulo'] ?: $prova['materia'] . ' - Avaliação'); ?>
                                         </h3>
@@ -156,7 +176,7 @@ if ($result_provas && mysqli_num_rows($result_provas) > 0) {
                                                 📚 <?php echo htmlspecialchars($prova['materia']); ?>
                                             </span>
                                             <span class="badge badge-questoes">
-                                                🔢 <?php echo $prova['num_questoes']; ?> questões
+                                                🔢 <?php echo (int)$prova['num_questoes']; ?> questões
                                             </span>
                                             <span class="badge badge-serie">
                                                 🎯 Série: <?php echo htmlspecialchars($prova['serie_destinada']); ?>
@@ -172,7 +192,7 @@ if ($result_provas && mysqli_num_rows($result_provas) > 0) {
                                         <?php elseif ($status === 'realizada'): ?>
                                             <span class="status-tag tag-realizada">📤 Aguardando correção</span>
                                         <?php elseif ($status === 'corrigida'): ?>
-                                            <span class="status-tag tag-corrigida">📊 Nota: <?php echo number_format($prova['nota'], 1); ?></span>
+                                            <span class="status-tag tag-corrigida">📊 Nota: <?php echo number_format((float)$prova['nota'], 1); ?></span>
                                         <?php endif; ?>
                                     </div>
                                 </div>
@@ -192,11 +212,12 @@ if ($result_provas && mysqli_num_rows($result_provas) > 0) {
                                 <!-- Ações -->
                                 <div>
                                     <?php if ($status === 'disponivel'): ?>
-                                        <a href="fazer_prova.php?id=<?php echo $prova['idProvas']; ?>" class="btn btn-iniciar">
+                                        <!-- ✅ Link seguro com ID convertido para inteiro -->
+                                        <a href="fazer_prova.php?id=<?php echo (int)$prova['idProvas']; ?>" class="btn btn-iniciar">
                                             🚀 Iniciar Prova
                                         </a>
                                     <?php elseif ($status === 'pendente'): ?>
-                                        <a href="fazer_prova.php?id=<?php echo $prova['idProvas']; ?>" class="btn btn-iniciar">
+                                        <a href="fazer_prova.php?id=<?php echo (int)$prova['idProvas']; ?>" class="btn btn-iniciar">
                                             ➡️ Continuar Prova
                                         </a>
                                     <?php elseif ($status === 'realizada'): ?>
@@ -204,12 +225,13 @@ if ($result_provas && mysqli_num_rows($result_provas) > 0) {
                                             ⏳ Aguardando Correção
                                         </button>
                                     <?php elseif ($status === 'corrigida'): ?>
-                                        <a href="ver_resultado.php?id=<?php echo $prova['idProvas']; ?>" class="btn btn-resultado">
+                                        <a href="ver_resultado.php?id=<?php echo (int)$prova['idProvas']; ?>" class="btn btn-resultado">
                                             📊 Ver Resultado
                                         </a>
                                     <?php endif; ?>
                                     
-                                    <a href="detalhes_prova.php?id=<?php echo $prova['idProvas']; ?>" class="btn btn-detalhes">
+                                    <!-- ✅ Link seguro para detalhes -->
+                                    <a href="detalhes_prova.php?id=<?php echo (int)$prova['idProvas']; ?>" class="btn btn-detalhes">
                                         ℹ️ Detalhes
                                     </a>
                                 </div>

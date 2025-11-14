@@ -117,7 +117,7 @@ if (mysqli_query($conectar, $sql)) {
     
     if ($resultado) {
         while ($aluno = mysqli_fetch_assoc($resultado)) {
-            $sql_relacao = "INSERT INTO Aluno_Provas (Aluno_idAluno, Provas_idProvas, status) 
+            $sql_relacao = "INSERT INTO Aluno_Provas (Aluno_idAluno, Provas_idProvas, status)
                             VALUES ({$aluno['idAluno']}, $prova_id, 'pendente')";
             mysqli_query($conectar, $sql_relacao);
         }

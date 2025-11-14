@@ -13,32 +13,80 @@ $password = "SenhaIrada@2024!";
 $database = "projeto_residencia";
 $conectar = mysqli_connect($host, $user, $password, $database);
 
+// ✅ Verificar se a conexão foi bem sucedida
+if (!$conectar) {
+    die("Erro de conexão: " . mysqli_connect_error());
+}
+
+$max_tentativas = 5;
+$bloqueio_tempo = 15 * 60; // 15 minutos
+
+// Verificar se há muitas tentativas falhas
+if (isset($_SESSION['tentativas_login'])) {
+    if ($_SESSION['tentativas_login'] >= $max_tentativas) {
+        if (time() - $_SESSION['ultima_tentativa'] < $bloqueio_tempo) {
+            $erro = "Muitas tentativas falhas. Tente novamente em " . 
+                    ceil(($bloqueio_tempo - (time() - $_SESSION['ultima_tentativa'])) / 60) . " minutos.";
+            $bloqueado = true;
+        } else {
+            // Resetar contador após o tempo de bloqueio
+            unset($_SESSION['tentativas_login']);
+            unset($_SESSION['ultima_tentativa']);
+        }
+    }
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['codigo_acesso'])) {
-        // Aluno já cadastrado - identificar pelo código
-        $codigo_acesso = mysqli_real_escape_string($conectar, $_POST['codigo_acesso']);
+        //  ALUNO JÁ CADASTRADO 
+        $codigo_acesso = trim($_POST['codigo_acesso']);
         
-        $sql = "SELECT * FROM Aluno WHERE codigo_acesso = '$codigo_acesso'";
-        $result = mysqli_query($conectar, $sql);
-        
-        if (mysqli_num_rows($result) === 1) {
-            $aluno = mysqli_fetch_assoc($result);
-            
-            $_SESSION['aluno_identificado'] = true;
-            $_SESSION['id_aluno'] = $aluno['idAluno'];
-            $_SESSION['nome_aluno'] = $aluno['nome'];
-            $_SESSION['usuario'] = $aluno['nome'];
-            
-            header("Location: dashboard_aluno.php");
-            exit();
+        //  VALIDAÇÃO do código de acesso
+        if (empty($codigo_acesso) || strlen($codigo_acesso) > 20) {
+            $erro = "Código de acesso inválido!";
         } else {
-            $erro = "Código de acesso não encontrado!";
+            $sql = "SELECT idAluno, nome, codigo_acesso FROM Aluno WHERE codigo_acesso = ?";
+            $stmt = mysqli_prepare($conectar, $sql);
+            
+            if ($stmt) {
+                mysqli_stmt_bind_param($stmt, "s", $codigo_acesso);
+                mysqli_stmt_execute($stmt);
+                $result = mysqli_stmt_get_result($stmt);
+                
+                if (mysqli_num_rows($result) === 1) {
+                    $aluno = mysqli_fetch_assoc($result);
+                    
+                    $_SESSION['aluno_identificado'] = true;
+                    $_SESSION['id_aluno'] = (int)$aluno['idAluno'];
+                    $_SESSION['nome_aluno'] = htmlspecialchars($aluno['nome']);
+                    $_SESSION['usuario'] = htmlspecialchars($aluno['nome']);
+                    
+                    mysqli_stmt_close($stmt);
+                    
+                    header("Location: dashboard_aluno.php");
+                    exit();
+                } else {
+                    $erro = "Código de acesso não encontrado!";
+                }
+                mysqli_stmt_close($stmt);
+            } else {
+                $erro = "Erro no sistema. Tente novamente.";
+            }
         }
     } elseif (isset($_POST['cadastrar'])) {
         // Novo cadastro de aluno
         header("Location: ../cadastro.php");
         exit();
     }
+}
+
+if (isset($erro)) {
+    // Incrementar contador de tentativas falhas
+    $_SESSION['tentativas_login'] = ($_SESSION['tentativas_login'] ?? 0) + 1;
+    $_SESSION['ultima_tentativa'] = time();
+    
+    // Log da tentativa (em produção, salvaria em arquivo/banco)
+    error_log("Tentativa de login falha - Código: " . substr($codigo_acesso, 0, 3) . "*** - IP: " . $_SERVER['REMOTE_ADDR']);
 }
 ?>
 

@@ -1,12 +1,16 @@
 <?php
 session_start();
-$codigo = isset($_GET['codigo']) ? $_GET['codigo'] : '';
-$nome = isset($_GET['nome']) ? $_GET['nome'] : '';
 
-if (empty($codigo)) {
-    header("Location: ../cadastro.php");
+$codigo = isset($_GET['codigo']) ? trim($_GET['codigo']) : '';
+$nome = isset($_GET['nome']) ? trim($_GET['nome']) : '';
+
+if (empty($codigo) || strlen($codigo) > 20 || !preg_match('/^[a-zA-Z0-9]+$/', $codigo)) {
+    header("Location: ../cadastro.php?erro=codigo_invalido");
     exit();
 }
+
+$codigo_seguro = htmlspecialchars($codigo, ENT_QUOTES, 'UTF-8');
+$nome_seguro = htmlspecialchars($nome, ENT_QUOTES, 'UTF-8');
 ?>
 
 <!DOCTYPE html>
@@ -29,12 +33,12 @@ if (empty($codigo)) {
     <main>
         <article class="dashboard-aluno">
             <h1>Cadastro Realizado com Sucesso! 🎉</h1>
-            <p>Aluno: <strong><?php echo htmlspecialchars($nome); ?></strong></p>
+            <p>Aluno: <strong><?php echo $nome_seguro; ?></strong></p>
             
             <div class="aluno-proximas-acoes">
                 <h2>Seu código de acesso é:</h2>
-                <div>
-                    <?php echo htmlspecialchars($codigo); ?>
+                <div id="codigo-acesso">
+                    <?php echo $codigo_seguro; ?>
                 </div>
                 <p><strong>⚠️ GUARDE ESTE CÓDIGO COM CUIDADO!</strong></p>
                 <p>Você precisará dele para:</p>
@@ -49,11 +53,14 @@ if (empty($codigo)) {
                 <button onclick="window.location.href='identificar_aluno.php'">
                     Fazer Login Agora
                 </button>
+                <button onclick="copiarCodigo()">
+                    📋 Copiar Código
+                </button>
                 <button onclick="window.print()">
-                    Imprimir Código
+                    🖨️ Imprimir Código
                 </button>
                 <button onclick="window.location.href='../index.php'">
-                    Página Inicial
+                    🏠 Página Inicial
                 </button>
             </div>
 
@@ -61,7 +68,7 @@ if (empty($codigo)) {
                 <h3>📝 Como usar seu código:</h3>
                 <ol>
                     <li>Vá para <strong>Área do Aluno</strong> na página inicial</li>
-                    <li>Digite seu código: <strong><?php echo htmlspecialchars($codigo); ?></strong></li>
+                    <li>Digite seu código: <strong><?php echo $codigo_seguro; ?></strong></li>
                     <li>Clique em "Fazer Login Agora"</li>
                 </ol>
             </div>
@@ -81,13 +88,20 @@ if (empty($codigo)) {
     </footer>
 
     <script>
-        // Copiar código para área de transferência
         function copiarCodigo() {
-            const codigo = '<?php echo $codigo; ?>';
+            const codigoElement = document.getElementById('codigo-acesso');
+            const codigo = codigoElement.textContent.trim();
+            
             navigator.clipboard.writeText(codigo).then(function() {
-                alert('Código copiado para a área de transferência!');
-            }, function(err) {
-                alert('Erro ao copiar código: ' + err);
+                alert('✅ Código copiado para a área de transferência!');
+            }).catch(function(err) {
+                const textArea = document.createElement('textarea');
+                textArea.value = codigo;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('✅ Código copiado para a área de transferência!');
             });
         }
     </script>

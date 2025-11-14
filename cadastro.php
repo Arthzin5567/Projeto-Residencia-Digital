@@ -199,7 +199,7 @@ session_start();
             const idade = document.getElementById('idade').value;
             const codigoAcesso = document.getElementById('codigo_acesso').value;
             
-            // Verificar idade entre 8 e 100 anos (conforme desafio)
+            // Verificar idade entre 8 e 100 anos 
             if (idade < 8 || idade > 100) {
                 e.preventDefault();
                 alert('A idade deve ser entre 8 e 100 anos! Ou você é muito novo, ou é muito velho para estar aqui :)');
@@ -273,6 +273,36 @@ session_start();
             // Adicionar evento quando idade mudar
             document.getElementById('idade').addEventListener('input', toggleCamposResponsavel);
             document.getElementById('idade').addEventListener('change', toggleCamposResponsavel);
+        });
+
+        // ✅ VALIDAÇÃO DE TELEFONE NO FRONTEND (adicione ao script existente)
+        function validarTelefone(telefone) {
+            const numeros = telefone.replace(/\D/g, '');
+            return numeros.length === 10 || numeros.length === 11; // 10 ou 11 dígitos
+        }
+
+        // Adicione ao evento de submit do formulário:
+        document.getElementById('cadastroForm').addEventListener('submit', function(e) {
+            // ... validações existentes ...
+            
+            // ✅ VALIDAR TELEFONE DO ALUNO
+            const telefoneAluno = document.getElementById('telefone').value;
+            if (telefoneAluno && !validarTelefone(telefoneAluno)) {
+                e.preventDefault();
+                alert('Telefone do aluno inválido! Use (11) 99999-9999 ou (11) 9999-9999');
+                return;
+            }
+            
+            // ✅ VALIDAR TELEFONE DO RESPONSÁVEL (se necessário)
+            const idade = parseInt(document.getElementById('idade').value) || 0;
+            if (idade < 18) {
+                const telefoneResponsavel = document.getElementById('telefone_responsavel').value;
+                if (!validarTelefone(telefoneResponsavel)) {
+                    e.preventDefault();
+                    alert('Telefone do responsável inválido! Use (11) 99999-9999 ou (11) 9999-9999');
+                    return;
+                }
+            }
         });
     </script>
 </body>

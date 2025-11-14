@@ -12,21 +12,24 @@ $password = "SenhaIrada@2024!";
 $database = "projeto_residencia";
 $conectar = mysqli_connect($host, $user, $password, $database);
 
-// Verificar se o ID da prova foi passado
-if (!isset($_GET['id'])) {
+// VALIDAÇÃO  do ID da prova
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     header("Location: gerenciar_provas.php");
     exit();
 }
 
 $prova_id = (int)$_GET['id'];
-$professor_id = $_SESSION["idProfessor"];
+$professor_id = (int)$_SESSION["idProfessor"];
 
-// Buscar imagens da prova
+//  Buscar imagens da prova 
 $sql_imagens = "SELECT numero_questao, caminho_imagem, nome_arquivo 
                 FROM ImagensProvas 
-                WHERE idProva = $prova_id 
+                WHERE idProva = ? 
                 ORDER BY numero_questao, idImagem";
-$resultado_imagens = mysqli_query($conectar, $sql_imagens);
+$stmt_imagens = mysqli_prepare($conectar, $sql_imagens);
+mysqli_stmt_bind_param($stmt_imagens, "i", $prova_id);
+mysqli_stmt_execute($stmt_imagens);
+$resultado_imagens = mysqli_stmt_get_result($stmt_imagens);
 $imagens_por_questao = [];
 
 if ($resultado_imagens) {
@@ -34,28 +37,39 @@ if ($resultado_imagens) {
         $imagens_por_questao[$imagem['numero_questao']][] = $imagem;
     }
 }
+mysqli_stmt_close($stmt_imagens);
 
-// Buscar os dados da prova
-$sql_prova = "SELECT * FROM Provas WHERE idProvas = $prova_id AND Professor_idProfessor = $professor_id";
-$resultado_prova = mysqli_query($conectar, $sql_prova);
+//  Buscar os dados da prova 
+$sql_prova = "SELECT * FROM Provas WHERE idProvas = ? AND Professor_idProfessor = ?";
+$stmt_prova = mysqli_prepare($conectar, $sql_prova);
+mysqli_stmt_bind_param($stmt_prova, "ii", $prova_id, $professor_id);
+mysqli_stmt_execute($stmt_prova);
+$resultado_prova = mysqli_stmt_get_result($stmt_prova);
 
 if (mysqli_num_rows($resultado_prova) === 0) {
     header("Location: gerenciar_provas.php?erro=Prova não encontrada");
+    mysqli_stmt_close($stmt_prova);
     exit();
 }
 
 $prova = mysqli_fetch_assoc($resultado_prova);
+mysqli_stmt_close($stmt_prova);
+
 $conteudo = json_decode($prova['conteudo'], true);
 $num_questoes = is_array($conteudo) ? count($conteudo) : 0;
 
-// Buscar estatísticas da prova
+//  Buscar estatísticas da prova 
 $sql_estatisticas = "SELECT 
     COUNT(*) as total_alunos,
-    SUM(CASE WHEN status = 'concluido' THEN 1 ELSE 0 END) as concluidas,
+    SUM(CASE WHEN status = 'realizada' THEN 1 ELSE 0 END) as concluidas,
     SUM(CASE WHEN status = 'pendente' THEN 1 ELSE 0 END) as pendentes
-    FROM Aluno_Provas WHERE Provas_idProvas = $prova_id";
-$resultado_estatisticas = mysqli_query($conectar, $sql_estatisticas);
+    FROM Aluno_Provas WHERE Provas_idProvas = ?";
+$stmt_estatisticas = mysqli_prepare($conectar, $sql_estatisticas);
+mysqli_stmt_bind_param($stmt_estatisticas, "i", $prova_id);
+mysqli_stmt_execute($stmt_estatisticas);
+$resultado_estatisticas = mysqli_stmt_get_result($stmt_estatisticas);
 $estatisticas = mysqli_fetch_assoc($resultado_estatisticas);
+mysqli_stmt_close($stmt_estatisticas);
 ?>
 
 <!DOCTYPE html>
@@ -162,7 +176,7 @@ $estatisticas = mysqli_fetch_assoc($resultado_estatisticas);
                                                     alt="Imagem da questão <?php echo $numero_questao; ?>"
                                                     class="imagem-questao"
                                                     onclick="abrirModal('<?php echo htmlspecialchars($imagem['caminho_imagem']); ?>')"
-                                                    style="cursor: pointer;">
+                                                    style="max-width: 200px; cursor: zoom-in; border: 1px solid #ddd; border-radius: 5px; padding: 5px;">
                                                 <br>
                                                 <small><?php echo htmlspecialchars($imagem['nome_arquivo']); ?></small>
                                             </div>
@@ -224,11 +238,11 @@ $estatisticas = mysqli_fetch_assoc($resultado_estatisticas);
         </div>
     </footer>
 
-    <!-- Modal para visualização ampliada de imagens -->
-    <div id="modalImagem">
-        <div style="position: relative; max-width: 90%; max-height: 90%;">
-            <img id="imagemModal" src="" alt="Imagem ampliada">
-            <button onclick="fecharModal()">Fechar</button>
+    <!-- Modal para visualização ampliada de imagens - COM CSS INLINE -->
+    <div id="modalImagem" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center;">
+        <div style="position: relative; max-width: 90%; max-height: 90%; text-align: center;">
+            <span onclick="fecharModal()" style="position: absolute; top: -50px; right: -10px; color: white; font-size: 40px; cursor: pointer; background: rgba(0,0,0,0.7); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid white; transition: all 0.3s ease;">&times;</span>
+            <img id="imagemModal" src="" alt="Imagem ampliada" style="max-width: 100%; max-height: 80vh; border-radius: 8px; box-shadow: 0 5px 25px rgba(0,0,0,0.5);">
         </div>
     </div>
 
@@ -238,13 +252,55 @@ $estatisticas = mysqli_fetch_assoc($resultado_estatisticas);
     <script src="../js/math-config.js"></script>
 
     <script>
-        // Função para expandir/contrair questões
+        // ✅ FUNÇÕES DO MODAL - VERSÃO CORRIGIDA
+        function abrirModal(src) {
+            console.log('Abrindo modal com:', src);
+            const modal = document.getElementById('modalImagem');
+            const modalImg = document.getElementById('imagemModal');
+            
+            if (modal && modalImg) {
+                modalImg.src = src;
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function fecharModal() {
+            const modal = document.getElementById('modalImagem');
+            if (modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // ✅ CONFIGURAÇÃO DOS EVENT LISTENERS
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('modalImagem');
+            
+            // Fechar modal ao clicar fora
+            if (modal) {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        fecharModal();
+                    }
+                });
+            }
+            
+            // Fechar modal com ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    fecharModal();
+                }
+            });
+        });
+
+        // ✅ CORREÇÃO: Função para expandir/contrair questões
         document.addEventListener('DOMContentLoaded', function() {
             const questaoCards = document.querySelectorAll('.questao-card');
             
             questaoCards.forEach(card => {
                 const enunciado = card.querySelector('.enunciado p');
-                if (enunciado.textContent.length > 200) {
+                if (enunciado && enunciado.textContent.length > 200) {
                     const textoCompleto = enunciado.innerHTML;
                     const textoResumido = textoCompleto.substring(0, 200) + '...';
                     
@@ -255,6 +311,7 @@ $estatisticas = mysqli_fetch_assoc($resultado_estatisticas);
                     btnExpandir.style.marginLeft = '10px';
                     btnExpandir.style.padding = '2px 5px';
                     btnExpandir.style.fontSize = '0.8em';
+                    btnExpandir.style.cursor = 'pointer';
                     
                     btnExpandir.addEventListener('click', function() {
                         if (enunciado.innerHTML === textoResumido) {
@@ -270,31 +327,7 @@ $estatisticas = mysqli_fetch_assoc($resultado_estatisticas);
                 }
             });
         });
-
-        // Funções para o modal de imagens
-        function abrirModal(src) {
-            document.getElementById('imagemModal').src = src;
-            document.getElementById('modalImagem').style.display = 'flex';
-        }
-
-        function fecharModal() {
-            document.getElementById('modalImagem').style.display = 'none';
-        }
-
-        // Fechar modal ao clicar fora da imagem
-        document.getElementById('modalImagem').addEventListener('click', function(e) {
-            if (e.target === this) {
-                fecharModal();
-            }
-        });
-
-        // Fechar modal com tecla ESC
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                fecharModal();
-            }
-        });
-    </script>
+        </script>
 </body>
 </html>
 
