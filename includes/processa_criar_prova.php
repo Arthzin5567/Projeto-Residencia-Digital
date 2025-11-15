@@ -11,13 +11,8 @@ if (!isset($_SESSION['idProfessor']) || !is_numeric($_SESSION['idProfessor'])) {
     exit();
 }
 
-require_once '../config/database_config.php';
-
-$host = $db_config['host'];
-$user = $db_config['user'];
-$password = $db_config['password'];
-$database = $db_config['database'];
-$conectar = mysqli_connect($host, $user, $password, $database);
+require_once __DIR__ . '/../config/funcoes_comuns.php';
+$conectar = conectarBanco();
 
 // Coletar dados básicos - Sanitização básica
 $titulo = mysqli_real_escape_string($conectar, trim($_POST["titulo"] ?? ''));

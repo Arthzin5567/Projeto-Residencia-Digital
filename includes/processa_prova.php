@@ -1,21 +1,11 @@
 <?php
 session_start();
+require_once __DIR__ . '/../config/funcoes_comuns.php';
 
 //  Headers de segurança
 header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: DENY');
 
-// Verificação consistente com as outras páginas
-if (!isset($_SESSION['aluno_identificado']) || $_SESSION['aluno_identificado'] !== true) {
-    header("Location: ../index.php");
-    exit();
-}
-
-//  Validar ID do aluno
-if (!isset($_SESSION['id_aluno']) || !is_numeric($_SESSION['id_aluno'])) {
-    header("Location: ../index.php");
-    exit();
-}
 
 // Verificar se o formulário foi submetido
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -30,16 +20,12 @@ if (!isset($_POST['prova_id']) || empty($_POST['prova_id'])) {
 }
 
 //  Validar IDs
-$aluno_id = (int)$_SESSION['id_aluno'];
+$aluno_id = verificarLoginAluno();
 $prova_id = (int)$_POST['prova_id'];
 
-require_once '../config/database_config.php';
 
-$host = $db_config['host'];
-$user = $db_config['user'];
-$password = $db_config['password'];
-$database = $db_config['database'];
-$conectar = mysqli_connect($host, $user, $password, $database);
+
+$conectar = conectarBanco();
 
 //  Verificar conexão
 if (!$conectar) {

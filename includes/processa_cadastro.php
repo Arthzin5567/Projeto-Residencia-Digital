@@ -5,13 +5,9 @@ session_start();
 header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: DENY');
 
-require_once '../config/database_config.php';
 
-$host = $db_config['host'];
-$user = $db_config['user'];
-$password = $db_config['password'];
-$database = $db_config['database'];
-$conectar = mysqli_connect($host, $user, $password, $database);
+require_once __DIR__ . '/../config/funcoes_comuns.php';
+$conectar = conectarBanco();
 
 // Verificar conexão
 if (!$conectar) {

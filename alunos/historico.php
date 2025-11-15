@@ -1,23 +1,10 @@
 <?php
 session_start();
 
-// Verificar se o aluno está identificado
-if (!isset($_SESSION['aluno_identificado'])) {
-    echo "<script>
-            alert('Acesso negado! Identifique-se primeiro.');
-            location.href = '../index.php';
-          </script>";
-    exit();
-}
 
-require_once '../config/database_config.php';
-
-$host = $db_config['host'];
-$user = $db_config['user'];
-$password = $db_config['password'];
-$database = $db_config['database'];
-$conectar = mysqli_connect($host, $user, $password, $database);
-$aluno_id = (int)$_SESSION['id_aluno'];
+require_once __DIR__ . '/../config/funcoes_comuns.php';
+$conectar = conectarBanco();
+$aluno_id = verificarLoginAluno();
 
 //  Buscar dados do aluno
 $sql_aluno = "SELECT * FROM Aluno WHERE idAluno = ?";

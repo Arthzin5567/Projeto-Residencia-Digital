@@ -16,13 +16,9 @@ function fazerUploadImagens($idProva, $questaoNumero, $arquivos) {
         return [];
     }
 
-    require_once '../config/database_config.php';
 
-    $host = $db_config['host'];
-    $user = $db_config['user'];
-    $password = $db_config['password'];
-    $database = $db_config['database'];
-    $conectar = mysqli_connect($host, $user, $password, $database);
+    require_once 'funcoes_comuns.php';
+    $conectar = conectarBanco();
 
     //  Verificar conexão
     if (!$conectar) {
@@ -118,7 +114,7 @@ function fazerUploadImagens($idProva, $questaoNumero, $arquivos) {
             $caminhoRelativo = "uploads/provas/prova_" . (int)$idProva . "/" . $nomeArquivo;
             
             // Salvar no banco de dados
-            $sql = "INSERT INTO ImagensProvas (idProva, numero_questao, caminho_imagem, nome_arquivo) 
+            $sql = "INSERT INTO ImagensProvas (idProva, numero_questao, caminho_imagem, nome_arquivo)
                     VALUES (?, ?, ?, ?)";
             $stmt = mysqli_prepare($conectar, $sql);
             

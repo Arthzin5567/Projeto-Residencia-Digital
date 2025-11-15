@@ -1,5 +1,9 @@
 <?php
 session_start();
+require_once __DIR__ . '/../config/funcoes_comuns.php';
+$conectar = conectarBanco();
+
+verificarloginProfessor();
 
 // HEADERS DE SEGURANÇA
 header("X-Frame-Options: DENY");
@@ -8,27 +12,11 @@ header("X-XSS-Protection: 1; mode=block");
 header("Referrer-Policy: strict-origin-when-cross-origin");
 header("Content-Security-Policy: default-src 'self'; img-src 'self' data:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;");
 
-// VALIDAÇÃO RIGOROSA DE SESSÃO
-if (!isset($_SESSION["logado"]) || $_SESSION["logado"] !== true || $_SESSION["tipo_usuario"] !== "professor") {
-    header("Location: ../index.php?erro=acesso_negado");
-    exit();
-}
 
 // VALIDAÇÃO DE CSRF TOKEN PARA AÇÕES CRÍTICAS
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token'])) {
-    die("Token CSRF inválido");
-}
+$csrf_token = gerarTokenCSRF();
 
 // CONFIGURAÇÃO SEGURA DO BANCO
-require_once '../config/database_config.php';
-
-$host = $db_config['host'];
-$user = $db_config['user'];
-$password = $db_config['password'];
-$database = $db_config['database'];
-
-// Conexão com tratamento de erro seguro
-$conectar = mysqli_connect($host, $user, $password, $database);
 if (!$conectar) {
     error_log("Erro de conexão com o banco no desempenho geral");
     die("Erro interno do sistema. Tente novamente mais tarde.");

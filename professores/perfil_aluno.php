@@ -1,5 +1,9 @@
 <?php
 session_start();
+require_once __DIR__ . '/../config/funcoes_comuns.php';
+$conectar = conectarBanco();
+
+verificarloginProfessor();
 
 // HEADERS DE SEGURANÇA
 header("X-Frame-Options: DENY");
@@ -15,12 +19,7 @@ if (!isset($_SESSION["logado"]) || $_SESSION["logado"] !== true || $_SESSION["ti
 }
 
 // VALIDAÇÃO DE CSRF TOKEN PARA AÇÕES
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-        error_log("Tentativa de CSRF detectada no perfil aluno");
-        die("Erro de segurança. Tente novamente.");
-    }
-}
+$csrf_token = gerarTokenCSRF();
 
 // VALIDAÇÃO DO ID DO ALUNO
 if (!isset($_GET['id']) || empty($_GET['id'])) {
@@ -36,15 +35,6 @@ if ($aluno_id <= 0 || $aluno_id > 999999) {
     exit();
 }
 
-require_once '../config/database_config.php';
-
-$host = $db_config['host'];
-$user = $db_config['user'];
-$password = $db_config['password'];
-$database = $db_config['database'];
-
-// CONEXÃO SEGURA
-$conectar = mysqli_connect($host, $user, $password, $database);
 if (!$conectar) {
     error_log("Erro de conexão no perfil aluno");
     die("Erro interno do sistema. Tente novamente mais tarde.");

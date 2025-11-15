@@ -1,19 +1,8 @@
 <?php
 session_start();
+require_once __DIR__ . '/../config/funcoes_comuns.php';
 
-// Se o aluno já está identificado, redirecionar para o dashboard
-if (isset($_SESSION['aluno_identificado'])) {
-    header("Location: dashboard_aluno.php");
-    exit();
-}
-
-require_once '../config/database_config.php';
-
-$host = $db_config['host'];
-$user = $db_config['user'];
-$password = $db_config['password'];
-$database = $db_config['database'];
-$conectar = mysqli_connect($host, $user, $password, $database);
+$conectar = conectarBanco();
 
 // ✅ Verificar se a conexão foi bem sucedida
 if (!$conectar) {

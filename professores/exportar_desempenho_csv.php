@@ -1,5 +1,9 @@
 <?php
 session_start();
+require_once __DIR__ . '/../config/funcoes_comuns.php';
+$conectar = conectarBanco();
+
+verificarloginProfessor();
 
 // HEADERS DE SEGURANÇA
 header("X-Frame-Options: DENY");
@@ -7,27 +11,9 @@ header("X-Content-Type-Options: nosniff");
 header("X-XSS-Protection: 1; mode=block");
 header("Referrer-Policy: strict-origin-when-cross-origin");
 
-// VALIDAÇÃO RIGOROSA DE SESSÃO
-if (!isset($_SESSION["logado"]) || $_SESSION["logado"] !== true || $_SESSION["tipo_usuario"] !== "professor") {
-    header("Location: ../index.php?erro=acesso_negado");
-    exit();
-}
-
 // VALIDAÇÃO DE CSRF TOKEN (opcional para GET, mas boa prática)
-if (isset($_GET['csrf_token']) && $_GET['csrf_token'] !== $_SESSION['csrf_token']) {
-    error_log("Tentativa de CSRF detectada na exportação CSV");
-    die("Erro de segurança. Acesso negado.");
-}
+$csrf_token = gerarTokenCSRF();
 
-require_once '../config/database_config.php';
-
-$host = $db_config['host'];
-$user = $db_config['user'];
-$password = $db_config['password'];
-$database = $db_config['database'];
-
-// CONEXÃO SEGURA
-$conectar = mysqli_connect($host, $user, $password, $database);
 if (!$conectar) {
     error_log("Erro de conexão na exportação CSV");
     die("Erro interno do sistema. Tente novamente mais tarde.");

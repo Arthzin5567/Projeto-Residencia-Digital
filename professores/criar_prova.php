@@ -1,25 +1,11 @@
 <?php
 session_start();
+require_once __DIR__ . '/../config/funcoes_comuns.php';
+$conectar = conectarBanco();
 
-//  Verificação robusta de autenticação
-if (!isset($_SESSION["logado"]) || $_SESSION["logado"] !== true || $_SESSION["tipo_usuario"] !== "professor") {
-    header("Location: ../index.php");
-    exit();
-}
+verificarloginProfessor();
 
-//  Validar ID do professor
-if (!isset($_SESSION['idProfessor']) || !is_numeric($_SESSION['idProfessor'])) {
-    header("Location: ../index.php");
-    exit();
-}
 
-require_once '../config/database_config.php';
-
-$host = $db_config['host'];
-$user = $db_config['user'];
-$password = $db_config['password'];
-$database = $db_config['database'];
-$conectar = mysqli_connect($host, $user, $password, $database);
 
 //  Verificar conexão com banco
 if (!$conectar) {

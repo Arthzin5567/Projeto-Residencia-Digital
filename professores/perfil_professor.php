@@ -1,5 +1,9 @@
 <?php
 session_start();
+require_once __DIR__ . '/../config/funcoes_comuns.php';
+$conectar = conectarBanco();
+
+verificarloginProfessor();
 
 // 🔒 HEADERS DE SEGURANÇA
 header("X-Frame-Options: DENY");
@@ -8,18 +12,7 @@ header("X-XSS-Protection: 1; mode=block");
 header("Referrer-Policy: strict-origin-when-cross-origin");
 header("Content-Security-Policy: default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline';");
 
-// 🔒 VALIDAÇÃO RIGOROSA DE SESSÃO
-if (!isset($_SESSION["logado"]) || $_SESSION["logado"] !== true || $_SESSION["tipo_usuario"] !== "professor") {
-    header("Location: ../index.php?erro=acesso_negado");
-    exit();
-}
 
-// 🔒 VALIDAÇÃO DO ID DO PROFESSOR
-if (!isset($_SESSION['idProfessor']) || !is_numeric($_SESSION['idProfessor'])) {
-    session_destroy();
-    header("Location: ../index.php?erro=sessao_invalida");
-    exit();
-}
 
 $professor_id = (int)$_SESSION['idProfessor'];
 
@@ -30,15 +23,6 @@ if ($professor_id <= 0 || $professor_id > 999999) {
     exit();
 }
 
-require_once '../config/database_config.php';
-
-$host = $db_config['host'];
-$user = $db_config['user'];
-$password = $db_config['password'];
-$database = $db_config['database'];
-
-// 🔒 CONEXÃO SEGURA
-$conectar = mysqli_connect($host, $user, $password, $database);
 if (!$conectar) {
     error_log("Erro de conexão no perfil professor");
     die("Erro interno do sistema. Tente novamente mais tarde.");

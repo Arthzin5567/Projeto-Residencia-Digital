@@ -1,11 +1,7 @@
 <?php
 session_start();
-
-$host = "localhost";
-$user = "root";
-$password = "SenhaIrada@2024!";
-$database = "projeto_residencia";
-$conectar = mysqli_connect($host, $user, $password, $database);
+require_once __DIR__ . '../config/funcoes_comuns.php';
+$conectar = conectarBanco();
 
 $login = $_POST["username"];
 $senha = $_POST["password"];

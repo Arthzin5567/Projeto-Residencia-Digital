@@ -1,14 +1,6 @@
 <?php
 session_start();
-
-// Verificação consistente com as outras páginas
-if (!isset($_SESSION['aluno_identificado'])) {
-    echo "<script>
-            alert('Acesso negado! Identifique-se primeiro.');
-            location.href = '../index.php';
-          </script>";
-    exit();
-}
+require_once __DIR__ . '/../config/funcoes_comuns.php';
 
 // ✅ VALIDAÇÃO SEGURA do ID da prova
 if (!isset($_GET['id']) || empty($_GET['id']) || !is_numeric($_GET['id'])) {
@@ -20,15 +12,8 @@ if (!isset($_GET['id']) || empty($_GET['id']) || !is_numeric($_GET['id'])) {
 }
 
 $prova_id = (int)$_GET['id'];
-$aluno_id = (int)$_SESSION['id_aluno'];
-
-require_once '../config/database_config.php';
-
-$host = $db_config['host'];
-$user = $db_config['user'];
-$password = $db_config['password'];
-$database = $db_config['database'];
-$conectar = mysqli_connect($host, $user, $password, $database);
+$aluno_id = verificarLoginAluno();
+$conectar = conectarBanco();
 
 //  Buscar dados da prova
 $sql_prova = "SELECT * FROM Provas WHERE idProvas = ?";
