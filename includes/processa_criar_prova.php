@@ -14,11 +14,31 @@ if (!isset($_SESSION['idProfessor']) || !is_numeric($_SESSION['idProfessor'])) {
 require_once __DIR__ . '/../config/funcoes_comuns.php';
 $conectar = conectarBanco();
 
-// Coletar dados básicos - Sanitização básica
-$titulo = mysqli_real_escape_string($conectar, trim($_POST["titulo"] ?? ''));
-$materia = mysqli_real_escape_string($conectar, trim($_POST["materia"] ?? ''));
-$serie_destinada = mysqli_real_escape_string($conectar, trim($_POST["serie_destinada"] ?? ''));
-$numero_questoes = isset($_POST["numero_questoes"]) ? (int)$_POST["numero_questoes"] : 0;
+// ✅ VALIDAÇÃO E SANITIZAÇÃO SEGURA
+function validarESanitizar($dados, $tipo = 'string') {
+    if (empty($dados)) return '';
+    
+    $dados = trim($dados);
+    
+    switch ($tipo) {
+        case 'int':
+            return (int)$dados;
+        case 'email':
+            return filter_var($dados, FILTER_VALIDATE_EMAIL) ? $dados : '';
+        case 'alfanumerico':
+            return preg_replace('/[^a-zA-Z0-9áéíóúâêîôûãõçÁÉÍÓÚÂÊÎÔÛÃÕÇ\s\-_\.]/', '', $dados);
+        case 'string':
+        default:
+            // Remove caracteres potencialmente perigosos mas mantém acentuação
+            return htmlspecialchars($dados, ENT_QUOTES, 'UTF-8');
+    }
+}
+
+// ✅ COLETA E VALIDAÇÃO SEGURA DE DADOS
+$titulo = validarESanitizar($_POST["titulo"] ?? '', 'alfanumerico');
+$materia = validarESanitizar($_POST["materia"] ?? '');
+$serie_destinada = validarESanitizar($_POST["serie_destinada"] ?? '');
+$numero_questoes = validarESanitizar($_POST["numero_questoes"] ?? 0, 'int');
 $professor_id = (int)$_SESSION["idProfessor"];
 
 //  Validação mínima
@@ -26,9 +46,6 @@ if (empty($titulo) || $numero_questoes < 1) {
     echo "<script>alert('Dados inválidos!'); location.href='../professores/criar_prova.php';</script>";
     exit();
 }
-
-// função de upload de imagens
-// require_once 'upload_imagens.php';
 
 // Construir array com as questões
 $questoes = [];
@@ -96,15 +113,32 @@ if (empty($questoes)) {
 }
 
 // Converter para JSON
-$conteudo_json = mysqli_real_escape_string($conectar, json_encode($questoes, JSON_UNESCAPED_UNICODE));
+$conteudo_json = json_encode($questoes, JSON_UNESCAPED_UNICODE);
 
-
+$data_criacao = date('Y-m-d H:i:s');
 
 // Inserir no banco
 $sql = "INSERT INTO Provas (titulo, materia, numero_questoes, conteudo, serie_destinada, data_criacao, Professor_idProfessor) 
-        VALUES ('$titulo', '$materia', $numero_questoes, '$conteudo_json', '$serie_destinada', CURDATE(), $professor_id)";
+        VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-echo "<pre>SQL: $sql</pre>";
+$stmt = mysqli_prepare($conectar, $sql);
+if (!$stmt) {
+    error_log("❌ Erro ao preparar statement: " . mysqli_error($conectar));
+    $_SESSION['erro_prova'] = "Erro interno do sistema. Tente novamente.";
+    header("Location: ../professores/criar_prova.php");
+    exit();
+}
+
+// titulo (s), materia (s), numero_questoes (i), conteudo (s), serie_destinada (s), data_criacao (s), professor_id (i)
+mysqli_stmt_bind_param($stmt, "ssisssi", 
+    $titulo, 
+    $materia, 
+    $numero_questoes, 
+    $conteudo_json, 
+    $serie_destinada, 
+    $data_criacao, 
+    $professor_id
+);
 
 // Verificar estado da conexão antes do upload
 error_log("🔗 Estado da conexão MySQL:");
@@ -127,126 +161,90 @@ if (!$conectar || !mysqli_ping($conectar)) {
     }
 }
 
-if (mysqli_query($conectar, $sql)) {
+if (mysqli_stmt_execute($stmt)) {
     $prova_id = mysqli_insert_id($conectar);
+    
+    // ✅ LOG SEGURO - SEM DADOS DO USUÁRIO
+    error_log("✅ Prova criada com ID: " . $prova_id);
 
     // PROCESSAR UPLOAD DE IMAGENS
-    error_log("🚀 INICIANDO UPLOAD DE IMAGENS PARA PROVA ID: " . $prova_id);
-
     $total_imagens = 0;
     for ($i = 1; $i <= $numero_questoes; $i++) {
         $imagens_key = "imagens_$i";
         
-        error_log("🔍 Verificando questão $i - chave: $imagens_key");
-        
-        // Verificar se a chave existe e tem arquivos
-        if (!isset($_FILES[$imagens_key]) || empty($_FILES[$imagens_key]['name'][0])) {
-            error_log("📭 Nenhum arquivo para questão $i");
-            continue;
-        }
-        
-        $arquivos = $_FILES[$imagens_key];
-        $quantidade_arquivos = count($arquivos['name']);
-        error_log("✅ Encontrados $quantidade_arquivos arquivo(s) para questão $i");
-        
-        // DEBUG: Log detalhado dos arquivos
-        foreach ($arquivos['name'] as $index => $nome) {
-            error_log("   📄 Arquivo $index: $nome (Tmp: " . $arquivos['tmp_name'][$index] . ")");
-        }
-        
-        // Chamar função de upload
-        $imagensSalvas = fazerUploadImagens($prova_id, $i, $arquivos, $conectar);
-        
-        if (!empty($imagensSalvas)) {
-            $total_imagens += count($imagensSalvas);
-            error_log("🎉 " . count($imagensSalvas) . " imagem(ns) salva(s) para questão $i");
-            foreach ($imagensSalvas as $imagem) {
-                error_log("   💾 Salvo: $imagem");
-            }
-        } else {
-            error_log("❌ Falha no upload para questão $i");
+        if (isset($_FILES[$imagens_key]) && !empty($_FILES[$imagens_key]['name'][0])) {
+            // ✅ LOG SEGURO - APENAS METADADOS, NÃO CONTEÚDO
+            error_log("📁 Processando upload para questão $i da prova $prova_id");
             
-            // DEBUG AVANÇADO: Testar manualmente
-            testarUploadManualmente($prova_id, $i, $arquivos, $conectar);
+            $arquivos = $_FILES[$imagens_key];
+            $imagensSalvas = fazerUploadImagens($prova_id, $i, $arquivos, $conectar);
+            
+            if (!empty($imagensSalvas)) {
+                $total_imagens += count($imagensSalvas);
+                // ✅ LOG SEGURO
+                error_log("✅ " . count($imagensSalvas) . " imagem(ns) salva(s) para questão $i");
+            }
         }
     }
 
-    error_log("📊 RESUMO FINAL: $total_imagens imagem(ns) salva(s) no total");
-
-    // Função de debug avançado
-    function testarUploadManualmente($prova_id, $questao_numero, $arquivos, $conectar) {
-        error_log("🧪 TESTE MANUAL DE UPLOAD:");
+    // ✅ VINCULAR ALUNOS COM PREPARED STATEMENT
+    $sql_alunos = "SELECT idAluno FROM Aluno WHERE escolaridade = ?";
+    $stmt_alunos = mysqli_prepare($conectar, $sql_alunos);
+    
+    if ($stmt_alunos) {
+        mysqli_stmt_bind_param($stmt_alunos, "s", $serie_destinada);
+        mysqli_stmt_execute($stmt_alunos);
+        $resultado = mysqli_stmt_get_result($stmt_alunos);
         
-        // 1. Verificar diretório
-        $uploadDir = "../uploads/provas/prova_" . $prova_id . "/";
-        error_log("📁 Diretório: $uploadDir");
-        error_log("   Existe: " . (is_dir($uploadDir) ? 'SIM' : 'NÃO'));
-        error_log("   Pode escrever: " . (is_writable($uploadDir) ? 'SIM' : 'NÃO'));
-        
-        if (!is_dir($uploadDir)) {
-            if (!mkdir($uploadDir, 0755, true)) {
-                error_log("❌ Não foi possível criar diretório");
-                return;
-            }
-            error_log("✅ Diretório criado");
-        }
-        
-        // 2. Testar primeiro arquivo
-        $tmp_name = $arquivos['tmp_name'][0];
-        $nome_arquivo = $arquivos['name'][0];
-        
-        error_log("📄 Testando arquivo: $nome_arquivo");
-        error_log("   Tmp existe: " . (file_exists($tmp_name) ? 'SIM' : 'NÃO'));
-        error_log("   Tamanho: " . $arquivos['size'][0]);
-        error_log("   Erro: " . $arquivos['error'][0]);
-        
-        if ($arquivos['error'][0] === UPLOAD_ERR_OK && file_exists($tmp_name)) {
-            // Tentar upload manual
-            $novo_nome = uniqid() . '_questao_' . $questao_numero . '.jpg';
-            $caminho_destino = $uploadDir . $novo_nome;
-            
-            if (move_uploaded_file($tmp_name, $caminho_destino)) {
-                error_log("✅ Upload manual bem-sucedido: $caminho_destino");
-                
-                // Tentar inserir no banco manualmente
-                $caminho_relativo = "uploads/provas/prova_" . $prova_id . "/" . $novo_nome;
-                $sql = "INSERT INTO ImagensProvas (idProva, numero_questao, caminho_imagem, nome_arquivo) VALUES (?, ?, ?, ?)";
-                $stmt = mysqli_prepare($conectar, $sql);
-                
-                if ($stmt) {
-                    mysqli_stmt_bind_param($stmt, "iiss", $prova_id, $questao_numero, $caminho_relativo, $nome_arquivo);
-                    if (mysqli_stmt_execute($stmt)) {
-                        error_log("✅ Inserção manual no banco bem-sucedida");
-                    } else {
-                        error_log("❌ Falha na inserção manual: " . mysqli_stmt_error($stmt));
+        if ($resultado) {
+            $alunos_vinculados = 0;
+            while ($aluno = mysqli_fetch_assoc($resultado)) {
+                $sql_relacao = "INSERT INTO Aluno_Provas (Aluno_idAluno, Provas_idProvas, status) VALUES (?, ?, 'pendente')";
+                $stmt_relacao = mysqli_prepare($conectar, $sql_relacao);
+                if ($stmt_relacao) {
+                    mysqli_stmt_bind_param($stmt_relacao, "ii", $aluno['idAluno'], $prova_id);
+                    if (mysqli_stmt_execute($stmt_relacao)) {
+                        $alunos_vinculados++;
                     }
-                    mysqli_stmt_close($stmt);
-                } else {
-                    error_log("❌ Falha ao preparar statement: " . mysqli_error($conectar));
+                    mysqli_stmt_close($stmt_relacao);
                 }
-            } else {
-                error_log("❌ Falha no move_uploaded_file");
-                error_log("   Permissões: " . decoct(fileperms($uploadDir)));
             }
+            
+            $_SESSION['sucesso_prova'] = "Prova criada com sucesso! Vinculada a $alunos_vinculados aluno(s).";
+            mysqli_stmt_close($stmt_alunos);
+            mysqli_stmt_close($stmt);
+            mysqli_close($conectar);
+            
+            header("Location: ../professores/gerenciar_provas.php");
+            exit();
         }
+        mysqli_stmt_close($stmt_alunos);
     }
     
-    // Criar registros para todos os alunos da série
-    $sql_alunos = "SELECT idAluno FROM Aluno WHERE escolaridade = '$serie_destinada'";
-    $resultado = mysqli_query($conectar, $sql_alunos);
+    $_SESSION['sucesso_prova'] = "Prova criada com sucesso!";
+    mysqli_stmt_close($stmt);
+    mysqli_close($conectar);
     
-    if ($resultado) {
-        while ($aluno = mysqli_fetch_assoc($resultado)) {
-            $sql_relacao = "INSERT INTO Aluno_Provas (Aluno_idAluno, Provas_idProvas, status)
-                            VALUES ({$aluno['idAluno']}, $prova_id, 'pendente')";
-            mysqli_query($conectar, $sql_relacao);
-        }
-        echo "<script>alert('Prova criada com sucesso!'); location.href='../professores/gerenciar_provas.php';</script>";
-    } else {
-        echo "<script>alert('Prova criada, mas erro ao vincular alunos.'); location.href='../professores/gerenciar_provas.php';</script>";
-    }
+    header("Location: ../professores/gerenciar_provas.php");
+    exit();
+    
 } else {
-    echo "<script>alert('Erro ao criar prova.'); history.back();</script>";
+    error_log("❌ Erro ao executar statement: " . mysqli_stmt_error($stmt));
+    $_SESSION['erro_prova'] = "Erro ao criar prova no banco de dados.";
+    mysqli_stmt_close($stmt);
+    mysqli_close($conectar);
+    
+    header("Location: ../professores/criar_prova.php");
+    exit();
+}
+
+// ✅ FUNÇÃO DE LOG SEGURO PARA UPLOAD (se necessário)
+function logUploadSeguro($prova_id, $questao_numero, $arquivos) {
+    // Apenas loga metadados, não o conteúdo ou nomes originais
+    $quantidade = count($arquivos['name']);
+    $tamanho_total = array_sum($arquivos['size']);
+    
+    error_log("📤 Upload: Prova $prova_id, Questão $questao_numero, Arquivos: $quantidade, Tamanho total: " . $tamanho_total . " bytes");
 }
 
 mysqli_close($conectar);
