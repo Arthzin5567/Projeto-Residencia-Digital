@@ -16,9 +16,11 @@ if (!$conectar) {
     exit();
 }
 
-// FUNÇÃO PARA LIMPAR TELEFONE 
+// FUNÇÃO PARA LIMPAR TELEFONE
 function limparTelefone($telefone) {
-    if (empty($telefone)) return '';
+    if (empty($telefone)) {
+        return '';
+    }
     return preg_replace('/\D/', '', $telefone);
 }
 

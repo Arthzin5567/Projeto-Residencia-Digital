@@ -135,6 +135,15 @@ $media_matematica = $matematica['media'] ? number_format($matematica['media'], 1
 $melhor_matematica = $matematica['melhor'] ? number_format($matematica['melhor'], 1) : '0.0';
 $aprovacao_matematica = $matematica['total'] > 0 ?
     number_format(($matematica['aprovadas'] / $matematica['total']) * 100, 1) : '0.0';
+
+// Extrair operações ternárias aninhadas
+// Determinar a classe de evolução
+$classe_evolucao = 'evolucao-neutra';
+if ($porcentagem_evolucao > 0) {
+    $classe_evolucao = 'evolucao-positiva';
+} elseif ($porcentagem_evolucao < 0) {
+    $classe_evolucao = 'evolucao-negativa';
+}
 ?>
 
 <!DOCTYPE html>
@@ -198,10 +207,7 @@ $aprovacao_matematica = $matematica['total'] > 0 ?
 
                 <div class="stat-card evolucao">
                     <h3>🚀 Sua Evolução</h3>
-                    <div class="stat-number <?php
-                        echo $porcentagem_evolucao > 0 ? 'evolucao-positiva' :
-                             ($porcentagem_evolucao < 0 ? 'evolucao-negativa' : 'evolucao-neutra');
-                    ?>">
+                    <div class="stat-number <?php echo $classe_evolucao; ?>">
                         <?php echo number_format($porcentagem_evolucao, 1); ?>%
                     </div>
                     <p>
@@ -297,8 +303,14 @@ $aprovacao_matematica = $matematica['total'] > 0 ?
 
                     $current_materia = '';
                     while ($prova = mysqli_fetch_assoc($result_provas_display)):
-                        $nota_class = $prova['nota'] >= 7 ? 'nota-alta' :
-                                    ($prova['nota'] >= 5 ? 'nota-media' : 'nota-baixa');
+                        
+                        $nota_class = 'nota-baixa';
+                        if ($prova['nota'] >= 7) {
+                            $nota_class = 'nota-alta';
+                        } elseif ($prova['nota'] >= 5) {
+                            $nota_class = 'nota-media';
+                        }
+                        
                         $materia_class = $prova['materia'] === 'Português' ? 'portugues-item' : 'matematica-item';
                         $title_class = $prova['materia'] === 'Português' ? 'title-portugues' : 'title-matematica';
                         

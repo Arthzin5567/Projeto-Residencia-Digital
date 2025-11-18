@@ -1,5 +1,10 @@
 <?php
 session_start();
+require_once __DIR__ . '/../config/funcoes_comuns.php';
+$conectar = conectarBanco();
+
+// CONSTANTE PARA REDIRECIONAMENTO=
+define('REDIRECT_PERFIL', '../alunos/perfil.php');
 
 // Headers de segurança
 header('X-Content-Type-Options: nosniff');
@@ -7,7 +12,9 @@ header('X-Frame-Options: DENY');
 
 // FUNÇÃO PARA LIMPAR TELEFONE
 function limparTelefone($telefone) {
-    if (empty($telefone)) return '';
+    if (empty($telefone)) {
+        return '';
+    }
     return preg_replace('/\D/', '', $telefone);
 }
 
@@ -24,22 +31,19 @@ if (!isset($_SESSION['id_aluno']) || !is_numeric($_SESSION['id_aluno'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: ../alunos/perfil.php");
+    header("Location: " . REDIRECT_PERFIL);
     exit();
 }
-
-require_once __DIR__ . '/../config/funcoes_comuns.php';
-$conectar = conectarBanco();
 
 // Verificar conexão
 if (!$conectar) {
     error_log("Erro de conexão ao editar perfil");
     $_SESSION['erro_perfil'] = "Erro de conexão. Tente novamente.";
-    header("Location: ../alunos/perfil.php");
+    header("Location: " . REDIRECT_PERFIL);
     exit();
 }
 
-$aluno_id = validarLoginAluno();
+$aluno_id = verificarLoginAluno();
 
 // Buscar dados com Prepared Statement (já está bom)
 $sql_aluno = "SELECT * FROM Aluno WHERE idAluno = ?";
@@ -52,7 +56,7 @@ mysqli_stmt_close($stmt_aluno);
 
 if (!$aluno) {
     $_SESSION['erro_perfil'] = "Aluno não encontrado!";
-    header("Location: ../alunos/perfil.php");
+    header("Location: " . REDIRECT_PERFIL);
     exit();
 }
 
@@ -62,13 +66,13 @@ $codigo_confirmacao = trim($_POST['codigo_confirmacao'] ?? '');
 // Validação segura do código
 if (empty($codigo_confirmacao)) {
     $_SESSION['erro_perfil'] = "Código de confirmação é obrigatório!";
-    header("Location: ../alunos/perfil.php");
+    header("Location: " . REDIRECT_PERFIL);
     exit();
 }
 
 if ($codigo_confirmacao !== $aluno['codigo_acesso']) {
     $_SESSION['erro_perfil'] = "Código de confirmação incorreto!";
-    header("Location: ../alunos/perfil.php");
+    header("Location: " . REDIRECT_PERFIL);
     exit();
 }
 
@@ -83,11 +87,11 @@ $turma = trim(htmlspecialchars($_POST['turma'] ?? '', ENT_QUOTES, 'UTF-8'));
 // VALIDAÇÕES BÁSICAS
 if (empty($nome) || strlen($nome) > 45) {
     $_SESSION['erro_perfil'] = "Nome inválido!";
-    header("Location: ../alunos/perfil.php");
+    header("Location: " . REDIRECT_PERFIL);
     exit();
 } elseif ($email && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     $_SESSION['erro_perfil'] = "E-mail inválido!";
-    header("Location: ../alunos/perfil.php");
+    header("Location: " . REDIRECT_PERFIL);
     exit();
 }
 
@@ -104,7 +108,7 @@ if ($aluno['idade'] < 18) {
     
     if (empty($nome_responsavel) || empty($telefone_responsavel)) {
         $_SESSION['erro_perfil'] = "Dados do responsável são obrigatórios para menores de idade!";
-        header("Location: ../alunos/perfil.php");
+        header("Location: " . REDIRECT_PERFIL);
         exit();
     } else {
         $sql_atualizar .= ", nome_responsavel = ?, tell_responsavel = ?";
@@ -139,5 +143,5 @@ if ($stmt_atualizar) {
 }
 
 mysqli_close($conectar);
-header("Location: ../alunos/perfil.php");
+header("Location: " . REDIRECT_PERFIL);
 exit();

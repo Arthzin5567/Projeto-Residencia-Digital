@@ -127,49 +127,62 @@ unset($_SESSION['erro_perfil']);
                 <p>Para alterar seus dados, preencha o formulário abaixo e confirme com seu código de acesso.</p>
                 
                 <form class="perfil-editar-formulario" method="POST" action="../includes/processa_edita_aluno.php">
-                    <div>
+                    <div class="form-columns">
                         
                         <!-- Coluna 1 -->
-                        <div>
+                        <div class="form-column">
                             <h3>Dados Pessoais</h3>
                             
-                            <div>
-                                <label>Nome Completo *</label>
-                                <input type="text" name="nome" value="<?php echo htmlspecialchars($aluno['nome']); ?>" required>
+                            <div class="form-group">
+                                <label for="nome_completo">Nome Completo *</label>
+                                <input type="text" id="nome_completo" name="nome" 
+                                    value="<?php echo htmlspecialchars($aluno['nome']); ?>" 
+                                    required aria-required="true">
                             </div>
                             
-                            <div>
-                                <label>E-mail</label>
-                                <input type="email" name="email" value="<?php echo htmlspecialchars($aluno['email']); ?>">
+                            <div class="form-group">
+                                <label for="email">E-mail</label>
+                                <input type="email" id="email" name="email" 
+                                    value="<?php echo htmlspecialchars($aluno['email']); ?>"
+                                    aria-describedby="email_help">
+                                <small id="email_help" class="text-help">Usado para comunicações importantes</small>
                             </div>
                             
-                            <div>
-                                <label>Telefone</label>
-                                <input type="text" name="telefone" value="<?php echo htmlspecialchars($aluno['telefone']); ?>"
-                                       placeholder="(11) 99999-9999">
+                            <div class="form-group">
+                                <label for="telefone">Telefone</label>
+                                <input type="text" id="telefone" name="telefone" 
+                                    value="<?php echo htmlspecialchars($aluno['telefone']); ?>"
+                                    placeholder="(11) 99999-9999"
+                                    aria-describedby="telefone_help">
+                                <small id="telefone_help" class="text-help">Formato: (DDD) 99999-9999</small>
                             </div>
                         </div>
                         
                         <!-- Coluna 2 -->
-                        <div>
+                        <div class="form-column">
                             <h3>Endereço e Escola</h3>
                             
-                            <div>
-                                <label>Endereço</label>
-                                <input type="text" name="endereco" value="<?php echo htmlspecialchars($aluno['endereco']); ?>"
-                                       placeholder="Endereço completo">
+                            <div class="form-group">
+                                <label for="endereco">Endereço</label>
+                                <input type="text" id="endereco" name="endereco" 
+                                    value="<?php echo htmlspecialchars($aluno['endereco']); ?>"
+                                    placeholder="Endereço completo"
+                                    aria-describedby="endereco_help">
+                                <small id="endereco_help" class="text-help">Rua, número, bairro, cidade</small>
                             </div>
                             
-                            <div>
-                                <label>Escola</label>
-                                <input type="text" name="escola" value="<?php echo htmlspecialchars($aluno['escola']); ?>"
-                                       placeholder="Nome da escola">
+                            <div class="form-group">
+                                <label for="escola">Escola</label>
+                                <input type="text" id="escola" name="escola" 
+                                    value="<?php echo htmlspecialchars($aluno['escola']); ?>"
+                                    placeholder="Nome da escola">
                             </div>
                             
-                            <div>
-                                <label>Turma</label>
-                                <input type="text" name="turma" value="<?php echo htmlspecialchars($aluno['turma']); ?>"
-                                       placeholder="Turma/Classe">
+                            <div class="form-group">
+                                <label for="turma">Turma</label>
+                                <input type="text" id="turma" name="turma" 
+                                    value="<?php echo htmlspecialchars($aluno['turma']); ?>"
+                                    placeholder="Turma/Classe">
                             </div>
                         </div>
                     </div>
@@ -180,15 +193,15 @@ unset($_SESSION['erro_perfil']);
                         <h3>👨‍👦 Dados do Responsável</h3>
                         <div class="form-row">
                             <div class="form-group">
-                                <label>Nome do Responsável *</label>
-                                <input type="text"
+                                <label for="nome_responsavel">Nome do Responsável *</label>
+                                <input type="text" id="nome_responsavel"
                                     name="nome_responsavel"
                                     value="<?php echo htmlspecialchars($aluno['nome_responsavel'] ?? ''); ?>"
-                                    required
+                                    required aria-required="true"
                                     placeholder="Nome completo do responsável">
                             </div>
                             <div class="form-group">
-                                <label>Telefone do Responsável *</label>
+                                <label for="telefone_responsavel">Telefone do Responsável *</label>
 
                                 <?php
                                     // Pré-formatar o telefone ANTES do input
@@ -198,34 +211,39 @@ unset($_SESSION['erro_perfil']);
                                     }
                                 ?>
 
-                                <input type="text"
+                                <input type="text" id="telefone_responsavel"
                                 name="telefone_responsavel"
                                 value="<?php echo htmlspecialchars($telefone_responsavel_formatado); ?>"
                                 placeholder="(11) 99999-9999"
-                                required>
+                                required aria-required="true"
+                                aria-describedby="telefone_responsavel_help">
+                                <small id="telefone_responsavel_help" class="text-help">Formato: (DDD) 99999-9999</small>
                             </div>
                         </div>
                     </div>
                     <?php endif; ?>
                     
                     <!-- Confirmação com código de acesso -->
-                    <div>
+                    <div class="confirmacao-section">
                         <h3>🔐 Confirmação de Segurança</h3>
                         <p>Para confirmar as alterações, digite seu código de acesso:</p>
                         
-                        <div>
-                            <label>Código de Acesso *</label>
-                            <input type="text" name="codigo_confirmacao"
-                                   placeholder="Digite seu código" required>
+                        <div class="form-group">
+                            <label for="codigo_confirmacao">Código de Acesso *</label>
+                            <input type="text" id="codigo_confirmacao" name="codigo_confirmacao"
+                                placeholder="Digite seu código" 
+                                required aria-required="true"
+                                aria-describedby="codigo_help">
+                            <small id="codigo_help" class="text-help">Seu código de acesso pessoal</small>
                         </div>
                     </div>
                     
-                    <div>
-                        <button type="submit" name="atualizar_perfil" >
+                    <div class="form-actions">
+                        <button type="submit" name="atualizar_perfil" class="btn-primary">
                             ✅ Atualizar Perfil
                         </button>
                         
-                        <a href="dashboard_aluno.php" >
+                        <a href="dashboard_aluno.php" class="btn-secondary">
                             ↩️ Voltar ao Dashboard
                         </a>
                     </div>
@@ -258,11 +276,11 @@ unset($_SESSION['erro_perfil']);
 
     <script>
         // Formatação automática do telefone
-        document.querySelector('input[name="telefone"]')?.addEventListener('input', function(e) {
+        document.querySelector('#telefone')?.addEventListener('input', function(e) {
             formatarTelefone(this);
         });
-        
-        document.querySelector('input[name="telefone_responsavel"]')?.addEventListener('input', function(e) {
+
+        document.querySelector('#telefone_responsavel')?.addEventListener('input', function(e) {
             formatarTelefone(this);
         });
 
@@ -280,7 +298,7 @@ unset($_SESSION['erro_perfil']);
 
         // Focar no código de confirmação quando o formulário for submetido com erro
         <?php if (isset($erro)): ?>
-            document.querySelector('input[name="codigo_confirmacao"]').focus();
+            document.querySelector('#codigo_confirmacao').focus();
         <?php endif; ?>
     </script>
 </body>

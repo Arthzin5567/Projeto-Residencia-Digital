@@ -1,5 +1,5 @@
 <?php
-function fazerUploadImagens($idProva, $questaoNumero, $arquivos) {
+function fazerUploadImagens2($idProva, $questaoNumero, $arquivos) {
     //  Validar parâmetros de entrada
     if (!is_numeric($idProva) || $idProva <= 0) {
         error_log("ID de prova inválido: $idProva");
@@ -17,7 +17,7 @@ function fazerUploadImagens($idProva, $questaoNumero, $arquivos) {
     }
 
 
-    require_once 'funcoes_comuns.php';
+    require_once __DIR__ . '/../config/funcoes_comuns.php';
     $conectar = conectarBanco();
 
     //  Verificar conexão

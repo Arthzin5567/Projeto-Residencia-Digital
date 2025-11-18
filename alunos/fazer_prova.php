@@ -2,7 +2,7 @@
 session_start();
 require_once __DIR__ . '/../config/funcoes_comuns.php';
 
-// ✅ VALIDAÇÃO SEGURA do ID da prova
+// VALIDAÇÃO SEGURA do ID da prova
 if (!isset($_GET['id']) || empty($_GET['id']) || !is_numeric($_GET['id'])) {
     echo "<script>
             alert('Prova não especificada.');

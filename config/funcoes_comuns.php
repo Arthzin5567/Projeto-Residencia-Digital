@@ -3,7 +3,7 @@
  * FUNÇÕES COMUNS PARA REDUZIR DUPLICAÇÃO
  */
 
-// 1. CONEXÃO COM BANCO (elimina 5-10 linhas de cada arquivo)
+// 1. CONEXÃO COM BANCO
 function conectarBanco() {
     require_once __DIR__ . '/../config/database_config.php';
     
@@ -115,4 +115,375 @@ function sanitizarInput($dados) {
 
 function escapeOutput($texto) {
     return htmlspecialchars($texto ?? '', ENT_QUOTES, 'UTF-8');
+}
+
+// No funcoes_comuns.php, adicione estas funções:
+
+/**
+ * FUNÇÃO UNIFICADA DE UPLOAD DE IMAGENS
+ * Versão refatorada - Complexidade: 12 (dentro do limite)
+ */
+function fazerUploadImagens($idProva, $questaoNumero, $arquivos, $conectar = null) {
+    // Se não receber conexão, cria uma própria
+    $conexaoPropria = false;
+    if ($conectar === null) {
+        $conectar = conectarBanco();
+        $conexaoPropria = true;
+        
+        if (!$conectar) {
+            error_log("❌ Erro de conexão no upload de imagens");
+            return [];
+        }
+    }
+    
+    // ✅ VALIDAÇÃO INICIAL
+    if (!validarParametrosUpload($idProva, $questaoNumero, $arquivos)) {
+        if ($conexaoPropria) mysqli_close($conectar);
+        return [];
+    }
+    
+    // ✅ PREPARAR DIRETÓRIO
+    $uploadDir = prepararDiretorioUpload($idProva);
+    if (!$uploadDir) {
+        if ($conexaoPropria) mysqli_close($conectar);
+        return [];
+    }
+    
+    // ✅ PROCESSAR ARQUIVOS
+    $resultado = processarArquivosUpload($idProva, $questaoNumero, $arquivos, $uploadDir, $conectar);
+    
+    if ($conexaoPropria) {
+        mysqli_close($conectar);
+    }
+    
+    return $resultado;
+}
+
+/**
+ * FUNÇÕES AUXILIARES (as mesmas que já estão no processa_editar_prova.php)
+ */
+function validarParametrosUpload($idProva, $questaoNumero, $arquivos) {
+    if (!is_numeric($idProva) || $idProva <= 0) {
+        error_log("ID de prova inválido: $idProva");
+        return false;
+    }
+    
+    if (!is_numeric($questaoNumero) || $questaoNumero <= 0) {
+        error_log("Número de questão inválido: $questaoNumero");
+        return false;
+    }
+    
+    if (!is_array($arquivos) || !isset($arquivos['tmp_name'])) {
+        error_log("Dados de arquivo inválidos");
+        return false;
+    }
+    
+    return true;
+}
+
+function prepararDiretorioUpload($idProva) {
+    $uploadBaseDir = "../uploads/provas/";
+    $uploadDir = $uploadBaseDir . "prova_" . (int)$idProva . "/";
+    
+    // Criar diretório base se não existir
+    if (!is_dir($uploadBaseDir) && !mkdir($uploadBaseDir, 0755, true)) {
+        error_log("Não foi possível criar diretório: $uploadBaseDir");
+        return null;
+    }
+    
+    // Criar diretório específico da prova
+    if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755, true)) {
+        error_log("Não foi possível criar diretório: $uploadDir");
+        return null;
+    }
+    
+    return $uploadDir;
+}
+
+function validarArquivo($arquivo, $tmp_name, $size) {
+    // Validar erro de upload
+    if ($arquivo !== UPLOAD_ERR_OK) {
+        error_log("Erro no upload do arquivo: " . $arquivo);
+        return false;
+    }
+    
+    // Validar arquivo temporário
+    if (empty($tmp_name) || !file_exists($tmp_name)) {
+        error_log("Arquivo temporário inválido ou não existe");
+        return false;
+    }
+    
+    // Validar tipo MIME
+    $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg', 'image/webp'];
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $mimeType = finfo_file($finfo, $tmp_name);
+    finfo_close($finfo);
+    
+    if (!in_array($mimeType, $allowedTypes)) {
+        error_log("Tipo de arquivo não permitido: $mimeType");
+        return false;
+    }
+    
+    // Validar tamanho (máx 2MB)
+    if ($size > 2 * 1024 * 1024) {
+        error_log("Arquivo muito grande: " . $size . " bytes");
+        return false;
+    }
+    
+    // Validar se é realmente uma imagem
+    if (!getimagesize($tmp_name)) {
+        error_log("Arquivo não é uma imagem válida");
+        return false;
+    }
+    
+    return true;
+}
+
+function validarExtensaoESeguranca($nomeArquivo, $uploadDir, $caminhoCompleto) {
+    $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+    $extensao = strtolower(pathinfo($nomeArquivo, PATHINFO_EXTENSION));
+    
+    if (!in_array($extensao, $allowedExtensions)) {
+        error_log("❌ Extensão não permitida: $extensao");
+        return false;
+    }
+    
+    // ✅ CORREÇÃO: Validação de segurança simplificada
+    // Garantir que o caminho completo está dentro do diretório de upload
+    $caminhoNormalizado = realpath(dirname($caminhoCompleto));
+    $dirNormalizado = realpath($uploadDir);
+    
+    if ($caminhoNormalizado === false || $dirNormalizado === false) {
+        error_log("❌ Não foi possível normalizar caminhos");
+        return false;
+    }
+    
+    // Verificar se o caminho está dentro do diretório permitido
+    if (strpos($caminhoNormalizado, $dirNormalizado) !== 0) {
+        error_log("❌ Tentativa de path traversal: $caminhoNormalizado não está em $dirNormalizado");
+        return false;
+    }
+    
+    return $extensao;
+}
+
+function salvarArquivoNoBanco($idProva, $questaoNumero, $caminhoRelativo, $nomeArquivoOriginal, $conectar) {
+    $sql = "INSERT INTO ImagensProvas (idProva, numero_questao, caminho_imagem, nome_arquivo) 
+            VALUES (?, ?, ?, ?)";
+    $stmt = mysqli_prepare($conectar, $sql);
+    
+    if (!$stmt) {
+        return false;
+    }
+    
+    $nomeArquivoOriginal = htmlspecialchars(basename($nomeArquivoOriginal), ENT_QUOTES, 'UTF-8');
+    mysqli_stmt_bind_param($stmt, "iiss", $idProva, $questaoNumero, $caminhoRelativo, $nomeArquivoOriginal);
+    
+    $sucesso = mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+    
+    return $sucesso;
+}
+
+function processarArquivosUpload($idProva, $questaoNumero, $arquivos, $uploadDir, $conectar) {
+    $imagensSalvas = [];
+    
+    foreach ($arquivos['tmp_name'] as $key => $tmp_name) {
+        // Validar arquivo individual
+        if (!validarArquivo($arquivos['error'][$key], $tmp_name, $arquivos['size'][$key])) {
+            continue;
+        }
+        
+        // Gerar nome seguro e validar extensão
+        $extensao = validarExtensaoESeguranca($arquivos['name'][$key], $uploadDir, $uploadDir . 'temp');
+        if (!$extensao) {
+            continue;
+        }
+        
+        $nomeArquivo = uniqid() . '_questao_' . (int)$questaoNumero . '.' . $extensao;
+        $caminhoCompleto = $uploadDir . $nomeArquivo;
+        
+        // Validar caminho final
+        if (!validarExtensaoESeguranca($nomeArquivo, $uploadDir, $caminhoCompleto)) {
+            continue;
+        }
+        
+        // Fazer upload físico
+        if (!move_uploaded_file($tmp_name, $caminhoCompleto)) {
+            error_log("❌ Falha ao mover arquivo uploadado");
+            continue;
+        }
+        
+        // Preparar caminho relativo
+        $caminhoRelativo = "uploads/provas/prova_" . (int)$idProva . "/" . $nomeArquivo;
+        
+        // Salvar no banco
+        if (salvarArquivoNoBanco($idProva, $questaoNumero, $caminhoRelativo, $arquivos['name'][$key], $conectar)) {
+            $imagensSalvas[] = $caminhoRelativo;
+            error_log("✅ Imagem salva: $caminhoRelativo");
+        } else {
+            error_log("❌ Erro ao salvar imagem no banco");
+            // Remover arquivo se falhou no banco
+            if (file_exists($caminhoCompleto)) {
+                unlink($caminhoCompleto);
+            }
+        }
+    }
+    
+    return $imagensSalvas;
+}
+
+// Upload de imagens (criação das provas)
+
+/**
+ * FUNÇÃO ESPECÍFICA PARA CRIAÇÃO DE PROVAS (baseada na original do upload_imagens.php)
+ * Mantém o comportamento original que funcionava
+ */
+function fazerUploadImagensCriacao($idProva, $questaoNumero, $arquivos) {
+    // ✅ COPIA DA VERSÃO ORIGINAL QUE FUNCIONAVA
+    
+    // Validar parâmetros de entrada
+    if (!is_numeric($idProva) || $idProva <= 0) {
+        error_log("ID de prova inválido: $idProva");
+        return [];
+    }
+    
+    if (!is_numeric($questaoNumero) || $questaoNumero <= 0) {
+        error_log("Número de questão inválido: $questaoNumero");
+        return [];
+    }
+    
+    if (!is_array($arquivos) || !isset($arquivos['tmp_name'])) {
+        error_log("Dados de arquivo inválidos");
+        return [];
+    }
+
+    $conectar = conectarBanco();
+
+    // Verificar conexão
+    if (!$conectar) {
+        error_log("Erro de conexão no upload de imagens");
+        return [];
+    }
+    
+    // DEBUG: Verificar o que está chegando
+    error_log("Upload chamado para prova $idProva, questão $questaoNumero");
+    
+    // Diretório de upload com validação
+    $uploadBaseDir = "../uploads/provas/";
+    
+    // Garantir que o diretório base existe
+    if (!is_dir($uploadBaseDir) && !mkdir($uploadBaseDir, 0755, true)) {
+        error_log("Não foi possível criar diretório base: $uploadBaseDir");
+        mysqli_close($conectar);
+        return [];
+    }
+    
+    $uploadDir = $uploadBaseDir . "prova_" . (int)$idProva . "/";
+    
+    // Criar diretório se não existir
+    if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755, true)) {
+        error_log("Não foi possível criar diretório: $uploadDir");
+        mysqli_close($conectar);
+        return [];
+    }
+    
+    $imagensSalvas = [];
+    
+    foreach ($arquivos['tmp_name'] as $key => $tmp_name) {
+        // Validar se o upload foi bem sucedido
+        if ($arquivos['error'][$key] !== UPLOAD_ERR_OK) {
+            error_log("Erro no upload do arquivo: " . $arquivos['error'][$key]);
+            continue;
+        }
+        
+        // Validar se o arquivo temporário existe
+        if (empty($tmp_name) || !file_exists($tmp_name)) {
+            error_log("Arquivo temporário inválido ou não existe");
+            continue;
+        }
+
+        // Validar tipo de arquivo
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg', 'image/webp'];
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_file($finfo, $tmp_name);
+        finfo_close($finfo);
+        
+        if (!in_array($mimeType, $allowedTypes)) {
+            error_log("Tipo de arquivo não permitido: $mimeType");
+            continue;
+        }
+        
+        // Validar tamanho (máx 2MB)
+        if ($arquivos['size'][$key] > 2 * 1024 * 1024) {
+            error_log("Arquivo muito grande: " . $arquivos['size'][$key] . " bytes");
+            continue;
+        }
+        
+        // Validar se é realmente uma imagem
+        if (!getimagesize($tmp_name)) {
+            error_log("Arquivo não é uma imagem válida");
+            continue;
+        }
+        
+        // Gerar nome seguro para o arquivo
+        $extensao = pathinfo($arquivos['name'][$key], PATHINFO_EXTENSION);
+        $extensao = strtolower($extensao);
+        
+        // Permitir apenas extensões seguras
+        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+        if (!in_array($extensao, $allowedExtensions)) {
+            error_log("Extensão não permitida: $extensao");
+            continue;
+        }
+        
+        $nomeArquivo = uniqid() . '_questao_' . (int)$questaoNumero . '.' . $extensao;
+        $caminhoCompleto = $uploadDir . $nomeArquivo;
+        
+        // Validar caminho final
+        $realUploadDir = realpath($uploadDir);
+        $realCaminhoCompleto = realpath(dirname($caminhoCompleto));
+        
+        if ($realCaminhoCompleto === false || strpos($realCaminhoCompleto, $realUploadDir) !== 0) {
+            error_log("Tentativa de path traversal detectada");
+            continue;
+        }
+        
+        if (move_uploaded_file($tmp_name, $caminhoCompleto)) {
+            // Preparar caminho relativo para o banco
+            $caminhoRelativo = "uploads/provas/prova_" . (int)$idProva . "/" . $nomeArquivo;
+            
+            // Salvar no banco de dados
+            $sql = "INSERT INTO ImagensProvas (idProva, numero_questao, caminho_imagem, nome_arquivo)
+                    VALUES (?, ?, ?, ?)";
+            $stmt = mysqli_prepare($conectar, $sql);
+            
+            if ($stmt) {
+                $nomeArquivoOriginal = htmlspecialchars(basename($arquivos['name'][$key]), ENT_QUOTES, 'UTF-8');
+                mysqli_stmt_bind_param($stmt, "iiss", $idProva, $questaoNumero, $caminhoRelativo, $nomeArquivoOriginal);
+                
+                if (mysqli_stmt_execute($stmt)) {
+                    $imagensSalvas[] = $caminhoRelativo;
+                    error_log("✅ Imagem salva: $caminhoRelativo");
+                } else {
+                    error_log("❌ Erro ao salvar imagem no banco: " . mysqli_stmt_error($stmt));
+                    // Remover arquivo se falhou no banco
+                    if (file_exists($caminhoCompleto)) {
+                        unlink($caminhoCompleto);
+                    }
+                }
+                
+                mysqli_stmt_close($stmt);
+            }
+        } else {
+            error_log("❌ Falha ao mover arquivo uploadado");
+        }
+    }
+    
+    mysqli_close($conectar);
+    
+    // DEBUG: Resultado final
+    error_log("Upload finalizado. " . count($imagensSalvas) . " imagem(ns) salva(s)");
+    
+    return $imagensSalvas;
 }

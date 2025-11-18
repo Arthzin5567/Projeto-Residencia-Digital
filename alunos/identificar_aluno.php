@@ -77,7 +77,7 @@ if (isset($erro)) {
     $_SESSION['ultima_tentativa'] = time();
     
     // Log da tentativa (em produção, salvaria em arquivo/banco)
-    error_log("Tentativa de login falha - Código: " . substr($codigo_acesso, 0, 3) . "*** - IP: " . $_SERVER['REMOTE_ADDR']);
+    error_log("Tentativa de login falha - IP: " . $_SERVER['REMOTE_ADDR']);
 }
 ?>
 
