@@ -8,3 +8,14 @@ Este é um projeto referente à matéria de Residência Digital da minha faculda
 - Na versão V1.3.1 o site conseguiu passar nos requisitos mínimos da SonarCloud, mas o sistema ainda não está pronto, então ele pode sair de algum requisito após alguma atualização que adicione alguma feature.
 - As próximas features a serem adicionadas vão ser a possibilidade de ativar e desativar as provas e talvez ter a possibilidade de adicionar imagens às alternativas das provas.
   
+## Tecnologias usadas:
+- XAMPP
+- MySQL Workbench
+- Visual Code
+- SonarCloud
+
+## Linguagens usadas:
+- PHP
+- SQL
+- HTML
+- CSS
