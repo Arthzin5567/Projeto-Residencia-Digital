@@ -18,7 +18,8 @@ mysqli_stmt_close($stmt_aluno);
 $sql_provas = "SELECT p.*, ap.status, ap.nota, ap.data_realizacao
                FROM Provas p
                LEFT JOIN Aluno_Provas ap ON p.idProvas = ap.Provas_idProvas AND ap.Aluno_idAluno = ?
-               WHERE ap.Aluno_idAluno IS NULL OR ap.status = 'pendente'
+               WHERE (ap.Aluno_idAluno IS NULL OR ap.status = 'pendente')
+               AND p.ativa = 1
                ORDER BY p.data_criacao DESC";
 $stmt_provas = mysqli_prepare($conectar, $sql_provas);
 mysqli_stmt_bind_param($stmt_provas, "i", $aluno_id);

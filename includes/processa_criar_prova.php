@@ -118,8 +118,8 @@ $conteudo_json = json_encode($questoes, JSON_UNESCAPED_UNICODE);
 $data_criacao = date('Y-m-d H:i:s');
 
 // Inserir no banco
-$sql = "INSERT INTO Provas (titulo, materia, numero_questoes, conteudo, serie_destinada, data_criacao, Professor_idProfessor) 
-        VALUES (?, ?, ?, ?, ?, ?, ?)";
+$sql = "INSERT INTO Provas (titulo, materia, numero_questoes, conteudo, serie_destinada, data_criacao, Professor_idProfessor, ativa) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, 0)";
 
 $stmt = mysqli_prepare($conectar, $sql);
 if (!$stmt) {
