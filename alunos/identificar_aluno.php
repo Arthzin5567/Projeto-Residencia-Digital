@@ -4,7 +4,7 @@ require_once __DIR__ . '/../config/funcoes_comuns.php';
 
 $conectar = conectarBanco();
 
-// ✅ Verificar se a conexão foi bem sucedida
+// Verificar se a conexão foi bem sucedida
 if (!$conectar) {
     die("Erro de conexão: " . mysqli_connect_error());
 }

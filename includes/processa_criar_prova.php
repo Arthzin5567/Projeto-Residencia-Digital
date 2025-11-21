@@ -5,7 +5,7 @@ if (!isset($_SESSION["logado"]) || $_SESSION["logado"] !== true || $_SESSION["ti
     exit();
 }
 
-// ✅ SEGURANÇA MÍNIMA: Validar ID do professor
+// SEGURANÇA MÍNIMA: Validar ID do professor
 if (!isset($_SESSION['idProfessor']) || !is_numeric($_SESSION['idProfessor'])) {
     header("Location: ../index.php");
     exit();
@@ -14,7 +14,7 @@ if (!isset($_SESSION['idProfessor']) || !is_numeric($_SESSION['idProfessor'])) {
 require_once __DIR__ . '/../config/funcoes_comuns.php';
 $conectar = conectarBanco();
 
-// ✅ VALIDAÇÃO E SANITIZAÇÃO SEGURA
+// VALIDAÇÃO E SANITIZAÇÃO SEGURA
 function validarESanitizar($dados, $tipo = 'string') {
     if (empty($dados)) return '';
     
@@ -34,7 +34,7 @@ function validarESanitizar($dados, $tipo = 'string') {
     }
 }
 
-// ✅ COLETA E VALIDAÇÃO SEGURA DE DADOS
+// COLETA E VALIDAÇÃO SEGURA DE DADOS
 $titulo = validarESanitizar($_POST["titulo"] ?? '', 'alfanumerico');
 $materia = validarESanitizar($_POST["materia"] ?? '');
 $serie_destinada = validarESanitizar($_POST["serie_destinada"] ?? '');
@@ -130,14 +130,14 @@ if (!$stmt) {
 }
 
 // titulo (s), materia (s), numero_questoes (i), conteudo (s), serie_destinada (s), data_criacao (s), professor_id (i)
-mysqli_stmt_bind_param($stmt, "ssisssi", 
-    $titulo, 
-    $materia, 
-    $numero_questoes, 
-    $conteudo_json, 
-    $serie_destinada, 
-    $data_criacao, 
-    $professor_id
+mysqli_stmt_bind_param($stmt, "ssisssi",
+    $titulo,
+    $materia,
+    $numero_questoes,
+    $conteudo_json,
+    $serie_destinada,
+    $data_criacao,
+    $professor_i
 );
 
 // Verificar estado da conexão antes do upload
@@ -164,7 +164,7 @@ if (!$conectar || !mysqli_ping($conectar)) {
 if (mysqli_stmt_execute($stmt)) {
     $prova_id = mysqli_insert_id($conectar);
     
-    // ✅ LOG SEGURO - SEM DADOS DO USUÁRIO
+    // LOG SEGURO - SEM DADOS DO USUÁRIO
     error_log("✅ Prova criada com ID: " . $prova_id);
 
     // PROCESSAR UPLOAD DE IMAGENS
@@ -173,7 +173,7 @@ if (mysqli_stmt_execute($stmt)) {
         $imagens_key = "imagens_$i";
         
         if (isset($_FILES[$imagens_key]) && !empty($_FILES[$imagens_key]['name'][0])) {
-            // ✅ LOG SEGURO - APENAS METADADOS, NÃO CONTEÚDO
+            // LOG SEGURO - APENAS METADADOS, NÃO CONTEÚDO
             error_log("📁 Processando upload para questão $i da prova $prova_id");
             
             $arquivos = $_FILES[$imagens_key];
@@ -181,13 +181,13 @@ if (mysqli_stmt_execute($stmt)) {
             
             if (!empty($imagensSalvas)) {
                 $total_imagens += count($imagensSalvas);
-                // ✅ LOG SEGURO
+                // LOG SEGURO
                 error_log("✅ " . count($imagensSalvas) . " imagem(ns) salva(s) para questão $i");
             }
         }
     }
 
-    // ✅ VINCULAR ALUNOS COM PREPARED STATEMENT
+    // VINCULAR ALUNOS COM PREPARED STATEMENT
     $sql_alunos = "SELECT idAluno FROM Aluno WHERE escolaridade = ?";
     $stmt_alunos = mysqli_prepare($conectar, $sql_alunos);
     
@@ -238,7 +238,7 @@ if (mysqli_stmt_execute($stmt)) {
     exit();
 }
 
-// ✅ FUNÇÃO DE LOG SEGURO PARA UPLOAD (se necessário)
+// FUNÇÃO DE LOG SEGURO PARA UPLOAD (se necessário)
 function logUploadSeguro($prova_id, $questao_numero, $arquivos) {
     // Apenas loga metadados, não o conteúdo ou nomes originais
     $quantidade = count($arquivos['name']);

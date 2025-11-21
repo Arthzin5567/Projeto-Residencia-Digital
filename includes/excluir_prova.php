@@ -6,7 +6,7 @@ if (!isset($_SESSION["logado"]) || $_SESSION["logado"] !== true || $_SESSION["ti
     exit();
 }
 
-// ✅ SEGURANÇA: Validar ID do professor
+// SEGURANÇA: Validar ID do professor
 if (!isset($_SESSION['idProfessor']) || !is_numeric($_SESSION['idProfessor'])) {
     header("Location: ../index.php");
     exit();
@@ -15,7 +15,7 @@ if (!isset($_SESSION['idProfessor']) || !is_numeric($_SESSION['idProfessor'])) {
 require_once __DIR__ . '/../config/funcoes_comuns.php';
 $conectar = conectarBanco();
 
-// ✅ SEGURANÇA: Verificar conexão
+// SEGURANÇA: Verificar conexão
 if (!$conectar) {
     error_log("Erro de conexão ao excluir prova");
     header("Location: gerenciar_provas.php?erro=conexao");
@@ -28,14 +28,14 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
     exit();
 }
 
-// ✅ SEGURANÇA: Validar e sanitizar ID
+// SEGURANÇA: Validar e sanitizar ID
 $prova_id = (int)$_GET['id'];
 if ($prova_id <= 0) {
     header("Location: gerenciar_provas.php?erro=id_invalido");
     exit();
 }
 
-// Verificar se a prova pertence ao professor - ✅ SEGURANÇA: Prepared Statement
+// Verificar se a prova pertence ao professor - SEGURANÇA: Prepared Statement
 $sql_verificar = "SELECT * FROM Provas WHERE idProvas = ? AND Professor_idProfessor = ?";
 $stmt_verificar = mysqli_prepare($conectar, $sql_verificar);
 
@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         mysqli_begin_transaction($conectar);
         
         try {
-            // 1. Excluir tentativas/respostas dos alunos - ✅ SEGURANÇA: Prepared Statement
+            // 1. Excluir tentativas/respostas dos alunos - SEGURANÇA: Prepared Statement
             $sql_excluir_aluno_provas = "DELETE FROM Aluno_Provas WHERE Provas_idProvas = ?";
             $stmt_aluno = mysqli_prepare($conectar, $sql_excluir_aluno_provas);
             if ($stmt_aluno) {
@@ -71,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 mysqli_stmt_close($stmt_aluno);
             }
 
-            // 2. Excluir a prova - ✅ SEGURANÇA: Prepared Statement
+            // 2. Excluir a prova - SEGURANÇA: Prepared Statement
             $sql_excluir_prova = "DELETE FROM Provas WHERE idProvas = ? AND Professor_idProfessor = ?";
             $stmt_prova = mysqli_prepare($conectar, $sql_excluir_prova);
             if ($stmt_prova) {

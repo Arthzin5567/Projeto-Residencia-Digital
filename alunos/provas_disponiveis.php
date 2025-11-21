@@ -155,7 +155,7 @@ mysqli_stmt_close($stmt_provas);
                                 
                                 <div>
                                     <div>
-                                        <!-- ✅ Título sanitizado -->
+                                        <!-- Título sanitizado -->
                                         <h3>
                                             <?php echo htmlspecialchars($prova['titulo'] ?: $prova['materia'] . ' - Avaliação'); ?>
                                         </h3>
@@ -200,7 +200,7 @@ mysqli_stmt_close($stmt_provas);
                                 <!-- Ações -->
                                 <div>
                                     <?php if ($status === 'disponivel'): ?>
-                                        <!-- ✅ Link seguro com ID convertido para inteiro -->
+                                        <!-- Link seguro com ID convertido para inteiro -->
                                         <a href="fazer_prova.php?id=<?php echo (int)$prova['idProvas']; ?>" class="btn btn-iniciar">
                                             🚀 Iniciar Prova
                                         </a>
@@ -218,7 +218,7 @@ mysqli_stmt_close($stmt_provas);
                                         </a>
                                     <?php endif; ?>
                                     
-                                    <!-- ✅ Link seguro para detalhes -->
+                                    <!-- Link seguro para detalhes -->
                                     <a href="detalhes_prova.php?id=<?php echo (int)$prova['idProvas']; ?>" class="btn btn-detalhes">
                                         ℹ️ Detalhes
                                     </a>

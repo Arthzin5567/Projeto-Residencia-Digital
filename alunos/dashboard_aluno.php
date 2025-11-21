@@ -125,7 +125,7 @@ mysqli_stmt_close($stmt_corrigidas);
                                     <strong>Questões:</strong> <?php echo (int)$prova['numero_questoes']; ?> |
                                     <strong>Série:</strong> <?php echo htmlspecialchars($prova['serie_destinada']); ?>
                                 </p>
-                                <!-- ✅ LINK SEGURO - ID convertido para inteiro -->
+                                <!-- LINK SEGURO - ID convertido para inteiro -->
                                 <a href="fazer_prova.php?id=<?php echo (int)$prova['idProvas']; ?>">
                                     🚀 Iniciar Prova
                                 </a>

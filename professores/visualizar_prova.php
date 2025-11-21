@@ -5,7 +5,7 @@ $conectar = conectarBanco();
 
 verificarloginProfessor();
 
-// 🔒 HEADERS DE SEGURANÇA
+// HEADERS DE SEGURANÇA
 header("X-Frame-Options: DENY");
 header("X-Content-Type-Options: nosniff");
 header("X-XSS-Protection: 1; mode=block");
@@ -13,7 +13,7 @@ header("Referrer-Policy: strict-origin-when-cross-origin");
 header("Content-Security-Policy: default-src 'self'; img-src 'self' data: https:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;");
 
 
-// 🔒 VALIDAÇÃO DE CSRF TOKEN PARA AÇÕES CRÍTICAS
+// VALIDAÇÃO DE CSRF TOKEN PARA AÇÕES CRÍTICAS
 $csrf_token = gerarTokenCSRF();
 
 // 🔒 CONFIGURAÇÃO DE SEGURANÇA DO BANCO
@@ -22,7 +22,7 @@ if (!$conectar) {
     die("Erro interno do sistema. Tente novamente mais tarde.");
 }
 
-// 🔒 CONFIGURAÇÕES DE SEGURANÇA ADICIONAIS
+// CONFIGURAÇÕES DE SEGURANÇA ADICIONAIS
 mysqli_set_charset($conectar, "utf8mb4");
 mysqli_query($conectar, "SET time_zone = '-03:00'");
 
@@ -35,13 +35,13 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 $prova_id = (int)$_GET['id'];
 $professor_id = (int)$_SESSION["idProfessor"];
 
-// 🔒 VALIDAÇÃO DE FAIXA PARA IDS
+// VALIDAÇÃO DE FAIXA PARA IDS
 if ($prova_id <= 0 || $prova_id > 999999 || $professor_id <= 0) {
     header("Location: gerenciar_provas.php?erro=Parâmetros inválidos");
     exit();
 }
 
-// 🔒 BUSCAR DADOS DA PROVA COM PREPARED STATEMENT
+// BUSCAR DADOS DA PROVA COM PREPARED STATEMENT
 $sql_prova = "SELECT idProvas, titulo, materia, serie_destinada, data_criacao, conteudo, ativa
               FROM Provas
               WHERE idProvas = ? AND Professor_idProfessor = ?
@@ -58,7 +58,7 @@ mysqli_stmt_execute($stmt_prova);
 $resultado_prova = mysqli_stmt_get_result($stmt_prova);
 
 if (mysqli_num_rows($resultado_prova) === 0) {
-    // 🔒 NÃO REVELAR SE A PROVA EXISTE OU NÃO
+    // NÃO REVELAR SE A PROVA EXISTE OU NÃO
     header("Location: gerenciar_provas.php");
     mysqli_stmt_close($stmt_prova);
     mysqli_close($conectar);
@@ -68,7 +68,7 @@ if (mysqli_num_rows($resultado_prova) === 0) {
 $prova = mysqli_fetch_assoc($resultado_prova);
 mysqli_stmt_close($stmt_prova);
 
-// 🔒 VALIDAÇÃO E DECODIFICAÇÃO SEGURA DO JSON
+// VALIDAÇÃO E DECODIFICAÇÃO SEGURA DO JSON
 $questoes_json = null;
 if (!empty($prova['conteudo'])) {
     $questoes_json = json_decode($prova['conteudo'], true);
@@ -83,7 +83,7 @@ if (!empty($prova['conteudo'])) {
 $conteudo = $questoes_json ?? [];
 $num_questoes = is_array($conteudo) ? count($conteudo) : 0;
 
-// 🔒 BUSCAR IMAGENS COM VALIDAÇÃO DE SEGURANÇA
+// BUSCAR IMAGENS COM VALIDAÇÃO DE SEGURANÇA
 $sql_imagens = "SELECT numero_questao, caminho_imagem, nome_arquivo
                 FROM ImagensProvas
                 WHERE idProva = ?
@@ -101,7 +101,7 @@ if (!$stmt_imagens) {
 
     if ($resultado_imagens) {
         while ($imagem = mysqli_fetch_assoc($resultado_imagens)) {
-            // 🔒 VALIDAÇÃO E SANITIZAÇÃO DOS CAMINHOS DAS IMAGENS
+            // VALIDAÇÃO E SANITIZAÇÃO DOS CAMINHOS DAS IMAGENS
             $caminho_imagem = $imagem['caminho_imagem'];
             $caminho_final = null;
             
@@ -127,7 +127,7 @@ if (!$stmt_imagens) {
     mysqli_stmt_close($stmt_imagens);
 }
 
-// 🔒 BUSCAR ESTATÍSTICAS
+// BUSCAR ESTATÍSTICAS
 $sql_estatisticas = "SELECT
     COUNT(*) as total_alunos,
     SUM(CASE WHEN status = 'realizada' THEN 1 ELSE 0 END) as concluidas,
@@ -153,13 +153,13 @@ if ($stmt_estatisticas) {
     ];
 }
 
-// 🔒 GERAR TOKEN CSRF
+// GERAR TOKEN CSRF
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
 /**
- * 🔒 VALIDAR CAMINHO DE IMAGEM
+ * VALIDAR CAMINHO DE IMAGEM
  */
 function validarCaminhoImagem($caminho, $prova_id) {
     // Prevenir path traversal
@@ -181,7 +181,7 @@ function validarCaminhoImagem($caminho, $prova_id) {
 }
 
 /**
- * 🔒 VALIDAR ARQUIVO DE IMAGEM
+ * VALIDAR ARQUIVO DE IMAGEM
  */
 function validarArquivoImagem($caminho) {
     if (!file_exists($caminho)) {
@@ -216,7 +216,7 @@ function validarArquivoImagem($caminho) {
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     
-    <!-- 🔒 META TAGS DE SEGURANÇA -->
+    <!-- META TAGS DE SEGURANÇA -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;">
     
     <style>
@@ -307,7 +307,7 @@ function validarArquivoImagem($caminho) {
             text-align: center;
         }
         
-        /* 🔒 ESTILOS PARA DADOS SENSÍVEIS */
+        /* ESTILOS PARA DADOS SENSÍVEIS */
         .dado-seguro {
             word-break: break-word;
             overflow-wrap: break-word;
@@ -396,7 +396,7 @@ function validarArquivoImagem($caminho) {
                         <div class="questao-card">
                             <h3>Questão <?php echo (int)($index + 1); ?></h3>
 
-                            <!-- 🔒 EXIBIÇÃO SEGURA DE IMAGENS -->
+                            <!-- EXIBIÇÃO SEGURA DE IMAGENS -->
                             <?php $numero_questao = (int)($index + 1); ?>
                             <?php if (isset($imagens_por_questao[$numero_questao]) && !empty($imagens_por_questao[$numero_questao])): ?>
                                 <div class="imagens-questao">
@@ -463,10 +463,18 @@ function validarArquivoImagem($caminho) {
                 <?php endif; ?>
             </div>
             
-            <!-- 🔒 BOTÕES COM PROTEÇÃO CONTRA CLICKJACKING -->
+            <!-- BOTÕES COM PROTEÇÃO CONTRA CLICKJACKING -->
             <div class="bnt-all-provas">
                 <a href="gerenciar_provas.php" class="btn btn-voltar" rel="noopener">← Voltar para Minhas Provas</a>
                 <a href="editar_prova.php?id=<?php echo (int)$prova_id; ?>" class="btn" rel="noopener">Editar Prova</a>
+                <!-- Botão para ativar/desativar -->
+                <?php if ($prova['ativa'] ?? 0): ?>
+                    <a href="../includes/mudar_status_prova.php?id=<?php echo (int)$prova_id; ?>&action=desativar" 
+                    class="btn btn-desativar" rel="noopener">Desativar Prova</a>
+                <?php else: ?>
+                    <a href="../includes/mudar_status_prova.php?id=<?php echo (int)$prova_id; ?>&action=ativar" 
+                    class="btn btn-ativar" rel="noopener">Ativar Prova</a>
+                <?php endif; ?>
                 <button onclick="window.print()" class="btn btn-imprimir">🖨️ Imprimir Prova</button>
                 <a href="resultados_prova.php?id=<?php echo (int)$prova_id; ?>" class="btn" rel="noopener">Ver Resultados</a>
             </div>
@@ -485,7 +493,7 @@ function validarArquivoImagem($caminho) {
         </div>
     </footer>
 
-    <!-- 🔒 MODAL SEGURO -->
+    <!-- MODAL SEGURO -->
     <div id="modalImagem" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="fecharModal()">&times;</span>
@@ -493,13 +501,13 @@ function validarArquivoImagem($caminho) {
         </div>
     </div>
 
-    <!-- 🔒 SCRIPTS COM INTEGRIDADE SUBRESOURCE -->
+    <!-- SCRIPTS COM INTEGRIDADE SUBRESOURCE -->
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-8e0zqR1Y4xTMnJ9Hy5qk4+8+hgN6Em5Q+8hFHy0rY8X6Fy6g7FfYk6g7v2z+Q7pZ" crossorigin="anonymous"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"></script>
     <script defer src="../js/math-config.js"></script>
 
     <script>
-        // 🔒 FUNÇÕES SEGURAS DO MODAL
+        // FUNÇÕES SEGURAS DO MODAL
         function abrirModal(src) {
             const modal = document.getElementById('modalImagem');
             const modalImg = document.getElementById('imagemModal');
@@ -522,7 +530,7 @@ function validarArquivoImagem($caminho) {
             }
         }
 
-        // 🔒 EVENT LISTENERS SEGUROS
+        // EVENT LISTENERS SEGUROS
         document.addEventListener('DOMContentLoaded', function() {
             const modal = document.getElementById('modalImagem');
             
@@ -540,7 +548,7 @@ function validarArquivoImagem($caminho) {
                 }
             });
             
-            // 🔒 PREVENIR AÇÕES MALICIOSAS
+            // PREVENIR AÇÕES MALICIOSAS
             document.addEventListener('contextmenu', function(e) {
                 if (e.target.tagName === 'IMG') {
                     e.preventDefault();
@@ -548,7 +556,7 @@ function validarArquivoImagem($caminho) {
             });
         });
 
-        // 🔒 DEBUG SEGURO
+        // DEBUG SEGURO
         if (window.console && window.console.log) {
             console.log('Aplicação carregada com medidas de segurança');
         }

@@ -180,7 +180,7 @@ if (isset($_GET['erro'])) {
                         $link_editar = $prova_id > 0 ? "editar_prova.php?id=" . $prova_id : "#";
                         $link_excluir = $prova_id > 0 ? "../includes/excluir_prova.php?id=" . $prova_id : "#";
                         $link_ativar_desativar = $prova_id > 0 ?
-                            ($prova_ativa ? "../includes/desativar_prova.php?id=" . $prova_id : "../includes/ativar_prova.php?id=" . $prova_id) : "#";
+                            "../includes/mudar_status_prova.php?id=" . $prova_id . "&action=" . ($prova_ativa ? "desativar" : "ativar") : "#";
                         $link_resultados = $prova_id > 0 ? "resultados_prova.php?id=" . $prova_id : "#";
                     ?>
                         <div class="prova-card">

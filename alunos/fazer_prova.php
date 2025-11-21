@@ -273,7 +273,7 @@ if (!is_array($questoes) || empty($questoes)) {
     <script defer src="../js/math-config.js"></script>
 
     <script>
-        // ✅ FUNÇÕES BÁSICAS DO MODAL - VERSÃO SIMPLIFICADA
+        // FUNÇÕES BÁSICAS DO MODAL - VERSÃO SIMPLIFICADA
         function abrirModal(src) {
             console.log('Abrindo modal com:', src);
             const modal = document.getElementById('modalImagem');
@@ -298,7 +298,7 @@ if (!is_array($questoes) || empty($questoes)) {
             }
         }
 
-        // ✅ CONFIGURAÇÃO DOS EVENT LISTENERS
+        // CONFIGURAÇÃO DOS EVENT LISTENERS
         document.addEventListener('DOMContentLoaded', function() {
             // Fechar modal ao clicar fora
             const modal = document.getElementById('modalImagem');
@@ -317,14 +317,14 @@ if (!is_array($questoes) || empty($questoes)) {
                 }
             });
             
-            // ✅ DEBUG: Verificar se as funções estão carregando
+            // DEBUG: Verificar se as funções estão carregando
             console.log('✅ Modal functions loaded:', {
                 abrirModal: typeof abrirModal,
                 fecharModal: typeof fecharModal
             });
         });
 
-        // ✅ FUNÇÃO DE TESTE (opcional - pode remover depois)
+        // FUNÇÃO DE TESTE
         function testarModal() {
             abrirModal('../img/LOGOTIPO 1.avif');
         }

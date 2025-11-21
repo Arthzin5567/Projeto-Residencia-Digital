@@ -136,20 +136,20 @@ function fazerUploadImagens($idProva, $questaoNumero, $arquivos, $conectar = nul
         }
     }
     
-    // ✅ VALIDAÇÃO INICIAL
+    // VALIDAÇÃO INICIAL
     if (!validarParametrosUpload($idProva, $questaoNumero, $arquivos)) {
         if ($conexaoPropria) mysqli_close($conectar);
         return [];
     }
     
-    // ✅ PREPARAR DIRETÓRIO
+    // PREPARAR DIRETÓRIO
     $uploadDir = prepararDiretorioUpload($idProva);
     if (!$uploadDir) {
         if ($conexaoPropria) mysqli_close($conectar);
         return [];
     }
     
-    // ✅ PROCESSAR ARQUIVOS
+    // PROCESSAR ARQUIVOS
     $resultado = processarArquivosUpload($idProva, $questaoNumero, $arquivos, $uploadDir, $conectar);
     
     if ($conexaoPropria) {
@@ -248,7 +248,7 @@ function validarExtensaoESeguranca($nomeArquivo, $uploadDir, $caminhoCompleto) {
         return false;
     }
     
-    // ✅ CORREÇÃO: Validação de segurança simplificada
+    // Validação de segurança simplificada
     // Garantir que o caminho completo está dentro do diretório de upload
     $caminhoNormalizado = realpath(dirname($caminhoCompleto));
     $dirNormalizado = realpath($uploadDir);

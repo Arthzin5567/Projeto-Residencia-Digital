@@ -292,7 +292,7 @@ if ($porcentagem_evolucao > 0) {
                     <p>Total de provas realizadas: <strong><?php echo $total_provas_realizadas; ?></strong></p>
                     
                     <?php
-                    // ✅ Fechar o statement das provas apenas DEPOIS de usar os resultados
+                    // Fechar o statement das provas apenas DEPOIS de usar os resultados
                     mysqli_stmt_close($stmt_provas);
 
                     // Buscar as provas novamente para exibir (ou usar array em memória)
