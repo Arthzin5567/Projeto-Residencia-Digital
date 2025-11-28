@@ -240,44 +240,49 @@ function validarArquivoImagem($caminho) {
         }
         .katex { font-size: 1.1em; }
         
-        /* 🔒 ESTILOS SEGUROS DO MODAL */
-        #modalImagem {
+        /* ESTILOS SEGUROS DO MODAL */
+        .modal {
             display: none;
             position: fixed;
-            z-index: 9999;
+            z-index: 10000;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.95);
+            background-color: rgba(0, 0, 0, 0.95);
+            overflow: auto;
         }
-        #modalImagem .modal-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: transparent;
-            padding: 20px;
+
+        .modal-content {
+            position: relative;
+            margin: auto;
+            padding: 0;
+            width: auto;
             max-width: 90%;
-            max-height: 90%;
+            max-height: 90vh;
+            top: 50%;
+            transform: translateY(-50%);
             text-align: center;
         }
-        #modalImagem .modal-img {
+
+        .modal-img {
             max-width: 100%;
             max-height: 80vh;
             border-radius: 8px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
         }
-        #modalImagem .close-modal {
+
+        .close-modal {
             position: absolute;
-            top: -60px;
-            right: -10px;
+            top: -50px;
+            right: 0;
             color: white;
-            font-size: 40px;
+            font-size: 35px;
+            font-weight: bold;
             cursor: pointer;
-            background: rgba(0,0,0,0.7);
-            width: 50px;
-            height: 50px;
+            background: rgba(0, 0, 0, 0.7);
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -285,26 +290,25 @@ function validarArquivoImagem($caminho) {
             border: 2px solid white;
             transition: all 0.3s ease;
         }
-        #modalImagem .close-modal:hover {
-            background: rgba(255,0,0,0.8);
+
+        .close-modal:hover {
+            background: rgba(255, 0, 0, 0.8);
             transform: scale(1.1);
         }
+
         .imagem-questao {
             max-width: 300px;
-            cursor: zoom-in;
+            cursor: pointer;
             border: 1px solid #ddd;
             border-radius: 5px;
             padding: 5px;
             background: white;
             transition: transform 0.2s ease;
         }
+
         .imagem-questao:hover {
             transform: scale(1.02);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-        .imagem-container {
-            margin: 10px 0;
-            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
         
         /* ESTILOS PARA DADOS SENSÍVEIS */
@@ -497,7 +501,7 @@ function validarArquivoImagem($caminho) {
     <div id="modalImagem" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="fecharModal()">&times;</span>
-            <img id="imagemModal" src="" alt="Imagem ampliada" class="modal-img" onerror="this.style.display='none'">
+            <img id="imagemModal" src="" alt="Imagem ampliada" class="modal-img">
         </div>
     </div>
 
@@ -509,52 +513,61 @@ function validarArquivoImagem($caminho) {
     <script>
         // FUNÇÕES SEGURAS DO MODAL
         function abrirModal(src) {
-            const modal = document.getElementById('modalImagem');
-            const modalImg = document.getElementById('imagemModal');
-            
-            if (modal && modalImg) {
-                // Validar que é uma URL segura
-                if (src.startsWith('../uploads/') || src.startsWith('uploads/')) {
-                    modalImg.src = src;
-                    modal.style.display = 'block';
-                    document.body.style.overflow = 'hidden';
-                }
+        const modal = document.getElementById('modalImagem');
+        const modalImg = document.getElementById('imagemModal');
+        
+        if (modal && modalImg) {
+            // Validar que é uma URL segura
+            if (typeof src === 'string' && (src.startsWith('../uploads/') || src.startsWith('uploads/'))) {
+                modalImg.src = src;
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+                
+                // Foco no botão de fechar para acessibilidade
+                setTimeout(() => {
+                    const closeBtn = modal.querySelector('.close-modal');
+                    if (closeBtn) closeBtn.focus();
+                }, 100);
             }
         }
+    }
 
-        function fecharModal() {
-            const modal = document.getElementById('modalImagem');
-            if (modal) {
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }
+    function fecharModal() {
+        const modal = document.getElementById('modalImagem');
+        if (modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
+    }
 
-        // EVENT LISTENERS SEGUROS
-        document.addEventListener('DOMContentLoaded', function() {
-            const modal = document.getElementById('modalImagem');
-            
-            if (modal) {
-                modal.addEventListener('click', function(e) {
-                    if (e.target === this) {
-                        fecharModal();
-                    }
-                });
-            }
-            
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
+    // EVENT LISTENERS CORRIGIDOS
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('modalImagem');
+        const closeBtn = document.querySelector('.close-modal');
+        
+        // Fechar modal clicando fora da imagem
+        if (modal) {
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal || e.target.classList.contains('close-modal')) {
                     fecharModal();
                 }
             });
-            
-            // PREVENIR AÇÕES MALICIOSAS
-            document.addEventListener('contextmenu', function(e) {
-                if (e.target.tagName === 'IMG') {
-                    e.preventDefault();
-                }
-            });
+        }
+        
+        // Fechar modal com ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                fecharModal();
+            }
         });
+        
+        // Prevenir ações maliciosas em imagens
+        document.addEventListener('contextmenu', function(e) {
+            if (e.target.classList.contains('imagem-questao') || e.target.classList.contains('modal-img')) {
+                e.preventDefault();
+            }
+        });
+    });
 
         // DEBUG SEGURO
         if (window.console && window.console.log) {
@@ -565,6 +578,6 @@ function validarArquivoImagem($caminho) {
 </html>
 
 <?php
-// 🔒 LIMPEZA SEGURA
+// LIMPEZA SEGURA
 mysqli_close($conectar);
 ?>
